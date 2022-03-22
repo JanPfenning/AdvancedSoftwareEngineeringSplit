@@ -36,3 +36,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=JanPfenning_AdvancedSoftwareEngineeringSplit
+      - name: Upload jacoco exec results
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-tests-jacoco
+          path: |
+            **/jacoco.xml
