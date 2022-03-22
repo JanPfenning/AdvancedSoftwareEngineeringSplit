@@ -1,8 +1,8 @@
-public class UserManager {
+public class UserService {
 
-    private UserPersistenceInterface userPersistence;
+    private UserRepositoryInterface userPersistence;
 
-    public UserManager(UserPersistenceInterface userPersistence) {
+    public UserService(UserRepositoryInterface userPersistence) {
         this.userPersistence = userPersistence;
     }
 

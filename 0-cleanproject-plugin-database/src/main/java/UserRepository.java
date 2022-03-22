@@ -3,9 +3,9 @@ import IO.CSVreader;
 import java.util.LinkedList;
 import java.util.UUID;
 
-public class UserPersistence implements UserPersistenceInterface {
+public class UserRepository implements UserRepositoryInterface {
 
-    public UserPersistence() {}
+    public UserRepository() {}
 
     @Override
     public void save(User account) {
@@ -20,7 +20,7 @@ public class UserPersistence implements UserPersistenceInterface {
             for(String row : rows){
                 String[] rowdata = row.split(";");
                 if(rowdata[0].equals(name)) {
-                    AccountPersistenceInterface accountMapper = new AccountPersistence();
+                    AccountRepositoryInterface accountMapper = new AccountRepository();
                     Account account = accountMapper.get(UUID.fromString(rowdata[1]));
                     return new User(rowdata[0], account);
                 }
@@ -38,7 +38,7 @@ public class UserPersistence implements UserPersistenceInterface {
             for(String row : rows){
                 String[] rowdata = row.split(";");
                 if(rowdata[1].equals(id.toString())) {
-                    AccountPersistenceInterface accountMapper = new AccountPersistence();
+                    AccountRepositoryInterface accountMapper = new AccountRepository();
                     Account account = accountMapper.get(UUID.fromString(rowdata[1]));
                     return new User(rowdata[0], account);
                 }

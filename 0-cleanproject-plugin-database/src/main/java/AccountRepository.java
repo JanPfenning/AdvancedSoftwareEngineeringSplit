@@ -3,8 +3,8 @@ import IO.CSVreader;
 import java.util.LinkedList;
 import java.util.UUID;
 
-public class AccountPersistence implements AccountPersistenceInterface {
-    AccountPersistence(){}
+public class AccountRepository implements AccountRepositoryInterface {
+    AccountRepository(){}
 
     @Override
     public void save(Account account) {
@@ -15,7 +15,7 @@ public class AccountPersistence implements AccountPersistenceInterface {
     @Override
     public Account get(String name) {
         System.out.println("requested by name");
-        UserPersistenceInterface userMapper = new UserPersistence();
+        UserRepositoryInterface userMapper = new UserRepository();
         User u = userMapper.get(name);
         return u != null ? u.getAccount() : null;
     }

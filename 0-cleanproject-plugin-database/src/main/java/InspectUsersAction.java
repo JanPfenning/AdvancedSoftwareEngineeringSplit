@@ -9,9 +9,9 @@ public class InspectUsersAction implements ActionInterface {
         System.out.println("Which user do you want to inspect?");
         String username = CommandLineReader.readLine();
 
-        UserPersistenceInterface userMapper = new UserPersistence();
-        UserManager userManager = new UserManager(userMapper);
-        User u = userManager.getUser(username);
+        UserRepositoryInterface userMapper = new UserRepository();
+        UserService userService = new UserService(userMapper);
+        User u = userService.getUser(username);
 
         System.out.println("Corresponding ID:");
         System.out.println(u.getAccount().getId());
