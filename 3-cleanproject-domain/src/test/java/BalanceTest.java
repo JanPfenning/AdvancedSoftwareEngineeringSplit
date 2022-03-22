@@ -1,14 +1,13 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BalanceTest {
+public class BalanceTest {
 
     @Test
     @DisplayName("invalid values for Balance")
-    void negativeValues() throws Exception {
+    public void negativeValues() throws Exception {
         assertThrows(Exception.class, () -> new Balance(-1));
         assertThrows(Exception.class, () -> new Balance(-10));
         assertThrows(Exception.class, () -> new Balance(Integer.MAX_VALUE+1));
@@ -16,7 +15,7 @@ class BalanceTest {
 
     @Test
     @DisplayName("invalid values for Balance")
-    void nonNegativeValues() throws Exception {
+    public void nonNegativeValues() throws Exception {
         assertDoesNotThrow(() -> {
             new Balance(0);
         });
@@ -28,6 +27,15 @@ class BalanceTest {
         });
         assertDoesNotThrow(() -> {
             new Balance(Integer.MAX_VALUE);
+        });
+    }
+
+    @Test
+    @DisplayName("Getter test")
+    public void getter(){
+        assertDoesNotThrow(() -> {
+            Balance b = new Balance(0);
+            assertEquals(0, b.getValue());
         });
     }
 }
