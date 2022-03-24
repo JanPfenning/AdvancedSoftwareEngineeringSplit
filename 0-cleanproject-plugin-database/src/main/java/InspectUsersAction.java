@@ -12,7 +12,7 @@ public class InspectUsersAction implements ActionInterface {
 
         UserRepositoryInterface userMapper = new UserRepository();
         UserService userService = new UserService(userMapper);
-        User u = userService.getUser(username);
+        UserAggregate u = userService.getUser(username);
 
         OutputLogger.log("Corresponding ID:");
         OutputLogger.log(u.getAccount().getId().toString());

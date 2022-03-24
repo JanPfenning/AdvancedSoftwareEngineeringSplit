@@ -2,11 +2,11 @@ public class Transfer {
 
     private int id; //TODO
     private Timestamp sendingTimestamp;
-    private User sender;
-    private User recipient;
+    private UserAggregate sender;
+    private UserAggregate recipient;
     private Amount amount;
 
-    public Transfer(User sender, User recipient, Amount amount) {
+    public Transfer(UserAggregate sender, UserAggregate recipient, Amount amount) {
         this.sendingTimestamp = new Timestamp();
         this.sender = sender;
         this.recipient = recipient;
@@ -17,11 +17,11 @@ public class Transfer {
         return sendingTimestamp;
     }
 
-    public User getBiller() {
+    public UserAggregate getBiller() {
         return sender;
     }
 
-    public User getRecipient() {
+    public UserAggregate getRecipient() {
         return recipient;
     }
 

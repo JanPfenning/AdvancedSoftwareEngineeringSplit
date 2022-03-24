@@ -22,4 +22,13 @@ public class Username {
             "ADMIN"
     );
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Username))
+            return false;
+        Username other = (Username)o;
+        return other.value.equals(this.value);
+    }
 }

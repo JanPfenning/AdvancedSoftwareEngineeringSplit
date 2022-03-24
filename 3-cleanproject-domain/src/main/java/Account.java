@@ -6,9 +6,14 @@ public class Account {
     private UUID id;
 
     // Generate new Account from scratch
-    Account() throws Exception {
-        this.balance = new Balance(0);
-        this.id = UUID.randomUUID();
+    Account(){
+        try{
+            this.balance = new Balance(0);
+            this.id = UUID.randomUUID();
+        }catch (Exception e){
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
 

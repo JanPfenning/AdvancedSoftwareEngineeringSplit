@@ -6,9 +6,13 @@ public class UserService {
         this.userPersistence = userPersistence;
     }
 
-    public User getUser(String userName){
-        User u = this.userPersistence.get(userName);
+    public UserAggregate getUser(String userName){
+        UserAggregate u = this.userPersistence.getUserFrom(new Username(userName));
         return u;
+    }
+
+    public void createNewUser(String userName){
+        UserAggregate newUserAggregate = new UserAggregate(userName);
     }
 
 }

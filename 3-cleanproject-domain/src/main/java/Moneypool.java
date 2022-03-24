@@ -2,10 +2,10 @@ import java.util.UUID;
 
 public class Moneypool {
     private UUID id;
-    private User owner;
+    private UserAggregate owner;
     private float balance;
 
-    public Moneypool(UUID id, User owner, float balance) {
+    public Moneypool(UUID id, UserAggregate owner, float balance) {
         this.id = id;
         this.owner = owner;
         this.balance = balance;
@@ -15,7 +15,7 @@ public class Moneypool {
         return id;
     }
 
-    public User getOwner() {
+    public UserAggregate getOwner() {
         return owner;
     }
 
