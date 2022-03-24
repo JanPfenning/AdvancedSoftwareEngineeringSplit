@@ -11,8 +11,16 @@ public class UserService {
         return u;
     }
 
-    public void createNewUser(String userName){
+    public UserAggregate createNewUser(String userName){
         UserAggregate newUserAggregate = new UserAggregate(userName);
+        this.userPersistence.save(newUserAggregate);
+        return newUserAggregate;
+    }
+
+    public Moneypool createNewMoneypoolFor(UserAggregate user){
+        Moneypool moneypool = new Moneypool();
+        this.userPersistence.save(moneypool, user);
+        return moneypool;
     }
 
 }

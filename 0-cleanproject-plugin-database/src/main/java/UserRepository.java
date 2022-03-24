@@ -17,28 +17,28 @@ public class UserRepository implements UserRepositoryInterface {
 
     @Override
     public void save(UserAggregate user) {
+        if(this.getUserFrom(user.getUsername()) == null) return;
+
         StringBuilder sb = new StringBuilder();
         sb.append(user.getUsername()).append(";").append(user.getAccount().getId());
         CSVwriter.writeLine(USER_FILEPATH, sb.toString());
+        this.save(user.getAccount());
     }
 
     @Override
     public void save(Account account) {
         Account oldAccount = this.getAccountFrom(account.getId());
-        try{
-            LinkedList<String> rows = CSVreader.read(UserRepository.ACCOUNT_FILEPATH, "\r\n");
-            for(String row : rows){
-                String[] rowdata = row.split(";");
-                if(rowdata[0].equals(oldAccount.getId().toString())) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(account.getId()).append(";").append(account.getBalance());
-                    CSVwriter.overwriteLine(ACCOUNT_FILEPATH, row , sb.toString());
-                    //TODO if none is found append new as new account
-                    break;
-                }
+        StringBuilder sb = new StringBuilder();
+        sb.append(account.getId()).append(";").append(account.getBalance());
+        if (oldAccount != null){
+            String row = this.getFirstRowStringFromCSV(oldAccount.getId().toString(), 0, UserRepository.ACCOUNT_FILEPATH);
+            try {
+                CSVwriter.overwriteLine(ACCOUNT_FILEPATH, row , sb.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        }else{
+            CSVwriter.writeLine(ACCOUNT_FILEPATH, sb.toString());
         }
     }
 
@@ -54,7 +54,20 @@ public class UserRepository implements UserRepositoryInterface {
                 e.printStackTrace();
             }
         }else{
+            System.err.println("Tried to save moneypool that no owner");
+        }
+    }
+
+    @Override
+    public void save(Moneypool newMoneypool, UserAggregate owner) {
+        String currentMoneypoolPersistence = getFirstRowStringFromCSV(newMoneypool.getId().toString(), 0, MONEYPOOL_FILEPATH);
+        StringBuilder sb = new StringBuilder();
+        sb.append(newMoneypool.getId()).append(";").append(newMoneypool.getBalance());
+        if(currentMoneypoolPersistence != null){
+            System.err.println("tried to save moneypool but this pool already exists");
+        }else{
             CSVwriter.writeLine(MONEYPOOL_FILEPATH, sb.toString());
+            CSVwriter.writeLine(USERS_MONEYPOOLS_FILEPATH, owner.getUsername()+";"+newMoneypool.getId());
         }
     }
 
