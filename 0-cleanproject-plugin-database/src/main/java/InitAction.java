@@ -1,4 +1,5 @@
 import IO.CommandLineReader;
+import IO.OutputLogger;
 
 import java.util.HashMap;
 
@@ -18,9 +19,9 @@ public class InitAction implements ActionInterface {
 
     @Override
     public void act() {
-        Integer response;
+        int response;
         do{
-            System.out.println(
+            OutputLogger.log(
                 "1) Send Money\n" +
                 "2) Request Money \n" +
                 "3) View History (and filter/analyze/export) \n" +
@@ -35,9 +36,9 @@ public class InitAction implements ActionInterface {
             if(response==0) break;
             actions.get(response).act();
 
-            System.out.println("\nEnter to continue");
+            OutputLogger.log("\nEnter to continue");
             String awaitKey = CommandLineReader.readLine();
-            if(awaitKey.equals("quit") || awaitKey.equals("exit")) break;
+            if(!awaitKey.equals("")) break;
         }while(true);
     }
 }

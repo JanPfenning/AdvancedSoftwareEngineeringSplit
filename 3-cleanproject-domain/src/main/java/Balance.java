@@ -10,4 +10,9 @@ public class Balance {
     public float getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return ""+value;
+    }
 }
