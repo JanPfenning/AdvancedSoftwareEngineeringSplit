@@ -13,6 +13,7 @@ public class TransferService {
     public boolean sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws Exception {
         Depot senderDepot = userPersistence.getDepotFrom(UUID.fromString(senderDepotId));
         Depot receiverDepot = userPersistence.getDepotFrom(UUID.fromString(receiverDepotId));
+        if(senderDepot == null || receiverDepot == null) throw new Exception("Either of the depots could not be found");
 
         Balance newSenderBalance = new Balance(senderDepot.getBalance().getValue()-amount.getValue());
         Balance newReceiverBalance = new Balance(receiverDepot.getBalance().getValue()+amount.getValue());
