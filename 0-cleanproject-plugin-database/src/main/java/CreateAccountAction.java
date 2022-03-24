@@ -2,7 +2,6 @@ import IO.CommandLineReader;
 
 public class CreateAccountAction implements ActionInterface {
 
-    //TODO
     CreateAccountAction(){}
 
     @Override

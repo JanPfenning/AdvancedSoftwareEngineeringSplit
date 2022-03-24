@@ -2,7 +2,6 @@ import IO.CommandLineReader;
 
 public class CreateMoneypoolAction implements ActionInterface {
 
-    //TODO
     CreateMoneypoolAction(){}
 
     @Override
