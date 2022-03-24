@@ -1,4 +1,5 @@
 import IO.CSVreader;
+import IO.CSVwriter;
 import IO.OutputLogger;
 
 import java.io.FileNotFoundException;
@@ -10,24 +11,53 @@ public class UserRepository implements UserRepositoryInterface {
 
     public static String USER_FILEPATH = "mock_Data/UsersAccounts.csv";
     public static String ACCOUNT_FILEPATH = "mock_Data/Accounts.csv";
-    public static String MONEYPOOL_FILEPATH = "mock_Data/UsersMoneypools.csv";
+    public static String MONEYPOOL_FILEPATH = "mock_Data/Moneypools.csv";
+    public static String USERS_MONEYPOOLs_FILEPATH = "mock_Data/UsersMoneypools.csv";
 
     public UserRepository() {}
 
     @Override
-    public void save(UserAggregate account) {
+    public void save(UserAggregate user) {
         //TODO
-        OutputLogger.log("Saving was not successfull due to: not implemented");
+        OutputLogger.log("Saving User was not successfull due to: not implemented");
     }
 
     @Override
     public void save(Account account) {
-        OutputLogger.log("Saving was not successfull due to: not implemented");
+        Account oldAccount = this.getAccountFrom(account.getId());
+        try{
+            LinkedList<String> rows = CSVreader.read(UserRepository.ACCOUNT_FILEPATH, "\r\n");
+            for(String row : rows){
+                String[] rowdata = row.split(";");
+                if(rowdata[0].equals(oldAccount.getId().toString())) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(account.getId()).append(";").append(account.getBalance());
+                    CSVwriter.overwriteLine(ACCOUNT_FILEPATH, row , sb.toString());
+                    break;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void save(Moneypool moneypool) {
-        OutputLogger.log("Saving was not successfull due to: not implemented");
+        Moneypool oldMoneyPool = this.getMoneypoolFrom(moneypool.getId());
+        try{
+            LinkedList<String> rows = CSVreader.read(UserRepository.MONEYPOOL_FILEPATH, "\r\n");
+            for(String row : rows){
+                String[] rowdata = row.split(";");
+                if(rowdata[0].equals(oldMoneyPool.getId().toString())) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(oldMoneyPool.getId()).append(";").append(moneypool.getBalance());
+                    CSVwriter.overwriteLine(MONEYPOOL_FILEPATH, row , sb.toString());
+                    break;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -54,19 +84,41 @@ public class UserRepository implements UserRepositoryInterface {
         }catch (Exception e){
             System.out.println(e);
         }
-        System.out.println("requested by id");
         return null;
     }
 
     @Override
     public ArrayList<Moneypool> getMoneypoolsFrom(Username username) {
-        OutputLogger.log("Saving was not successfull due to: not implemented");
+        ArrayList<Moneypool> moneypools = new ArrayList<>();
+        try{
+            LinkedList<String> rows = CSVreader.read(UserRepository.USERS_MONEYPOOLs_FILEPATH, "\r\n");
+            for(String row : rows){
+                String[] rowdata = row.split(";");
+                if(rowdata[0].equals(username.getValue())) {
+                    moneypools.add(getMoneypoolFrom(UUID.fromString(rowdata[0])));
+                }
+            }
+            return moneypools;
+        }catch (Exception e){
+            System.out.println(e);
+        }
         return null;
     }
 
     @Override
     public Moneypool getMoneypoolFrom(UUID accountId) {
-        OutputLogger.log("Saving was not successfull due to: not implemented");
+        try{
+            LinkedList<String> rows = CSVreader.read(UserRepository.MONEYPOOL_FILEPATH, "\r\n");
+            for(String row : rows){
+                String[] rowdata = row.split(";");
+                if(rowdata[0].equals(accountId.toString())) {
+                    //Balance readBalance = new Balance(Float.parseFloat(rowdata[1]));
+                    return new Moneypool(rowdata[0], Float.parseFloat(rowdata[1]));
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
         return null;
     }
 
@@ -109,5 +161,13 @@ public class UserRepository implements UserRepositoryInterface {
             System.exit(-1);
         }
         return null;
+    }
+
+    @Override
+    public Depot getDepotFrom(UUID depotId) {
+        Depot x = getAccountFrom(depotId);
+        if(x != null) return x;
+        x = getMoneypoolFrom(depotId);
+        return x;
     }
 }

@@ -2,11 +2,11 @@ public class Invoice {
 
     private int id; //TODO
     private Timestamp creationTimestamp;
-    private UserAggregate biller;
+    private Depot biller;
     private UserAggregate recipient;
     private Amount amount;
 
-    public Invoice(UserAggregate biller, UserAggregate recipient, Amount amount) {
+    public Invoice(Depot biller, UserAggregate recipient, Amount amount) {
         this.creationTimestamp = new Timestamp();
         this.biller = biller;
         this.recipient = recipient;
@@ -17,7 +17,7 @@ public class Invoice {
         return creationTimestamp;
     }
 
-    public UserAggregate getBiller() {
+    public Depot getBiller() {
         return biller;
     }
 
@@ -27,5 +27,9 @@ public class Invoice {
 
     public Amount getAmount() {
         return amount;
+    }
+
+    public int getId(){
+        return this.id;
     }
 }

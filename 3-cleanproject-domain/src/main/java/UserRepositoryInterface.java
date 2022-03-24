@@ -8,7 +8,9 @@ public interface UserRepositoryInterface {
     void save(Moneypool moneypool);
 
     UserAggregate getUserFrom(Username username);
-    UserAggregate getUserFrom(UUID accountOrPoolId);
+    UserAggregate getUserFrom(UUID depotId);
+
+    Depot getDepotFrom(UUID depotId);
 
     Account getAccountFrom(Username username) throws Exception;
     Account getAccountFrom(UUID accountId);

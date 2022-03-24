@@ -2,8 +2,8 @@ public class Payment extends Transfer {
 
     private Invoice invoice;
 
-    public Payment(Invoice invoice) {
-        super(invoice.getRecipient(), invoice.getBiller(), invoice.getAmount());
+    public Payment(Invoice invoice, Depot sender) {
+        super(sender, invoice.getBiller(), invoice.getAmount());
         this.invoice = invoice;
     }
 

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 /**
@@ -31,7 +32,16 @@ public class UserAggregate {
         return username;
     }
 
-    public Account getAccount() {
-        return account;
+    public Depot getDepotBy(UUID id) {
+        if(account.getId() == id) return account;
+        for (Moneypool pool: moneypools) {
+            if(pool.getId() == id) return pool;
+        }
+        return null;
     }
+
+    public Account getAccount() {
+        return this.account;
+    }
+
 }

@@ -1,15 +1,17 @@
+import java.util.UUID;
+
 public class Transfer {
 
-    private int id; //TODO
+    private int id; //TODO initialize id with atomic int
     private Timestamp sendingTimestamp;
-    private UserAggregate sender;
-    private UserAggregate recipient;
+    private Depot sender;
+    private Depot receiver;
     private Amount amount;
 
-    public Transfer(UserAggregate sender, UserAggregate recipient, Amount amount) {
+    public Transfer(Depot sender, Depot recipient, Amount amount) {
         this.sendingTimestamp = new Timestamp();
         this.sender = sender;
-        this.recipient = recipient;
+        this.receiver = recipient;
         this.amount = amount;
     }
 
@@ -17,15 +19,19 @@ public class Transfer {
         return sendingTimestamp;
     }
 
-    public UserAggregate getBiller() {
+    public Depot getSender() {
         return sender;
     }
 
-    public UserAggregate getRecipient() {
-        return recipient;
+    public Depot getRecipient() {
+        return receiver;
     }
 
     public Amount getAmount() {
         return amount;
+    }
+
+    public int getId(){
+        return id;
     }
 }
