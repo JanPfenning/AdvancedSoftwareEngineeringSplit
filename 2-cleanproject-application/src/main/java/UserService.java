@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 public class UserService {
 
     private UserRepositoryInterface userPersistence;
@@ -17,7 +19,8 @@ public class UserService {
         return newUserAggregate;
     }
 
-    public Moneypool createNewMoneypoolFor(UserAggregate user){
+    public Moneypool createNewMoneypoolFor(String userName){
+        UserAggregate user = this.getUser(userName);
         Moneypool moneypool = new Moneypool();
         this.userPersistence.save(moneypool, user);
         return moneypool;
