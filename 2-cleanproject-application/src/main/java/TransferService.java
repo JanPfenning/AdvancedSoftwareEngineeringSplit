@@ -36,9 +36,4 @@ public class TransferService {
         return true;
     }
 
-    public boolean payInvoice(int invoiceId) throws Exception {
-        throw new Exception("Not implemented");
-    }
-
-
 }

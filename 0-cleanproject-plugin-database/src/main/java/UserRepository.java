@@ -124,6 +124,7 @@ public class UserRepository implements UserRepositoryInterface {
         return null;
     }
 
+    //TODO remove duplicate code from getUser Functions
     @Override
     public UserAggregate getUserFrom(Username name) {
         String row = getFirstRowStringFromCSV(name.getValue(), 0, UserRepository.USER_FILEPATH);
@@ -131,7 +132,7 @@ public class UserRepository implements UserRepositoryInterface {
         String[] rowdata = row.split(";");
         UUID uuid = UUID.fromString(rowdata[1]);
         Account account = this.getAccountFrom(uuid);
-        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
+        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[1]));
         return new UserAggregate(rowdata[0], account, moneypools);
     }
 
@@ -142,7 +143,7 @@ public class UserRepository implements UserRepositoryInterface {
         String[] rowdata = row.split(";");
         UUID uuid = UUID.fromString(rowdata[1]);
         Account account = this.getAccountFrom(uuid);
-        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
+        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[1]));
         return new UserAggregate(rowdata[0], account, moneypools);
     }
 
