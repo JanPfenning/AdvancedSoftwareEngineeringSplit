@@ -101,7 +101,7 @@ public class UserRepository implements UserRepositoryInterface {
             for(String row : rows){
                 String[] rowdata = row.split(";");
                 if(rowdata[0].equals(username.getValue())) {
-                    moneypools.add(getMoneypoolFrom(UUID.fromString(rowdata[0])));
+                    moneypools.add(getMoneypoolFrom(UUID.fromString(rowdata[1])));
                 }
             }
             return moneypools;
@@ -132,7 +132,7 @@ public class UserRepository implements UserRepositoryInterface {
         String[] rowdata = row.split(";");
         UUID uuid = UUID.fromString(rowdata[1]);
         Account account = this.getAccountFrom(uuid);
-        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[1]));
+        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
         return new UserAggregate(rowdata[0], account, moneypools);
     }
 
@@ -143,7 +143,7 @@ public class UserRepository implements UserRepositoryInterface {
         String[] rowdata = row.split(";");
         UUID uuid = UUID.fromString(rowdata[1]);
         Account account = this.getAccountFrom(uuid);
-        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[1]));
+        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
         return new UserAggregate(rowdata[0], account, moneypools);
     }
 

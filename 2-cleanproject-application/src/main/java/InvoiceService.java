@@ -15,19 +15,46 @@ public class InvoiceService {
 
     public boolean payInvoice(int invoiceId, UUID payerDepotId) throws Exception {
         Invoice invoice = invoiceRepository.get(invoiceId);
+        if(invoice == null) return false;
         UserAggregate payer = invoice.getRecipient();
         if(invoice.isPaid()) return false;
-        TransferService transferService = new TransferService(userPersistence, transferRepository);
         try{
             Depot payerDepot = payer.getDepotBy(payerDepotId);
             if(payerDepot == null)
                 return false;
-            transferService.sendMoney(payerDepot.getId().toString(), invoice.getBiller().getId().toString(), invoice.getAmount());
+            this.sendMoney(payerDepot.getId().toString(), invoice);
             //TODO overwrite invoice as done
+            return true;
         }catch (Exception e){
+            System.out.println(e);
             return false;
         }
-        throw new Exception("Not implemented");
+    }
+
+    private boolean sendMoney(String senderDepotId, Invoice invoice) throws Exception {
+        Depot senderDepot = userPersistence.getDepotFrom(UUID.fromString(senderDepotId));
+        Depot receiverDepot = userPersistence.getDepotFrom(invoice.getBiller().getId());
+        if(senderDepot == null || receiverDepot == null) throw new Exception("Either of the depots could not be found");
+
+        Balance newSenderBalance = new Balance(senderDepot.getBalance().getValue()-invoice.getAmount().getValue());
+        Balance newReceiverBalance = new Balance(receiverDepot.getBalance().getValue()+invoice.getAmount().getValue());
+
+        senderDepot.setBalance(newSenderBalance);
+        receiverDepot.setBalance(newReceiverBalance);
+
+        Payment payment = new Payment(invoice, senderDepot);
+        transferRepository.save(payment);
+
+        if(senderDepot instanceof Account)
+            userPersistence.save((Account) senderDepot);
+        else
+            userPersistence.save((Moneypool) senderDepot);
+        if(receiverDepot instanceof Account)
+            userPersistence.save((Account) receiverDepot);
+        else
+            userPersistence.save((Moneypool) receiverDepot);
+
+        return true;
     }
 
     public ArrayList<Invoice> getInvoicesOf(Username username) throws Exception {

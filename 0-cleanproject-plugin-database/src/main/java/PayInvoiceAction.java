@@ -25,7 +25,9 @@ public class PayInvoiceAction implements ActionInterface {
         String invoiceId = CommandLineReader.readLine();
 
         try{
-            this.service.payInvoice(Integer.parseInt(invoiceId), UUID.fromString(depotId));
+            boolean success = this.service.payInvoice(Integer.parseInt(invoiceId), UUID.fromString(depotId));
+            if(success) System.out.println("Invoice has been paied");
+            else System.out.println("Error at payment");
         }catch (Exception e){
             System.out.println(e);
             System.exit(-1);

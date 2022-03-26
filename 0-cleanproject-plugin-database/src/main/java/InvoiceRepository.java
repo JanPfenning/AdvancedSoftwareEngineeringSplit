@@ -36,7 +36,7 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
             Depot biller = userRepository.getDepotFrom(UUID.fromString(rowdata[1]));
             UserAggregate receiver = userRepository.getUserFrom(new Username(rowdata[2]));
             Amount amount = new Amount(Float.parseFloat(rowdata[3]));
-            boolean paid = !rowdata[4].equals("0");
+            boolean paid = !rowdata[5].equals("0");
             return new Invoice(Integer.parseInt(rowdata[0]), biller, receiver, amount, paid);
         }catch (Exception e){
             return null;
@@ -54,7 +54,7 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
             LinkedList<String> rows = CSVreader.read(INVOICE_FILEPATH, "\r\n");
             for(String row : rows){
                 String[] rowdata = row.split(";");
-                if(Integer.parseInt(rowdata[0]) == id) {
+                if(rowdata[0].equals(id+"")) {
                     return row;
                 }
             }

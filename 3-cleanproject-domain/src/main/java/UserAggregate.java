@@ -33,9 +33,10 @@ public class UserAggregate {
     }
 
     public Depot getDepotBy(UUID id) {
-        if(account.getId() == id) return account;
+        UUID accountid = account.getId();
+        if(accountid.equals(id)) return account;
         for (Moneypool pool: moneypools) {
-            if(pool.getId() == id) return pool;
+            if(pool.getId().equals(id)) return pool;
         }
         return null;
     }
