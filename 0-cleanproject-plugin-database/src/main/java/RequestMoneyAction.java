@@ -7,7 +7,8 @@ public class RequestMoneyAction implements ActionInterface {
     RequestMoneyAction(){
         UserRepositoryInterface userRepository = new UserRepository();
         InvoiceRepositoryInterface invoiceRepository = new InvoiceRepository();
-        this.service = new InvoiceService(userRepository, invoiceRepository);
+        TransferRepository transferRepository = new TransferRepository();
+        this.service = new InvoiceService(userRepository, invoiceRepository, transferRepository);
     }
 
     @Override
