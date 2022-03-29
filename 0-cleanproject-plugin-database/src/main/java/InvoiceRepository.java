@@ -2,6 +2,7 @@ import IO.CSVreader;
 import IO.CSVwriter;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -16,18 +17,37 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
     public void save(Invoice invoice) {
         String delimiter = ";";
         StringBuilder sb = new StringBuilder();
+        String oldInvoiceRow = getInvoiceStringFromCsvOf(invoice.getId());
 
-        sb.append(invoice.getId()).append(delimiter)
-                .append(invoice.getBiller().getId()).append(delimiter)
-                .append(invoice.getRecipient().getUsername()).append(delimiter)
-                .append(invoice.getAmount()).append(delimiter)
-                .append(invoice.getCreationTimestamp().getUnixTime()).append(delimiter)
-                .append(0);
-        CSVwriter.writeLine(INVOICE_FILEPATH, sb.toString());
+        if(oldInvoiceRow == null){
+            sb.append(invoice.getId()).append(delimiter)
+                    .append(invoice.getBiller().getId()).append(delimiter)
+                    .append(invoice.getRecipient().getUsername()).append(delimiter)
+                    .append(invoice.getAmount()).append(delimiter)
+                    .append(invoice.getCreationTimestamp().getUnixTime()).append(delimiter)
+                    .append(invoice.isPaid()?1:0);
+            String serializedInvoice = sb.toString();
+            CSVwriter.writeLine(INVOICE_FILEPATH, serializedInvoice);
+        }else{
+            String[] rowdata = oldInvoiceRow.split(";");
+            sb.append(invoice.getId()).append(delimiter)
+                    .append(invoice.getBiller().getId()).append(delimiter)
+                    .append(invoice.getRecipient().getUsername()).append(delimiter)
+                    .append(invoice.getAmount()).append(delimiter)
+                    .append(rowdata[4]).append(delimiter)
+                    .append(1);
+            String serializedInvoice = sb.toString();
+            try {
+                CSVwriter.overwriteLine(INVOICE_FILEPATH, oldInvoiceRow, serializedInvoice);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
     }
 
     @Override
-    public Invoice get(int id) {
+    public Invoice get(UUID id) {
         String row = getInvoiceStringFromCsvOf(id);
         String[] rowdata = row.split(";");
 
@@ -37,7 +57,7 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
             UserAggregate receiver = userRepository.getUserFrom(new Username(rowdata[2]));
             Amount amount = new Amount(Float.parseFloat(rowdata[3]));
             boolean paid = !rowdata[5].equals("0");
-            return new Invoice(Integer.parseInt(rowdata[0]), biller, receiver, amount, paid);
+            return new Invoice(UUID.fromString(rowdata[0]), biller, receiver, amount, paid);
         }catch (Exception e){
             return null;
         }
@@ -49,12 +69,12 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
         return null;
     }
 
-    private String getInvoiceStringFromCsvOf(int id){
+    private String getInvoiceStringFromCsvOf(UUID id){
         try{
             LinkedList<String> rows = CSVreader.read(INVOICE_FILEPATH, "\r\n");
             for(String row : rows){
                 String[] rowdata = row.split(";");
-                if(rowdata[0].equals(id+"")) {
+                if(rowdata[0].equals(id.toString())) {
                     return row;
                 }
             }
