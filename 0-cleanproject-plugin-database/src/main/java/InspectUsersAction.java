@@ -1,4 +1,5 @@
 import IO.CommandLineReader;
+import IO.OutputLogger;
 
 public class InspectUsersAction implements ActionInterface {
 
@@ -6,16 +7,16 @@ public class InspectUsersAction implements ActionInterface {
 
     @Override
     public void act() {
-        System.out.println("Which user do you want to inspect?");
+        OutputLogger.log("Which user do you want to inspect?");
         String username = CommandLineReader.readLine();
 
         UserRepositoryInterface userMapper = new UserRepository();
         UserService userService = new UserService(userMapper);
-        User u = userService.getUser(username);
+        UserAggregate u = userService.getUser(username);
 
-        System.out.println("Corresponding ID:");
-        System.out.println(u.getAccount().getId());
-        System.out.println("Current Balance:");
-        System.out.println(u.getAccount().getBalance());
+        OutputLogger.log("Corresponding ID:");
+        OutputLogger.log(u.getAccount().getId().toString());
+        OutputLogger.log("Current Balance:");
+        OutputLogger.log(u.getAccount().getBalance().toString());
     }
 }

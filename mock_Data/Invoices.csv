@@ -1,2 +1,3 @@
-invoiceid;sender;receiver;creationtimestamp;paid
-0;123e4567-e89b-12d3-a456-000000000000;123e4567-e89b-12d3-a456-111111111111;1637950006;0
+invoiceid;biller;receiverName;amount;creationtimestamp;paid
+0;223e4567-e89b-12d3-a456-222222222222;Jan;1.2;1648300148;0
+0;223e4567-e89b-12d3-a456-222222222222;Jan;1.2;1648300857;0

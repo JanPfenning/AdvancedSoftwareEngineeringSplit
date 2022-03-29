@@ -1,25 +1,13 @@
 import java.util.UUID;
 
-public class Moneypool {
-    private UUID id;
-    private User owner;
-    private float balance;
+public class Moneypool extends Depot {
 
-    public Moneypool(UUID id, User owner, float balance) {
-        this.id = id;
-        this.owner = owner;
-        this.balance = balance;
+    public Moneypool(){
+        super();
     }
 
-    public UUID getId() {
-        return id;
+    public Moneypool(String id, float balance) throws Exception {
+        super(UUID.fromString(id), new Balance(balance));
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public float getBalance() {
-        return balance;
-    }
 }

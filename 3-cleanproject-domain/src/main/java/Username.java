@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Username {
     private String value;
@@ -22,4 +23,21 @@ public class Username {
             "ADMIN"
     );
 
+    @Override
+    public String toString() {
+        return ""+value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Username username = (Username) o;
+        return value.equals(username.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }
