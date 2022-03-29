@@ -3,17 +3,17 @@ import java.util.UUID;
 
 public class TransferService {
 
-    private UserRepositoryInterface userPersistence;
+    private UserRepositoryInterface userRepository;
     private TransferRepositoryInterface transferRepository;
 
-    public TransferService(UserRepositoryInterface userPersistence, TransferRepositoryInterface transferRepository) {
-        this.userPersistence = userPersistence;
+    public TransferService(UserRepositoryInterface userRepository, TransferRepositoryInterface transferRepository) {
+        this.userRepository = userRepository;
         this.transferRepository = transferRepository;
     }
 
     public void sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws DepotNotFoundException, InvalidBalanceException {
-        Depot senderDepot = userPersistence.getDepotFrom(UUID.fromString(senderDepotId));
-        Depot receiverDepot = userPersistence.getDepotFrom(UUID.fromString(receiverDepotId));
+        Depot senderDepot = userRepository.getDepotFrom(UUID.fromString(senderDepotId));
+        Depot receiverDepot = userRepository.getDepotFrom(UUID.fromString(receiverDepotId));
         if(senderDepot == null) throw new DepotNotFoundException("Sender Depot could not be found");
         if(receiverDepot == null) throw new DepotNotFoundException("Receiver Depot could not be found");
 
@@ -27,25 +27,25 @@ public class TransferService {
         transferRepository.save(transfer);
 
         if(senderDepot instanceof Account)
-            userPersistence.save((Account) senderDepot);
+            userRepository.save((Account) senderDepot);
         else
-            userPersistence.save((Moneypool) senderDepot);
+            userRepository.save((Moneypool) senderDepot);
         if(receiverDepot instanceof Account)
-            userPersistence.save((Account) receiverDepot);
+            userRepository.save((Account) receiverDepot);
         else
-            userPersistence.save((Moneypool) receiverDepot);
+            userRepository.save((Moneypool) receiverDepot);
 
     }
 
     public ArrayList<Transfer> analyseTransferSendings(String uuidString) {
         UUID uuid = UUID.fromString(uuidString);
-        Depot depot = userPersistence.getDepotFrom(uuid);
+        Depot depot = userRepository.getDepotFrom(uuid);
         return transferRepository.getTransfersWithSender(depot);
     }
 
     public ArrayList<Transfer> analyseTransferRecievings(String uuidString) {
         UUID uuid = UUID.fromString(uuidString);
-        Depot depot = userPersistence.getDepotFrom(uuid);
+        Depot depot = userRepository.getDepotFrom(uuid);
         return transferRepository.getTransfersWithRecipient(depot);
     }
 
