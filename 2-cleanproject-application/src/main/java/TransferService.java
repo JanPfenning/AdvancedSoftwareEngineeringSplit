@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class TransferService {
@@ -34,6 +35,18 @@ public class TransferService {
         else
             userPersistence.save((Moneypool) receiverDepot);
 
+    }
+
+    public ArrayList<Transfer> analyseTransferSendings(String uuidString) {
+        UUID uuid = UUID.fromString(uuidString);
+        Depot depot = userPersistence.getDepotFrom(uuid);
+        return transferRepository.getTransfersWithSender(depot);
+    }
+
+    public ArrayList<Transfer> analyseTransferRecievings(String uuidString) {
+        UUID uuid = UUID.fromString(uuidString);
+        Depot depot = userPersistence.getDepotFrom(uuid);
+        return transferRepository.getTransfersWithRecipient(depot);
     }
 
 }
