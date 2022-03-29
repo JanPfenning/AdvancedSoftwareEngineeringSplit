@@ -34,7 +34,7 @@ public class TransferRepository implements TransferRepositoryInterface{
 
     @Override
     public ArrayList<Transfer> getTransfersWithSender(Depot depot) {
-        return getTransferWithUUIDinPosition(depot, 1tatus);
+        return getTransferWithUUIDinPosition(depot, 1);
 
     }
 
