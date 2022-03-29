@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class TransferService {
@@ -10,10 +11,11 @@ public class TransferService {
         this.transferRepository = transferRepository;
     }
 
-    public boolean sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws Exception {
+    public void sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws DepotNotFoundException, InvalidBalanceException {
         Depot senderDepot = userPersistence.getDepotFrom(UUID.fromString(senderDepotId));
         Depot receiverDepot = userPersistence.getDepotFrom(UUID.fromString(receiverDepotId));
-        if(senderDepot == null || receiverDepot == null) throw new Exception("Either of the depots could not be found");
+        if(senderDepot == null) throw new DepotNotFoundException("Sender Depot could not be found");
+        if(receiverDepot == null) throw new DepotNotFoundException("Receiver Depot could not be found");
 
         Balance newSenderBalance = new Balance(senderDepot.getBalance().getValue()-amount.getValue());
         Balance newReceiverBalance = new Balance(receiverDepot.getBalance().getValue()+amount.getValue());
@@ -33,7 +35,18 @@ public class TransferService {
         else
             userPersistence.save((Moneypool) receiverDepot);
 
-        return true;
+    }
+
+    public ArrayList<Transfer> analyseTransferSendings(String uuidString) {
+        UUID uuid = UUID.fromString(uuidString);
+        Depot depot = userPersistence.getDepotFrom(uuid);
+        return transferRepository.getTransfersWithSender(depot);
+    }
+
+    public ArrayList<Transfer> analyseTransferRecievings(String uuidString) {
+        UUID uuid = UUID.fromString(uuidString);
+        Depot depot = userPersistence.getDepotFrom(uuid);
+        return transferRepository.getTransfersWithRecipient(depot);
     }
 
 }

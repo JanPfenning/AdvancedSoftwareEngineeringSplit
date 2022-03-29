@@ -16,13 +16,13 @@ public class UserAggregate {
      * @param account
      * @param moneypools
      */
-    UserAggregate(String name, Account account, ArrayList<Moneypool> moneypools){
+    UserAggregate(String name, Account account, ArrayList<Moneypool> moneypools) throws InvalidUsernameException {
         this.username = new Username(name);
         this.account = account;
         this.moneypools = moneypools;
     }
 
-    UserAggregate(String name){
+    UserAggregate(String name) throws InvalidUsernameException {
         this.username = new Username(name);
         this.account = new Account();
         this.moneypools = new ArrayList<Moneypool>();

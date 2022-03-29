@@ -25,7 +25,7 @@ public class InitAction implements ActionInterface {
             OutputLogger.log(
                 "1) Send Money\n" +
                 "2) Request Money \n" +
-                "3) View History (and filter/analyze/export) \n" +
+                "3) View History of Depot \n" +
                 "4) Create Account \n" +
                 "5) Create Moneypool \n" +
                 "6) View Invoices\n" +

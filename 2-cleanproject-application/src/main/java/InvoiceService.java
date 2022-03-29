@@ -13,22 +13,12 @@ public class InvoiceService {
         this.transferRepository = transferRepository;
     }
 
-    public boolean payInvoice(int invoiceId, UUID payerDepotId) throws Exception {
+    public void payInvoice(UUID invoiceId, UUID payerDepotId) throws Exception {
         Invoice invoice = invoiceRepository.get(invoiceId);
-        if(invoice == null) return false;
         UserAggregate payer = invoice.getRecipient();
-        if(invoice.isPaid()) return false;
-        try{
-            Depot payerDepot = payer.getDepotBy(payerDepotId);
-            if(payerDepot == null)
-                return false;
-            this.sendMoney(payerDepot.getId().toString(), invoice);
-            //TODO overwrite invoice as done
-            return true;
-        }catch (Exception e){
-            System.out.println(e);
-            return false;
-        }
+        Depot payerDepot = payer.getDepotBy(payerDepotId);
+        this.sendMoney(payerDepot.getId().toString(), invoice);
+        invoiceRepository.save(invoice);
     }
 
     private boolean sendMoney(String senderDepotId, Invoice invoice) throws Exception {
@@ -57,12 +47,8 @@ public class InvoiceService {
         return true;
     }
 
-    public ArrayList<Invoice> getInvoicesOf(Username username) throws Exception {
-        throw new Exception("Not implemented");
-    }
-
-    public ArrayList<Invoice> getInvoicesFromTo(Username username, Depot destinationDepot) throws Exception {
-        throw new Exception("Not implemented");
+    public ArrayList<Invoice> getInvoicesOf(Username username) {
+        return invoiceRepository.get(username);
     }
 
     public void sendInvoice(String billerId, Username recipientUsername, Amount amount){

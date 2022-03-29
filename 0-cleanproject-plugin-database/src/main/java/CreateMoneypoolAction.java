@@ -13,8 +13,15 @@ public class CreateMoneypoolAction implements ActionInterface {
 
         UserRepositoryInterface userMapper = new UserRepository();
         UserService userService = new UserService(userMapper);
-        Moneypool pool = userService.createNewMoneypoolFor(owner);
-
-        System.out.println("New Moneypool has been registered for "+owner+". The id is: "+pool.getId());
+        Username username = null;
+        try {
+            username = new Username(owner);
+            Moneypool pool = userService.createNewMoneypoolFor(username);
+            System.out.println("New Moneypool has been registered for "+owner+". The id is: "+pool.getId());
+        } catch (InvalidUsernameException e) {
+            e.printStackTrace();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

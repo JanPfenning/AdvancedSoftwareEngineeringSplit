@@ -3,9 +3,9 @@ import java.util.Objects;
 public class Balance {
     private float value;
 
-    Balance(float desiredBalance) throws Exception {
+    Balance(float desiredBalance) throws InvalidBalanceException {
         if(desiredBalance < 0)
-            throw new Exception("Balance can't be negative");
+            throw new InvalidBalanceException("Balance can't be negative");
         this.value = desiredBalance;
     }
 

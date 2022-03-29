@@ -1,6 +1,8 @@
+import java.util.UUID;
+
 public class Invoice {
 
-    private int id;
+    private UUID id;
     private Timestamp creationTimestamp;
     private Depot biller;
     private UserAggregate recipient;
@@ -8,7 +10,7 @@ public class Invoice {
     private boolean paid;
 
     public Invoice(Depot biller, UserAggregate recipient, Amount amount) {
-        this.id = 0; // TODO increment an atomic integer or so
+        this.id = UUID.randomUUID();
         this.creationTimestamp = new Timestamp();
         this.biller = biller;
         this.recipient = recipient;
@@ -16,7 +18,7 @@ public class Invoice {
         this.paid = false;
     }
 
-    public Invoice(int id, Depot biller, UserAggregate recipient, Amount amount, boolean paid) {
+    public Invoice(UUID id, Depot biller, UserAggregate recipient, Amount amount, boolean paid) {
         this.id = id;
         this.biller = biller;
         this.recipient = recipient;
@@ -40,7 +42,7 @@ public class Invoice {
         return amount;
     }
 
-    public int getId(){
+    public UUID getId(){
         return this.id;
     }
 

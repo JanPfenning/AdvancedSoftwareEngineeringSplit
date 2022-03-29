@@ -72,11 +72,9 @@ public class UserRepository implements UserRepositoryInterface {
     }
 
     @Override
-    public Account getAccountFrom(Username username) throws Exception{
+    public Account getAccountFrom(Username username){
         UserAggregate u = this.getUserFrom(username);
-        if(u == null){
-            throw new Exception("Username does not exist. Maybe the User deleted the connection from Username to the Account");
-        }
+        if(u==null) return null;
         return u.getAccount();
     }
 
@@ -132,8 +130,19 @@ public class UserRepository implements UserRepositoryInterface {
         String[] rowdata = row.split(";");
         UUID uuid = UUID.fromString(rowdata[1]);
         Account account = this.getAccountFrom(uuid);
-        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
-        return new UserAggregate(rowdata[0], account, moneypools);
+        ArrayList<Moneypool> moneypools = null;
+        try {
+            moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
+        } catch (InvalidUsernameException e) {
+            e.printStackTrace();
+        }
+        try {
+            return new UserAggregate(rowdata[0], account, moneypools);
+        } catch (InvalidUsernameException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        return null;
     }
 
     @Override
@@ -143,8 +152,19 @@ public class UserRepository implements UserRepositoryInterface {
         String[] rowdata = row.split(";");
         UUID uuid = UUID.fromString(rowdata[1]);
         Account account = this.getAccountFrom(uuid);
-        ArrayList<Moneypool> moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
-        return new UserAggregate(rowdata[0], account, moneypools);
+        ArrayList<Moneypool> moneypools = null;
+        try {
+            moneypools = this.getMoneypoolsFrom(new Username(rowdata[0]));
+        } catch (InvalidUsernameException e) {
+            e.printStackTrace();
+        }
+        try {
+            return new UserAggregate(rowdata[0], account, moneypools);
+        } catch (InvalidUsernameException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        return null;
     }
 
     @Override
