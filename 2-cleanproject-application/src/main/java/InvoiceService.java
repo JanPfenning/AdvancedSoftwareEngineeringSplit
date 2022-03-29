@@ -47,12 +47,8 @@ public class InvoiceService {
         return true;
     }
 
-    public ArrayList<Invoice> getInvoicesOf(Username username) throws Exception {
-        throw new Exception("Not implemented");
-    }
-
-    public ArrayList<Invoice> getInvoicesFromTo(Username username, Depot destinationDepot) throws Exception {
-        throw new Exception("Not implemented");
+    public ArrayList<Invoice> getInvoicesOf(Username username) {
+        return invoiceRepository.get(username);
     }
 
     public void sendInvoice(String billerId, Username recipientUsername, Amount amount){
