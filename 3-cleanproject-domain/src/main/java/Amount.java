@@ -4,9 +4,9 @@ public class Amount {
 
     private float value;
 
-    public Amount(float value) throws Exception {
+    public Amount(float value) throws InvalidAmountException {
         if (value <= 0)
-            throw new Exception("Values must be positive");
+            throw new InvalidAmountException(value+" is negative but Amounts must be positive");
         this.value = value;
     }
 

@@ -5,11 +5,11 @@ import java.util.Objects;
 public class Username {
     private String value;
 
-    Username(String name){
-        if(name.length()<2) throw new Error();
-        if(name.length()>20) throw new Error();
+    Username(String name) throws InvalidUsernameException {
+        if(name.length()<2) throw new InvalidUsernameException("'"+name+"' is too short");
+        if(name.length()>20) throw new InvalidUsernameException("'"+name+"' is too long");
         for(String badSequence:badSequences){
-            if(name.toUpperCase().contains(badSequence)) throw new Error();
+            if(name.toUpperCase().contains(badSequence)) throw new InvalidUsernameException("'"+name+"' contains invalid sequence: '"+badSequence+"'");
         }
         this.value = name;
     }

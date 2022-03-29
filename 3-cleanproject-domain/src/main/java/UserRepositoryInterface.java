@@ -13,7 +13,7 @@ public interface UserRepositoryInterface {
 
     Depot getDepotFrom(UUID depotId);
 
-    Account getAccountFrom(Username username) throws Exception;
+    Account getAccountFrom(Username username);
     Account getAccountFrom(UUID accountId);
 
     List<Moneypool> getMoneypoolsFrom(Username username);

@@ -13,8 +13,14 @@ public class CreateAccountAction implements ActionInterface {
 
         UserRepositoryInterface userMapper = new UserRepository();
         UserService userService = new UserService(userMapper);
-        UserAggregate u = userService.createNewUser(desiredUsername);
+        UserAggregate u = null;
+        try {
+            u = userService.createNewUser(desiredUsername);
+            System.out.println("New user has been registered. Your main account has the id: "+u.getAccount().getId());
+        } catch (InvalidUsernameException e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
 
-        System.out.println("New user has been registered. Your main account has the id: "+u.getAccount().getId());
     }
 }
