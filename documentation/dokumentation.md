@@ -176,6 +176,13 @@ ausführliche Begründung, warum es keines geben kann/hier nicht sinnvoll ist]
 möglichen Lösungsweg bzw. den genommen Lösungsweg beschreiben (inkl. (Pseudo-)Code)]
 
 ##2 Refactorings
+Long Class extracted into subclasses
+https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/pull/32/files
+Im UserRepository war der Code dafür direkt Accounts und Moneypools auszulesen.
+Diese Entitäten haben nun jeweils eigene Repositories die vom User Repository aufgerufen werden. 
+TODO: UML
+
+2. TODO
 [2 unterschiedliche Refactorings aus der Vorlesung anwenden, begründen, sowie UML vorher/nachher
 liefern; jeweils auf die Commits verweisen]
 
