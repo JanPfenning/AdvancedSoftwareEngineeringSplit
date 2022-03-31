@@ -12,8 +12,12 @@ public class TransferService {
     }
 
     public void sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws DepotNotFoundException, InvalidBalanceException {
-        Depot senderDepot = userRepository.getDepotFrom(UUID.fromString(senderDepotId));
-        Depot receiverDepot = userRepository.getDepotFrom(UUID.fromString(receiverDepotId));
+        UserAggregate sender = userRepository.getUserFrom(UUID.fromString(senderDepotId));
+        Depot senderDepot = sender.getDepotBy(UUID.fromString(senderDepotId));
+
+        UserAggregate receiver = userRepository.getUserFrom(UUID.fromString(receiverDepotId));
+        Depot receiverDepot = receiver.getDepotBy(UUID.fromString(receiverDepotId));
+
         if(senderDepot == null) throw new DepotNotFoundException("Sender Depot could not be found");
         if(receiverDepot == null) throw new DepotNotFoundException("Receiver Depot could not be found");
 
@@ -26,26 +30,21 @@ public class TransferService {
         Transfer transfer = new Transfer(senderDepot, receiverDepot, amount);
         transferRepository.save(transfer);
 
-        if(senderDepot instanceof Account)
-            userRepository.save((Account) senderDepot);
-        else
-            userRepository.save((Moneypool) senderDepot);
-        if(receiverDepot instanceof Account)
-            userRepository.save((Account) receiverDepot);
-        else
-            userRepository.save((Moneypool) receiverDepot);
-
+        userRepository.save(sender);
+        userRepository.save(receiver);
     }
 
     public ArrayList<Transfer> analyseTransferSendings(String uuidString) {
         UUID uuid = UUID.fromString(uuidString);
-        Depot depot = userRepository.getDepotFrom(uuid);
+        UserAggregate user = userRepository.getUserFrom(uuid);
+        Depot depot = user.getDepotBy(uuid);
         return transferRepository.getTransfersWithSender(depot);
     }
 
     public ArrayList<Transfer> analyseTransferRecievings(String uuidString) {
         UUID uuid = UUID.fromString(uuidString);
-        Depot depot = userRepository.getDepotFrom(uuid);
+        UserAggregate user = userRepository.getUserFrom(uuid);
+        Depot depot = user.getDepotBy(uuid);
         return transferRepository.getTransfersWithRecipient(depot);
     }
 

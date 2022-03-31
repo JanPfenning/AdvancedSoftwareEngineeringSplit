@@ -28,8 +28,8 @@ public class UserService {
 
     public Moneypool createNewMoneypoolFor(Username username) throws UserNotFoundException {
         UserAggregate user = this.getUser(username);
-        Moneypool moneypool = new Moneypool();
-        this.userRepository.save(moneypool, user);
+        Moneypool moneypool = user.createMoneypool();
+        this.userRepository.save(user);
         return moneypool;
     }
 
