@@ -45,13 +45,11 @@ public class UserRepository implements UserRepositoryInterface {
         return accountRepository.getAccountFrom(accountId);
     }
 
-    @Override
-    public ArrayList<Moneypool> getMoneypoolsFrom(Username username) {
+    private ArrayList<Moneypool> getMoneypoolsFrom(Username username) {
         return moneypoolRepository.getMoneypoolsFrom(username);
     }
 
-    @Override
-    public Moneypool getMoneypoolFrom(UUID moneypoolId) {
+    private Moneypool getMoneypoolFrom(UUID moneypoolId) {
         return moneypoolRepository.getMoneypoolFrom(moneypoolId);
     }
 
@@ -100,16 +98,6 @@ public class UserRepository implements UserRepositoryInterface {
         }
         return null;
     }
-
-    /*
-    @Override
-    public Depot getDepotFrom(UUID depotId) {
-        Depot x = accountRepository.getAccountFrom(depotId);
-        if(x != null) return x;
-        x = moneypoolRepository.getMoneypoolFrom(depotId);
-        return x;
-    }
-     */
 
     public static String getFirstRowStringFromCSV(String value, int position, String file){
         try{

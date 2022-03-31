@@ -11,7 +11,4 @@ public interface UserRepositoryInterface {
     UserAggregate getUserFrom(Username username);
     UserAggregate getUserFrom(UUID depotId);
 
-    List<Moneypool> getMoneypoolsFrom(Username username);
-    Moneypool getMoneypoolFrom(UUID accountId);
-
 }
