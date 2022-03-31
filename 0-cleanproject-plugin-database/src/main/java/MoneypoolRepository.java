@@ -13,10 +13,10 @@ public class MoneypoolRepository {
 
     public MoneypoolRepository() {}
 
-    public void save(Moneypool newMoneypool) {
-        String currentMoneypoolPersistence = UserRepository.getFirstRowStringFromCSV(newMoneypool.getId().toString(), 0, MONEYPOOL_FILEPATH);
+    private void updateMoneypool(Moneypool updatedMoneypool) {
+        String currentMoneypoolPersistence = UserRepository.getFirstRowStringFromCSV(updatedMoneypool.getId().toString(), 0, MONEYPOOL_FILEPATH);
         StringBuilder sb = new StringBuilder();
-        sb.append(newMoneypool.getId()).append(";").append(newMoneypool.getBalance());
+        sb.append(updatedMoneypool.getId()).append(";").append(updatedMoneypool.getBalance());
         if(currentMoneypoolPersistence != null){
             try {
                 CSVwriter.overwriteLine(MONEYPOOL_FILEPATH, currentMoneypoolPersistence , sb.toString());
@@ -24,20 +24,15 @@ public class MoneypoolRepository {
                 e.printStackTrace();
             }
         }else{
-            System.err.println("Tried to save moneypool that no owner");
+            System.err.println("Tried to update Moneypool with id "+updatedMoneypool.getId()+" but this does not exist");
         }
     }
 
-    public void save(Moneypool newMoneypool, UserAggregate owner) {
-        String currentMoneypoolPersistence = UserRepository.getFirstRowStringFromCSV(newMoneypool.getId().toString(), 0, MONEYPOOL_FILEPATH);
+    private void persistNewMoneypool(Moneypool newMoneypool, UserAggregate owner) {
         StringBuilder sb = new StringBuilder();
         sb.append(newMoneypool.getId()).append(";").append(newMoneypool.getBalance());
-        if(currentMoneypoolPersistence != null){
-            System.err.println("tried to save moneypool but this pool already exists");
-        }else{
-            CSVwriter.writeLine(MONEYPOOL_FILEPATH, sb.toString());
-            CSVwriter.writeLine(USERS_MONEYPOOLS_FILEPATH, owner.getUsername()+";"+newMoneypool.getId());
-        }
+        CSVwriter.writeLine(MONEYPOOL_FILEPATH, sb.toString());
+        CSVwriter.writeLine(USERS_MONEYPOOLS_FILEPATH, owner.getUsername()+";"+newMoneypool.getId());
     }
 
     public ArrayList<Moneypool> getMoneypoolsFrom(Username username) {
@@ -47,7 +42,9 @@ public class MoneypoolRepository {
             for(String row : rows){
                 String[] rowdata = row.split(";");
                 if(rowdata[0].equals(username.getValue())) {
-                    moneypools.add(getMoneypoolFrom(UUID.fromString(rowdata[1])));
+                    Moneypool moneypool = getMoneypoolFrom(UUID.fromString(rowdata[1]));
+                    if(moneypool != null)
+                        moneypools.add(moneypool);
                 }
             }
             return moneypools;
@@ -69,4 +66,15 @@ public class MoneypoolRepository {
         return null;
     }
 
+    public void save(ArrayList<Moneypool> moneypools, UserAggregate user) {
+        if(moneypools == null) return;
+        for(Moneypool moneypool: moneypools){
+            Moneypool temp = this.getMoneypoolFrom(moneypool.getId());
+            if(temp == null){
+                persistNewMoneypool(moneypool, user);
+            }else{
+                updateMoneypool(moneypool);
+            }
+        }
+    }
 }

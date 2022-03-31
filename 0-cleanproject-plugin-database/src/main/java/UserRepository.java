@@ -9,36 +9,33 @@ import java.util.UUID;
 public class UserRepository implements UserRepositoryInterface {
 
     public static String USER_FILEPATH = "mock_Data/UsersAccounts.csv";
+    public static String USERS_MONEYPOOLS_FILEPATH = "mock_Data/UsersMoneypools.csv";
 
     private AccountRepository accountRepository = new AccountRepository();
     private MoneypoolRepository moneypoolRepository = new MoneypoolRepository();
 
     public UserRepository() {}
 
-    //TODO saving a user must also save his accounts and his moneypools
     @Override
     public void save(UserAggregate user) {
-        if(this.getUserFrom(user.getUsername()) == null) return;
+        if(this.getUserFrom(user.getUsername()) == null)
+            this.saveNewUser(user);
+        else
+            this.updateUser(user);
+    }
 
+    //TODO test
+    private void updateUser(UserAggregate user){
+        moneypoolRepository.save(user.getMoneypools(), user);
+        accountRepository.save(user.getAccount());
+    }
+
+    //TODO test
+    private void saveNewUser(UserAggregate user){
         StringBuilder sb = new StringBuilder();
         sb.append(user.getUsername()).append(";").append(user.getAccount().getId());
         CSVwriter.writeLine(USER_FILEPATH, sb.toString());
-        this.save(user.getAccount());
-    }
-
-    @Override
-    public void save(Account account) {
-        accountRepository.save(account);
-    }
-
-    @Override
-    public void save(Moneypool newMoneypool) {
-        moneypoolRepository.save(newMoneypool);
-    }
-
-    @Override
-    public void save(Moneypool newMoneypool, UserAggregate owner) {
-        moneypoolRepository.save(newMoneypool, owner);
+        accountRepository.save(user.getAccount());
     }
 
     private Account getAccountFrom(UUID accountId) {
@@ -80,7 +77,18 @@ public class UserRepository implements UserRepositoryInterface {
     public UserAggregate getUserFrom(UUID id) {
         //TODO if no account has been found, search for MoneypoolIds the User owns
         String row = UserRepository.getFirstRowStringFromCSV(id.toString(), 1, UserRepository.USER_FILEPATH);
-        if(row == null) return null;
+        if(row == null){
+            // No Account id was provided but maybe a Moneypoolid
+            row = UserRepository.getFirstRowStringFromCSV(id.toString(), 1, UserRepository.USERS_MONEYPOOLS_FILEPATH);
+            String[] rowdata = row.split(";");
+            //Get name of Moneypool row
+            String username = rowdata[0];
+            try {
+                return getUserFrom(new Username(username));            //Get Useraggregate of account
+            } catch (InvalidUsernameException e) {
+                e.printStackTrace();
+            }
+        }
         String[] rowdata = row.split(";");
         UUID uuid = UUID.fromString(rowdata[1]);
         Account account = this.getAccountFrom(uuid);

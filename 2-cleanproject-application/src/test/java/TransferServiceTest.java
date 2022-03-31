@@ -58,5 +58,4 @@ class TransferServiceTest {
     //TODO test send from moneypool to moneypool
     //TODO test send from Moneypool to account
     //TODO test send from Account to moneypool
-
 }

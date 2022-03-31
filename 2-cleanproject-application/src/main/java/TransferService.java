@@ -30,15 +30,8 @@ public class TransferService {
         Transfer transfer = new Transfer(senderDepot, receiverDepot, amount);
         transferRepository.save(transfer);
 
-        if(senderDepot instanceof Account)
-            userRepository.save((Account) senderDepot);
-        else
-            userRepository.save((Moneypool) senderDepot);
-        if(receiverDepot instanceof Account)
-            userRepository.save((Account) receiverDepot);
-        else
-            userRepository.save((Moneypool) receiverDepot);
-
+        userRepository.save(sender);
+        userRepository.save(receiver);
     }
 
     public ArrayList<Transfer> analyseTransferSendings(String uuidString) {

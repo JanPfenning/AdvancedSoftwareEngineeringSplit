@@ -21,7 +21,7 @@ public class InvoiceService {
         invoiceRepository.save(invoice);
     }
 
-    private boolean sendMoney(String senderDepotId, Invoice invoice) throws Exception {
+    private void sendMoney(String senderDepotId, Invoice invoice) throws Exception {
         UserAggregate sender = userRepository.getUserFrom(UUID.fromString(senderDepotId));
         Depot senderDepot = sender.getDepotBy(UUID.fromString(senderDepotId));
         UserAggregate receiver = userRepository.getUserFrom(invoice.getBiller().getId());
@@ -37,16 +37,8 @@ public class InvoiceService {
         Payment payment = new Payment(invoice, senderDepot);
         transferRepository.save(payment);
 
-        if(senderDepot instanceof Account)
-            userRepository.save((Account) senderDepot);
-        else
-            userRepository.save((Moneypool) senderDepot);
-        if(receiverDepot instanceof Account)
-            userRepository.save((Account) receiverDepot);
-        else
-            userRepository.save((Moneypool) receiverDepot);
-
-        return true;
+        userRepository.save(sender);
+        userRepository.save(receiver);
     }
 
     public ArrayList<Invoice> getInvoicesOf(Username username) {
