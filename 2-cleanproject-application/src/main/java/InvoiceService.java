@@ -3,12 +3,12 @@ import java.util.UUID;
 
 public class InvoiceService {
 
-    private UserRepositoryInterface userPersistence;
+    private UserRepositoryInterface userRepository;
     private InvoiceRepositoryInterface invoiceRepository;
     private TransferRepositoryInterface transferRepository;
 
-    public InvoiceService(UserRepositoryInterface userPersistence, InvoiceRepositoryInterface invoiceRepository, TransferRepositoryInterface transferRepository) {
-        this.userPersistence = userPersistence;
+    public InvoiceService(UserRepositoryInterface userRepository, InvoiceRepositoryInterface invoiceRepository, TransferRepositoryInterface transferRepository) {
+        this.userRepository = userRepository;
         this.invoiceRepository = invoiceRepository;
         this.transferRepository = transferRepository;
     }
@@ -22,8 +22,8 @@ public class InvoiceService {
     }
 
     private boolean sendMoney(String senderDepotId, Invoice invoice) throws Exception {
-        Depot senderDepot = userPersistence.getDepotFrom(UUID.fromString(senderDepotId));
-        Depot receiverDepot = userPersistence.getDepotFrom(invoice.getBiller().getId());
+        Depot senderDepot = userRepository.getDepotFrom(UUID.fromString(senderDepotId));
+        Depot receiverDepot = userRepository.getDepotFrom(invoice.getBiller().getId());
         if(senderDepot == null || receiverDepot == null) throw new Exception("Either of the depots could not be found");
 
         Balance newSenderBalance = new Balance(senderDepot.getBalance().getValue()-invoice.getAmount().getValue());
@@ -36,13 +36,13 @@ public class InvoiceService {
         transferRepository.save(payment);
 
         if(senderDepot instanceof Account)
-            userPersistence.save((Account) senderDepot);
+            userRepository.save((Account) senderDepot);
         else
-            userPersistence.save((Moneypool) senderDepot);
+            userRepository.save((Moneypool) senderDepot);
         if(receiverDepot instanceof Account)
-            userPersistence.save((Account) receiverDepot);
+            userRepository.save((Account) receiverDepot);
         else
-            userPersistence.save((Moneypool) receiverDepot);
+            userRepository.save((Moneypool) receiverDepot);
 
         return true;
     }
@@ -53,8 +53,8 @@ public class InvoiceService {
 
     public void sendInvoice(String billerId, Username recipientUsername, Amount amount){
         UUID biller = UUID.fromString(billerId);
-        Depot destinationDepot = userPersistence.getDepotFrom(biller);
-        UserAggregate recipient = userPersistence.getUserFrom(recipientUsername);
+        Depot destinationDepot = userRepository.getDepotFrom(biller);
+        UserAggregate recipient = userRepository.getUserFrom(recipientUsername);
 
         Invoice invoice = new Invoice(destinationDepot, recipient, amount);
         invoiceRepository.save(invoice);
