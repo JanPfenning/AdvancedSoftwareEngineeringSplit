@@ -22,8 +22,10 @@ public class InvoiceService {
     }
 
     private boolean sendMoney(String senderDepotId, Invoice invoice) throws Exception {
-        Depot senderDepot = userRepository.getDepotFrom(UUID.fromString(senderDepotId));
-        Depot receiverDepot = userRepository.getDepotFrom(invoice.getBiller().getId());
+        UserAggregate sender = userRepository.getUserFrom(UUID.fromString(senderDepotId));
+        Depot senderDepot = sender.getDepotBy(UUID.fromString(senderDepotId));
+        UserAggregate receiver = userRepository.getUserFrom(invoice.getBiller().getId());
+        Depot receiverDepot = receiver.getDepotBy(invoice.getBiller().getId());
         if(senderDepot == null || receiverDepot == null) throw new Exception("Either of the depots could not be found");
 
         Balance newSenderBalance = new Balance(senderDepot.getBalance().getValue()-invoice.getAmount().getValue());
@@ -51,9 +53,10 @@ public class InvoiceService {
         return invoiceRepository.get(username);
     }
 
-    public void sendInvoice(String billerId, Username recipientUsername, Amount amount){
-        UUID biller = UUID.fromString(billerId);
-        Depot destinationDepot = userRepository.getDepotFrom(biller);
+    public void sendInvoice(String billerString, Username recipientUsername, Amount amount){
+        UUID billerId = UUID.fromString(billerString);
+        UserAggregate biller = userRepository.getUserFrom(billerId);
+        Depot destinationDepot = biller.getDepotBy(billerId);
         UserAggregate recipient = userRepository.getUserFrom(recipientUsername);
 
         Invoice invoice = new Invoice(destinationDepot, recipient, amount);

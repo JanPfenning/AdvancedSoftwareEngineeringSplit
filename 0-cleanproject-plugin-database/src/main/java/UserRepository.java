@@ -15,6 +15,7 @@ public class UserRepository implements UserRepositoryInterface {
 
     public UserRepository() {}
 
+    //TODO saving a user must also save his accounts and his moneypools
     @Override
     public void save(UserAggregate user) {
         if(this.getUserFrom(user.getUsername()) == null) return;
@@ -80,6 +81,7 @@ public class UserRepository implements UserRepositoryInterface {
 
     @Override
     public UserAggregate getUserFrom(UUID id) {
+        //TODO if no account has been found, search for MoneypoolIds the User owns
         String row = UserRepository.getFirstRowStringFromCSV(id.toString(), 1, UserRepository.USER_FILEPATH);
         if(row == null) return null;
         String[] rowdata = row.split(";");
@@ -100,6 +102,7 @@ public class UserRepository implements UserRepositoryInterface {
         return null;
     }
 
+    /*
     @Override
     public Depot getDepotFrom(UUID depotId) {
         Depot x = accountRepository.getAccountFrom(depotId);
@@ -107,6 +110,7 @@ public class UserRepository implements UserRepositoryInterface {
         x = moneypoolRepository.getMoneypoolFrom(depotId);
         return x;
     }
+     */
 
     public static String getFirstRowStringFromCSV(String value, int position, String file){
         try{
