@@ -41,8 +41,7 @@ public class UserRepository implements UserRepositoryInterface {
         moneypoolRepository.save(newMoneypool, owner);
     }
 
-    @Override
-    public Account getAccountFrom(UUID accountId) {
+    private Account getAccountFrom(UUID accountId) {
         return accountRepository.getAccountFrom(accountId);
     }
 
