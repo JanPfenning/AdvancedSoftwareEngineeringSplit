@@ -41,6 +41,16 @@ public class UserAggregate {
         return null;
     }
 
+    public Moneypool createMoneypool(){
+        Moneypool moneypool = new Moneypool();
+        this.moneypools.add(moneypool);
+        return moneypool;
+    }
+
+    public ArrayList<Moneypool> getMoneypools() {
+        return moneypools;
+    }
+
     public Account getAccount() {
         return this.account;
     }

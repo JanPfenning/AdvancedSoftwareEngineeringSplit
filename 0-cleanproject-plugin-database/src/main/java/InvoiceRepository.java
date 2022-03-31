@@ -53,11 +53,12 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
 
         UserRepositoryInterface userRepository = new UserRepository();
         try{
-            Depot biller = userRepository.getDepotFrom(UUID.fromString(rowdata[1]));
+            UserAggregate biller = userRepository.getUserFrom(UUID.fromString(rowdata[1]));
+            Depot billerDestination = biller.getDepotBy(UUID.fromString(rowdata[1]));
             UserAggregate receiver = userRepository.getUserFrom(new Username(rowdata[2]));
             Amount amount = new Amount(Float.parseFloat(rowdata[3]));
             boolean paid = !rowdata[5].equals("0");
-            return new Invoice(UUID.fromString(rowdata[0]), biller, receiver, amount, paid);
+            return new Invoice(UUID.fromString(rowdata[0]), billerDestination, receiver, amount, paid);
         }catch (Exception e){
             return null;
         }

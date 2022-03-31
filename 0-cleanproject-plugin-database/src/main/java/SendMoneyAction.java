@@ -21,12 +21,16 @@ public class SendMoneyAction implements ActionInterface {
         System.out.println("How much do you wish to send?");
         String amountString = CommandLineReader.readLine();
 
-        try{
+        try {
             Amount amount = new Amount(Float.parseFloat(amountString));
             service.sendMoney(senderDepotId, receiverDepotId, amount);
             System.out.println("Money send");
-        } catch (Exception e) {
-            System.out.println("Invalid amount to be send");
+        } catch (DepotNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvalidBalanceException e) {
+            e.printStackTrace();
+        } catch (InvalidAmountException e) {
+            e.printStackTrace();
         }
     }
 }
