@@ -182,7 +182,11 @@ Im UserRepository war der Code dafür direkt Accounts und Moneypools auszulesen.
 Diese Entitäten haben nun jeweils eigene Repositories die vom User Repository aufgerufen werden. 
 TODO: UML
 
-2. TODO
+extract method
+https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/commit/b49d5f087ee3ae59a97852e9bc90eafddc4b770c
+Es war nicht deutlich was "rowdata[0]" bedeuten sollte. 
+Darum die benannte funktion die nun verdeutlicht, dass es sich um den Nutzernamen handelt
+TODO: UML With and without the function?
 [2 unterschiedliche Refactorings aus der Vorlesung anwenden, begründen, sowie UML vorher/nachher
 liefern; jeweils auf die Commits verweisen]
 
