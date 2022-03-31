@@ -64,15 +64,10 @@ public class UserRepository implements UserRepositoryInterface {
 
     @Override
     public UserAggregate getUserFrom(UUID id) {
-        String row = UserRepository.getFirstRowStringFromCSV(id.toString(), 1, UserRepository.USER_FILEPATH);
-        if(row == null) // Provided UUID is not an Accountid
+        String tupleWithAccountId = UserRepository.getFirstRowStringFromCSV(id.toString(), 1, UserRepository.USER_FILEPATH);
+        if(tupleWithAccountId == null)
             return getUserFromMoneypoolId(id);
-        return getUserFromAccountId(id);
-    }
-
-    private UserAggregate getUserFromAccountId(UUID accountid){
-        String row = UserRepository.getFirstRowStringFromCSV(accountid.toString(), 1, UserRepository.USER_FILEPATH);
-        return getUserAggregateOfAccountRow(row);
+        return getUserAggregateOfAccountRow(tupleWithAccountId);
     }
 
     private UserAggregate getUserFromMoneypoolId(UUID moneypoolid){
