@@ -1,2 +1,3 @@
-package PACKAGE_NAME;public class TransferOutOfMoneypoolException {
+public class TransferOutOfMoneypoolException extends Exception{
+    TransferOutOfMoneypoolException(String errormessage) { super(errormessage); }
 }
