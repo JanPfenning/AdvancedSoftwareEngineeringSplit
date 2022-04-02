@@ -13,6 +13,10 @@ public class Balance {
         return value;
     }
 
+    public boolean isSmallerThan(Balance otherBalance){
+        return Float.compare(value, otherBalance.value) < 0;
+    }
+
     @Override
     public String toString() {
         return ""+value;
