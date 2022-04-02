@@ -11,7 +11,7 @@ public class TransferService {
         this.transferRepository = transferRepository;
     }
 
-    public void sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws DepotNotFoundException, InvalidBalanceException {
+    public void sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws DepotNotFoundException, InvalidBalanceException, TransferOutOfMoneypoolException {
         UserAggregate sender = userRepository.getUserFrom(UUID.fromString(senderDepotId));
         Depot senderDepot = sender.getDepotBy(UUID.fromString(senderDepotId));
 
