@@ -28,7 +28,7 @@ public class Depot {
         return id;
     }
 
-    public void setBalance(Balance newBalance) throws Exception{
+    public void setBalance(Balance newBalance) throws TransferOutOfMoneypoolException{
         this.balance = newBalance;
     }
 }
