@@ -31,6 +31,8 @@ public class SendMoneyAction implements ActionInterface {
             e.printStackTrace();
         } catch (InvalidAmountException e) {
             e.printStackTrace();
+        } catch (TransferOutOfMoneypoolException e) {
+            e.printStackTrace();
         }
     }
 }
