@@ -25,7 +25,7 @@ class TransferServiceTest {
     @BeforeEach
     void init(){
         this.moneypoolIDofSender = UUID.fromString("223e4567-e89b-12d3-a456-000000000000");
-        this.moneypoolIDofReciever = UUID.fromString("223e4567-e89b-12d3-a456-000000000000");
+        this.moneypoolIDofReciever = UUID.fromString("223e4567-e89b-12d3-a456-111111111111");
         this.accountIDofSender = UUID.fromString("123e4567-e89b-12d3-a456-111111111111");
         this.accountIDofReciever = UUID.fromString("123e4567-e89b-12d3-a456-222222222222");
 
@@ -73,57 +73,6 @@ class TransferServiceTest {
         TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
         assertDoesNotThrow(()->{
             service.sendMoney(accountIDofSender.toString(), accountIDofReciever.toString(), new Amount(1));
-        });
-    }
-
-    @Test
-    void moneypoolToMoneypool() {
-        Depot mockedSenderDepot = mock(Moneypool.class);
-        Depot mockedReceiverDepot = mock(Moneypool.class);
-
-        when(mockedUserRepository.getUserFrom(moneypoolIDofSender)).thenReturn(mockedSender);
-        when(mockedUserRepository.getUserFrom(moneypoolIDofReciever)).thenReturn(mockedReceiver);
-
-        when(mockedSender.getDepotBy(moneypoolIDofSender)).thenReturn(mockedSenderDepot);
-        when(mockedReceiver.getDepotBy(moneypoolIDofReciever)).thenReturn(mockedReceiverDepot);
-
-        TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
-        assertThrows( TransferOutOfMoneypoolException.class,() ->{
-            service.sendMoney(moneypoolIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(1));
-        });
-    }
-
-    @Test
-    void moneypoolToAccount() {
-        Depot mockedSenderDepot = mock(Moneypool.class);
-        Depot mockedReceiverDepot = mock(Account.class);
-
-        when(mockedUserRepository.getUserFrom(moneypoolIDofSender)).thenReturn(mockedSender);
-        when(mockedUserRepository.getUserFrom(accountIDofReciever)).thenReturn(mockedReceiver);
-
-        when(mockedSender.getDepotBy(moneypoolIDofSender)).thenReturn(mockedSenderDepot);
-        when(mockedReceiver.getDepotBy(accountIDofReciever)).thenReturn(mockedReceiverDepot);
-
-        TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
-        assertThrows( TransferOutOfMoneypoolException.class,() ->{
-            service.sendMoney(moneypoolIDofSender.toString(), accountIDofReciever.toString(), new Amount(1));
-        });
-    }
-
-    @Test
-    void accountToMoneypool() throws Exception{
-        Depot mockedSenderDepot = mock(Account.class);
-        Depot mockedReceiverDepot = mock(Moneypool.class);
-
-        when(mockedUserRepository.getUserFrom(accountIDofSender)).thenReturn(mockedSender);
-        when(mockedUserRepository.getUserFrom(moneypoolIDofReciever)).thenReturn(mockedReceiver);
-
-        when(mockedSender.getDepotBy(accountIDofSender)).thenReturn(mockedSenderDepot);
-        when(mockedReceiver.getDepotBy(moneypoolIDofReciever)).thenReturn(mockedReceiverDepot);
-
-        TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
-        assertDoesNotThrow(() ->{
-            service.sendMoney(accountIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(1));
         });
     }
 
