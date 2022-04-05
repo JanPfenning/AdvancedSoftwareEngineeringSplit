@@ -135,5 +135,4 @@ class TransferServiceTest {
             service.sendMoney(accountIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(1));
         });
     }
-
 }
