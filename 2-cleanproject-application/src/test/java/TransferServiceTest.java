@@ -1,21 +1,20 @@
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static  org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TransferServiceTest {
 
-    private static UUID moneypoolIDofSender = UUID.fromString("223e4567-e89b-12d3-a456-000000000000");
-    private static UUID moneypoolIDofReciever = UUID.fromString("223e4567-e89b-12d3-a456-000000000000");
+    private UUID moneypoolIDofSender;
+    private UUID moneypoolIDofReciever;
 
-    private static UUID accountIDofSender = UUID.fromString("123e4567-e89b-12d3-a456-111111111111");
-    private static UUID accountIDofReciever = UUID.fromString("123e4567-e89b-12d3-a456-222222222222");
-
+    private UUID accountIDofSender;
+    private UUID accountIDofReciever;
 
     private TransferRepositoryInterface mockedTransferRepository;
     private UserRepositoryInterface mockedUserRepository;
@@ -23,8 +22,13 @@ class TransferServiceTest {
     private UserAggregate mockedSender;
     private UserAggregate mockedReceiver;
 
-    @BeforeAll
+    @BeforeEach
     void init(){
+        this.moneypoolIDofSender = UUID.fromString("223e4567-e89b-12d3-a456-000000000000");
+        this.moneypoolIDofReciever = UUID.fromString("223e4567-e89b-12d3-a456-000000000000");
+        this.accountIDofSender = UUID.fromString("123e4567-e89b-12d3-a456-111111111111");
+        this.accountIDofReciever = UUID.fromString("123e4567-e89b-12d3-a456-222222222222");
+
         this.mockedTransferRepository = mock(TransferRepositoryInterface.class);
         this.mockedUserRepository = mock(UserRepositoryInterface.class);
 
