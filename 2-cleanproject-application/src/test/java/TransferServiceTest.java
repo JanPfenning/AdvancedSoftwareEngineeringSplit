@@ -5,7 +5,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static  org.mockito.Mockito.*;
+import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TransferServiceTest {
@@ -16,11 +16,11 @@ class TransferServiceTest {
     private UUID accountIDofSender;
     private UUID accountIDofReciever;
 
-    private TransferRepositoryInterface mockedTransferRepository;
-    private UserRepositoryInterface mockedUserRepository;
+    public TransferRepositoryInterface mockedTransferRepository;
+    public UserRepositoryInterface mockedUserRepository;
 
-    private UserAggregate mockedSender;
-    private UserAggregate mockedReceiver;
+    public UserAggregate mockedSender;
+    public UserAggregate mockedReceiver;
 
     @BeforeEach
     void init(){
@@ -35,7 +35,6 @@ class TransferServiceTest {
         this.mockedSender = mock(UserAggregate.class);
         this.mockedReceiver = mock(UserAggregate.class);
     }
-
 
     @Test
     void senderInsufficientMoney() throws Exception {
@@ -62,18 +61,18 @@ class TransferServiceTest {
         Depot mockedSenderDepot = mock(Account.class);
         Depot mockedReceiverDepot = mock(Account.class);
 
-        when(mockedUserRepository.getUserFrom(moneypoolIDofSender)).thenReturn(mockedSender);
-        when(mockedUserRepository.getUserFrom(moneypoolIDofReciever)).thenReturn(mockedReceiver);
+        when(mockedUserRepository.getUserFrom(accountIDofSender)).thenReturn(mockedSender);
+        when(mockedUserRepository.getUserFrom(accountIDofReciever)).thenReturn(mockedReceiver);
 
-        when(mockedSender.getDepotBy(moneypoolIDofSender)).thenReturn(mockedSenderDepot);
-        when(mockedReceiver.getDepotBy(moneypoolIDofReciever)).thenReturn(mockedReceiverDepot);
+        when(mockedSender.getDepotBy(accountIDofSender)).thenReturn(mockedSenderDepot);
+        when(mockedReceiver.getDepotBy(accountIDofReciever)).thenReturn(mockedReceiverDepot);
 
         when(mockedSenderDepot.getBalance()).thenReturn(new Balance(2));
         when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(0));
 
         TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
         assertDoesNotThrow(()->{
-            service.sendMoney(moneypoolIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(1));
+            service.sendMoney(accountIDofSender.toString(), accountIDofReciever.toString(), new Amount(1));
         });
     }
 
