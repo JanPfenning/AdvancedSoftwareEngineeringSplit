@@ -12,8 +12,9 @@ public class Moneypool extends Depot {
 
     @Override
     public void setBalance(Balance newBalance) throws TransferOutOfMoneypoolException {
-        if(this.getBalance().isSmallerThan(newBalance)){
+        if(this.getBalance().compareTo(newBalance)>0){
             throw new TransferOutOfMoneypoolException("Attempt to transfer money out of money pool "+getId());
         }
+        super.setBalance(newBalance);
     }
 }
