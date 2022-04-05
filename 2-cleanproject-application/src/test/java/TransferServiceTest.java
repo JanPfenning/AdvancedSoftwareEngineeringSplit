@@ -76,4 +76,24 @@ class TransferServiceTest {
         });
     }
 
+    @Test
+    void AccountToMoneypoolHappyPath() throws Exception {
+        Depot mockedSenderDepot = mock(Account.class);
+        Depot mockedReceiverDepot = mock(Moneypool.class);
+
+        when(mockedUserRepository.getUserFrom(accountIDofSender)).thenReturn(mockedSender);
+        when(mockedUserRepository.getUserFrom(moneypoolIDofReciever)).thenReturn(mockedReceiver);
+
+        when(mockedSender.getDepotBy(accountIDofSender)).thenReturn(mockedSenderDepot);
+        when(mockedReceiver.getDepotBy(moneypoolIDofReciever)).thenReturn(mockedReceiverDepot);
+
+        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(2));
+        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(0));
+
+        TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
+        assertDoesNotThrow(()->{
+            service.sendMoney(accountIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(1));
+        });
+    }
+
 }
