@@ -13,6 +13,8 @@ public class Balance {
         return value;
     }
 
+    //TODO should be Comperator method
+    //https://www.javatpoint.com/Comparator-interface-in-collection-framework
     public boolean isSmallerThan(Balance otherBalance){
         return Float.compare(value, otherBalance.value) < 0;
     }
