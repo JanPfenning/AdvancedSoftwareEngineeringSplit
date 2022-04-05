@@ -1,11 +1,13 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TransferServiceTest {
 
     private static UUID moneypoolIDofSender = UUID.fromString("223e4567-e89b-12d3-a456-000000000000");
