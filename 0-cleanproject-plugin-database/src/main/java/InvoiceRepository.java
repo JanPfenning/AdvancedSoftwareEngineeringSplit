@@ -49,20 +49,23 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
     @Override
     public Invoice get(UUID id) {
         String row = getInvoiceStringFromCsvOf(id);
-        String[] rowdata = row.split(";");
+        String[] rowdata = new String[0];
+        if (row != null) {
+            rowdata = row.split(";");
 
-        UserRepositoryInterface userRepository = new UserRepository();
-        try{
-            UserAggregate biller = userRepository.getUserFrom(UUID.fromString(rowdata[1]));
-            Depot billerDestination = biller.getDepotBy(UUID.fromString(rowdata[1]));
-            UserAggregate receiver = userRepository.getUserFrom(new Username(rowdata[2]));
-            Amount amount = new Amount(Float.parseFloat(rowdata[3]));
-            boolean paid = !rowdata[5].equals("0");
-            return new Invoice(UUID.fromString(rowdata[0]), billerDestination, receiver, amount, paid);
-        }catch (Exception e){
-            return null;
+            UserRepositoryInterface userRepository = new UserRepository();
+            try{
+                UserAggregate biller = userRepository.getUserFrom(UUID.fromString(rowdata[1]));
+                Depot billerDestination = biller.getDepotBy(UUID.fromString(rowdata[1]));
+                UserAggregate receiver = userRepository.getUserFrom(new Username(rowdata[2]));
+                Amount amount = new Amount(Float.parseFloat(rowdata[3]));
+                boolean paid = !rowdata[5].equals("0");
+                return new Invoice(UUID.fromString(rowdata[0]), billerDestination, receiver, amount, paid);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-
+        return null;
     }
 
     @Override
