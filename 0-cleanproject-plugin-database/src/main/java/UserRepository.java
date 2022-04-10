@@ -72,13 +72,14 @@ public class UserRepository implements UserRepositoryInterface {
 
     private UserAggregate getUserFromMoneypoolId(UUID moneypoolid){
         String row = UserRepository.getFirstRowStringFromCSV(moneypoolid.toString(), 1, UserRepository.USERS_MONEYPOOLS_FILEPATH);
-        assert row != null;
-        String extractedUsername = extractUsernameOfMoneypoolString(row);
-        try {
-            Username username = new Username(extractedUsername);
-            return getUserFrom(username);
-        } catch (InvalidUsernameException e) {
-            e.printStackTrace();
+        if (row != null) {
+            String extractedUsername = extractUsernameOfMoneypoolString(row);
+            try {
+                Username username = new Username(extractedUsername);
+                return getUserFrom(username);
+            } catch (InvalidUsernameException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
