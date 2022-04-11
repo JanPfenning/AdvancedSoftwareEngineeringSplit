@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class Balance {
+public class Balance implements Comparable{
     private float value;
 
     Balance(float desiredBalance) throws InvalidBalanceException {
@@ -11,12 +11,6 @@ public class Balance {
 
     public float getValue() {
         return value;
-    }
-
-    //TODO should be Comperator method
-    //https://www.javatpoint.com/Comparator-interface-in-collection-framework
-    public boolean isSmallerThan(Balance otherBalance){
-        return Float.compare(value, otherBalance.value) < 0;
     }
 
     @Override
@@ -35,5 +29,10 @@ public class Balance {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return Float.compare(this.value, ((Balance)o).value);
     }
 }

@@ -1,7 +1,6 @@
 import IO.CSVreader;
 import IO.CSVwriter;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -28,7 +27,22 @@ public class TransferRepository implements TransferRepositoryInterface{
     }
 
     @Override
-    public Transfer get(int id) {
+    public Transfer get(UUID id) {
+        try{
+            LinkedList<String> rows = CSVreader.read(TRANSFER_FILEPATH, "\r\n");
+            for(String row : rows){
+                String[] rowdata = row.split(";");
+                if(id.toString().equals(rowdata[0])) {
+                    UUID readUUID = UUID.fromString(rowdata[0]);
+                    Depot sender = new Depot(UUID.fromString(rowdata[1]), new Balance(0));
+                    Depot receiver = new Depot(UUID.fromString(rowdata[2]), new Balance(0));
+                    Amount amount = new Amount(Float.parseFloat(rowdata[3]));
+                    return new Transfer(readUUID, sender, receiver, amount);
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
         return null;
     }
 
