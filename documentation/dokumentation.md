@@ -133,10 +133,31 @@ Die Tests werden Schicht für Schicht durchlaufen und die Resultate einzeln je S
 
 <u><h3>ATRIP: Thorough</h3></u>
 
-[jeweils 1 positives und negatives Beispiel zu ‘Thorough’; jeweils Code-Beispiel, Analyse und
-Begründung, was professionell/nicht professionell ist]
+Es gibt Ansätze, die Test-Before-Code prädigen. Hierbei wird sich vorher über die Funktionalität der Funktion Gedanken gemacht. Auf der anderen Seite kann ein Test im nachhinein zur Überprüfung der Integrität geschrieben werden.
 
-##ATRIP: Professional
+Die Tests sollten alles <b>notwendige</b> und <b>kritische</b> abdecken. Die Auslegung dessen liegt im ermessen des Entwicklers.
+
+Das Testen von Gettern ist i.d.R. überflüssig, da sie nur einen privaten Wert zum auslesen bereitstellen um so zu verhindern dass das Attribut als public Attribut zugänglich und veränderbar ist.
+
+<img src="./images/useless_getter_test.jpg">
+
+Das Testen von Konstruktoren ist nach einigen Entwicklern auch überflüssig.
+Diese enthalten jedoch teilweise validierungslogik. Diese zu Testen dient dazu, beim automatischen Testen ungewollte Seiteneffekte zu finden, bevor sich diese fortplanzen. 
+
+<img src="./images/negative_balances.jpg">
+
+<img src="./images/valid_balance.jpg">
+
+Diese Tests decken alle sinnvollen Fälle ab, eine Accountbalance zu erstellen. Diese sollte nie negativ sein, aber darf genau 0 sein.
+
+Der Test <span style="font-family: monospace;">searchTransferByIdThatDoesNotExist</span> wurde aufgrund eines gefundenen Bugs erstellt um zukünftig Bugs wegen des selben Fehlers zu vermeiden. Wenn die ID nicht existiert, dann soll kein Mockobjekt oder eine Leere Liste o.Ä. zurückgegeben werden.
+
+<img src="./images/iterative_test.jpg">
+
+Unvollständig ist natürlich das fehlen von Tests für das User-Repository.
+
+<u><h3>ATRIP: Professional</h3></u>
+
 [jeweils 1 positives und negatives Beispiel zu ‘Professional’; jeweils Code-Beispiel, Analyse und
 Begründung, was professionell/nicht professionell ist]
 

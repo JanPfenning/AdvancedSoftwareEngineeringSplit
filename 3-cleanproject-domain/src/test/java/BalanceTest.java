@@ -14,7 +14,7 @@ public class BalanceTest {
     }
 
     @Test
-    @DisplayName("invalid values for Balance")
+    @DisplayName("valid values for Balance")
     public void nonNegativeValues() throws Exception {
         assertDoesNotThrow(() -> {
             new Balance(0);
