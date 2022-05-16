@@ -1,4 +1,5 @@
-#Kapitel 1: Einführung
+Kapitel 1: Einführung
+-
 ##Übersicht über die Applikation
 Die Applikation abstrahiert den Geldfluss zwischen Nutzern.
 Nutzer der Software können sich mit einem Nutzernamen registrieren und bekommen ein Hauptkonto erstellt.
@@ -14,7 +15,8 @@ So können Geschäftsbeziehungen mit einem Prepaid Konto abgehandelt werden.
 ##Wie testet man die Applikation?
 [Wie testet man die Applikation? Welche Voraussetzungen werden benötigt? Schritt-für-SchrittAnleitung]
 
-#Kapitel 2: Clean Architecture
+Kapitel 2: Clean Architecture
+-
 ##Was ist Clean Architecture?
 Bei der Clean Architecture geht es darum, den langlebigen Domänenkern und die Anwendungslogik von der potentiell sehr volatilen Außenwelt abzuschotten.
 Man stellt sich die Anwendung als in Schichten geteilt vor. Umso weiter innen eine Klasse liegt, desto eher ist sie langlebig.
@@ -44,7 +46,8 @@ die Clean-Architecture]
 ###Schicht: [Name]
 
 
-#Kapitel 3: SOLID
+Kapitel 3: SOLID
+-
 [https://moodle.dhbw.de/pluginfile.php/199989/mod_resource/content/1/solid-slides.pdf]
 
 ##Analyse Single-Responsibility-Principle (SRP)
@@ -70,7 +73,8 @@ und ein negatives Beispiel für ISP genommen werden]
 ###Negativ-Beispiel
 
 
-#Kapitel 4: Weitere Prinzipien
+Kapitel 4: Weitere Prinzipien
+-
 ##Analyse GRASP: Geringe Kopplung
 Hier sind die Action klassen zur steuerung der UI vermutlich zu nennen
 [jeweils eine bis jetzt noch nicht behandelte Klasse als positives und negatives Beispiel geringer
@@ -93,7 +97,8 @@ Es ist relevant Geldsendungen nach Sendern und Empfängern zu filtern.
 Die funktion einen Geldtransfer basierend auf einer ID zu lesen ist in beiden Fällen gleich.
 Lediglich die Position der zu überprüfenden ID ändert sich!
 
-#Kapitel 5: Unit Tests
+Kapitel 5: Unit Tests
+-
 ##10 Unit Tests
 [Nennung von 10 Unit-Tests und Beschreibung, was getestet wird]
 
@@ -112,10 +117,22 @@ Unit Test           |Beschreibung
 
 
 
-##ATRIP: Automatic
-[Begründung/Erläuterung, wie ‘Automatic’ realisiert wurde]
+<u><h3>ATRIP: Automatic</h3></u>
 
-##ATRIP: Thorough
+Mit dem Command <span style="font-family: monospace;"> mvn clean test</span> können alle Tests mit einem einfachen Command ausgeführt werden.
+Die Tests werden ebenso automatisch ausgeführt, wenn eine neue Pull-Request auf GitHub auf gemacht wird. Diese ausführung funktioniert über GitHub Actions. Die Ausführung ist in einer yml-Datei definiert (/.github/workflows/build.yml)
+
+<img src="./images/automatic_test_github_example.jpg">
+
+Wie im Screenshot zu sehen, kann ein Test, sofern er läuft, lediglich erfolgreich durchlaufen oder fehlschlagen. Sind nicht ausnahmslos alle Tests erfolgreich, wird die Pullrequest gesperrt.
+
+Diese Automatisierung und Einfachheit der Testausführung ist sehr wichtig, da das händische Testen sehr nervig, anstrengend und auch Zeitaufwendig ist.
+Die Automatisierung ist auch hilfreich um eine einheitliche abfolge der Schritte einfacher realisieren zu können. Die Tests erfordern zB keine manuellen Eingaben, diese sind im Test Hardcoded. 
+
+Die Tests werden Schicht für Schicht durchlaufen und die Resultate einzeln je Schicht aufgeführt.
+
+<u><h3>ATRIP: Thorough</h3></u>
+
 [jeweils 1 positives und negatives Beispiel zu ‘Thorough’; jeweils Code-Beispiel, Analyse und
 Begründung, was professionell/nicht professionell ist]
 
@@ -134,11 +151,13 @@ https://sonarcloud.io/component_measures?id=JanPfenning_AdvancedSoftwareEngineer
 [Analyse und Begründung des Einsatzes von 2 Fake/Mock-Objekten; zusätzlich jeweils UML
 Diagramm der Klasse]
 
-#Kapitel 6: Domain Driven Design
+Kapitel 6: Domain Driven Design
+-
 ##Ubiquitous Language
 [4 Beispiele für die Ubiquitous Language; jeweils Bezeichung, Bedeutung und kurze Begründung,
 warum es zur Ubiquitous Language gehört]
-| Bezeichnung | Bedeutung | Begründung
+| Bezeichnung | Bedeutung | Begründung |
+|-|-|-|
 | Depot | Zusammenfassung aller möglichen Geldspeicher | Accounts und Moneypools sind beides Geldspeicher sind aber für unterschiedliche Dinge gedacht |
 | Transfer | Überweisung jeglicher Art | Auch Payments sind überweisungen aber diejendigen, die eine Invoice bezahlen |
 | Invoice | Rechnung | Nutzer können Rechnungen ausstellen, die sich andere Nutzer anscheun können und bezahlen können
@@ -168,7 +187,8 @@ Account, User, Moneypool, mit User als RootEntity
 ausführliche Begründung, warum es keines geben kann/hier nicht sinnvoll ist]
 
 
-#Kapitel 7: Refactoring
+Kapitel 7: Refactoring
+-
 ##Code Smells
 [jeweils 1 Code-Beispiel zu 2 Code Smells aus der Vorlesung; jeweils Code-Beispiel und einen
 möglichen Lösungsweg bzw. den genommen Lösungsweg beschreiben (inkl. (Pseudo-)Code)]
