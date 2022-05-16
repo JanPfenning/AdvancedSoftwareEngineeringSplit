@@ -45,7 +45,7 @@ class TransferServiceTest {
         when(mockedUserRepository.getUserFrom(accountIDofReciever)).thenReturn(mockedReceiver);
 
         when(mockedSender.getDepotBy(accountIDofSender)).thenReturn(mockedSenderDepot);
-        when(mockedReceiver.getDepotBy(accountIDofReciever)).thenReturn(mockedSenderDepot);
+        when(mockedReceiver.getDepotBy(accountIDofReciever)).thenReturn(mockedReceiverDepot);
 
         when(mockedSenderDepot.getBalance()).thenReturn(new Balance(0));
         when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(0));
@@ -95,5 +95,28 @@ class TransferServiceTest {
             service.sendMoney(accountIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(1));
         });
     }
+
+    /*
+    @Test
+    void MoneypoolToAccount() throws Exception {
+        Depot mockedSenderDepot = mock(Moneypool.class);
+        Depot mockedReceiverDepot = mock(Account.class);
+
+        when(mockedUserRepository.getUserFrom(moneypoolIDofSender)).thenReturn(mockedSender);
+        when(mockedUserRepository.getUserFrom(accountIDofReciever)).thenReturn(mockedReceiver);
+
+        when(mockedSender.getDepotBy(moneypoolIDofSender)).thenReturn(mockedSenderDepot);
+        when(mockedReceiver.getDepotBy(accountIDofReciever)).thenReturn(mockedReceiverDepot);
+
+        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(5));
+        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(2));
+
+        TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
+        assertThrows(TransferOutOfMoneypoolException.class, ()->{
+            //TODO Junit skips the overwritten Method Set balance in moneypool
+            service.sendMoney(moneypoolIDofSender.toString(), accountIDofReciever.toString(), new Amount(1));
+        });
+    }
+     */
 
 }

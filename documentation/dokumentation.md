@@ -1,9 +1,6 @@
-#Notes
-UUID und Nickname trennen für Annonymisierung
-
 #Kapitel 1: Einführung
 ##Übersicht über die Applikation
-Die Applikation abstrahiert den Geldfluss zwischen Freunden.
+Die Applikation abstrahiert den Geldfluss zwischen Nutzern.
 Nutzer der Software können sich mit einem Nutzernamen registrieren und bekommen ein Hauptkonto erstellt.
 Nutzer können auch Moneypools erstellen um Geld abseits ihres Hauptkontos für einen gewissen zweck zu sammeln.
 Es wird kein Neues Geld generiert.
@@ -102,16 +99,17 @@ Lediglich die Position der zu überprüfenden ID ändert sich!
 
 Unit Test           |Beschreibung
 -----               |----
-| Klasse#Methode    |               | 
-|                   |               |
-|                   |               |
-|                   |               |
-|                   |               |
-|                   |               |
-|                   |               |
-|                   |               |
-|                   |               |
-|                   |               |
+| senderInsufficientMoney@TransferserviceTest | Überprüft, dass nur Geld von gedeckten Accounts gesendet werden kann| 
+| AccountToAccountHappyPath@TransferserviceTest | Überprüft, dass Geld beim Sender abgebucht wurde und der Empfänger es auch rechtmäßig erhalten hat |
+| AccountToMoneypoolHappyPath@TransferserviceTest | Überprüft, dass auch Moneypools Geld von Accounts erhalten können  |
+| MoneypoolToAccount@TransferserviceTest | Überprüft, dass es nicht möglich ist, Moneypools zu verwenden um Geld zu versenden |
+| SendInvoiceHappyPathAccount@InvoiceServiceTest | Testet das Erstellen von Rechnungen, die auf einen Account bezahlt werden sollen |
+| SendInvoiceHappyPathMoneypool@InvoiceServiceTest | Testet das Erstellen von Rechnungen die auf einen Moneypool bezahlt werden sollen |
+| InvoiceToUnknownUser@InvoiceServiceTest | Überprüft, dass nur Rechnungen an Nutzer gestellt werden, die auch in der Anwendung registriert sind |
+| negativeInvoice@TransferServiceTest | Überprüft, dass Nutzer keine Negativen Geldbeträge in Rechnung stellen |
+| PayInvoiceHappy@TransferService | Testet das Bezahlen einer Rechnung von einem Gedeckten Account |
+| searchTransferByIdThatDoesNotExists@TransferRepositoryTest | Überprüft, dass kein Transfer zurück gefunden wird, wenn die ID der Suche nicht existiert |
+
 
 
 ##ATRIP: Automatic

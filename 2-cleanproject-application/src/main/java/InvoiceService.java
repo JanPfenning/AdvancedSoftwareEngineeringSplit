@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.UUID;
 
+//TODO think of the idea, to pay Invoices with open invoices from others. Skip the middle person.
 public class InvoiceService {
 
     private UserRepositoryInterface userRepository;
@@ -17,6 +18,7 @@ public class InvoiceService {
         Invoice invoice = invoiceRepository.get(invoiceId);
         UserAggregate payer = invoice.getRecipient();
         Depot payerDepot = payer.getDepotBy(payerDepotId);
+        if(payerDepot == null) throw new DepotNotFoundException("Depot with id "+payerDepotId+" not found for recipient "+payer.getUsername());
         this.sendMoney(payerDepot.getId().toString(), invoice);
         invoiceRepository.save(invoice);
     }
@@ -45,11 +47,14 @@ public class InvoiceService {
         return invoiceRepository.get(username);
     }
 
-    public void sendInvoice(String billerString, Username recipientUsername, Amount amount){
+    public void sendInvoice(String billerString, Username recipientUsername, Amount amount) throws UnknownUserAggregateException {
         UUID billerId = UUID.fromString(billerString);
         UserAggregate biller = userRepository.getUserFrom(billerId);
         Depot destinationDepot = biller.getDepotBy(billerId);
         UserAggregate recipient = userRepository.getUserFrom(recipientUsername);
+
+        if(recipient == null)
+            throw new UnknownUserAggregateException("User with Username "+recipientUsername+" Does not exist");
 
         Invoice invoice = new Invoice(destinationDepot, recipient, amount);
         invoiceRepository.save(invoice);
