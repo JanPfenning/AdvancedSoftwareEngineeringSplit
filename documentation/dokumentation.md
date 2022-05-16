@@ -160,23 +160,29 @@ Unvollständig ist natürlich das fehlen von Tests für das User-Repository.
 
 <u><h3>ATRIP: Professional</h3></u>
 
-[jeweils 1 positives und negatives Beispiel zu ‘Professional’; jeweils Code-Beispiel, Analyse und
-Begründung, was professionell/nicht professionell ist]
+Im folgenden Beispiel sieht man, wie der Testcode den gleichen Standards wie der Produktivcode folgt. Ein Test umfasst nur rund 15 Zeilen, ist nicht tief verschachtelt und hat durchaus sprechende Variablennamen.
 
-##Code Coverage
+<img src="./images/professional_test.jpg">
+
+Die folgenden vier Zeilen sind jedoch in verschiedenen Tests in der Klasse <span style="font-family: monospace;">TransferServiceTest</span> zu finden. 
+<img src="./images/atrip_unproffessional.jpg">
+Diese sollten, wie im produktivcode auch an einer gemeinsamen Stelle verwaltet werden. Hier wird eindeutig das Prinzip Dont-Repeat-Yourself verletzt. Außerdem fällt auf, dass die Zeilen vergleichsweise lang sind - was jedoch den Variablen und Funktionsnamen geschuldet ist.
+
+
+<u><h3>Code Coverage</u></h3>
 Die CodeCoverage ist mittels SonarCloud, GitHubActions und JUnit getestet.
 Die Testergebnisse werden von JUnit gesammelt und der Report and SonarCloud gesendet.
 https://sonarcloud.io/summary/overall?id=JanPfenning_AdvancedSoftwareEngineeringSplit
 https://sonarcloud.io/component_measures?id=JanPfenning_AdvancedSoftwareEngineeringSplit&metric=coverage&view=list
 [Code Coverage im Projekt analysieren und begründen]
 
-##Fakes und Mocks
+<u><h3>Fakes und Mocks</u></h3>
 [Analyse und Begründung des Einsatzes von 2 Fake/Mock-Objekten; zusätzlich jeweils UML
 Diagramm der Klasse]
 
 Kapitel 6: Domain Driven Design
 -
-##Ubiquitous Language
+<u><h3>Ubiquitous Language</u></h3>
 [4 Beispiele für die Ubiquitous Language; jeweils Bezeichung, Bedeutung und kurze Begründung,
 warum es zur Ubiquitous Language gehört]
 | Bezeichnung | Bedeutung | Begründung |
