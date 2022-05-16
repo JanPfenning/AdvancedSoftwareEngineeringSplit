@@ -51,7 +51,7 @@ class TransferRepositoryTest {
     }
 
     @Test
-    void searchIdThatDoesNotExists() {
+    void searchTransferByIdThatDoesNotExists() {
         LinkedList<String> transfers = new LinkedList<String>();
 
         transfers.add("5267debe-af38-11ec-b909-0242ac120002;223e4567-e89b-12d3-a456-000000000000;223e4567-e89b-12d3-a456-222222222222;0.1;;1648118619\n");
