@@ -7,7 +7,7 @@ public class Account extends Depot{
     }
 
     Account(float balance, String uuid) throws Exception {
-        super(UUID.fromString(uuid), new Balance(balance));
+        super(UUID.fromString(uuid), new Balance(new Money(balance)));
     }
 
 }

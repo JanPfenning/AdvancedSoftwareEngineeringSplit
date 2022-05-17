@@ -133,12 +133,12 @@ Unit Test           |Beschreibung
 | senderInsufficientMoney@TransferserviceTest | Überprüft, dass nur Geld von gedeckten Accounts gesendet werden kann| 
 | AccountToAccountHappyPath@TransferserviceTest | Überprüft, dass Geld beim Sender abgebucht wurde und der Empfänger es auch rechtmäßig erhalten hat |
 | AccountToMoneypoolHappyPath@TransferserviceTest | Überprüft, dass auch Moneypools Geld von Accounts erhalten können  |
-| MoneypoolToAccount@TransferserviceTest | Überprüft, dass es nicht möglich ist, Moneypools zu verwenden um Geld zu versenden |
+| invoiceAlreadyPaid@InvoiceServiceTest | Überprüft, dass eine Rechnung nicht mehrfach bezahlt wird |
 | SendInvoiceHappyPathAccount@InvoiceServiceTest | Testet das Erstellen von Rechnungen, die auf einen Account bezahlt werden sollen |
 | SendInvoiceHappyPathMoneypool@InvoiceServiceTest | Testet das Erstellen von Rechnungen die auf einen Moneypool bezahlt werden sollen |
 | InvoiceToUnknownUser@InvoiceServiceTest | Überprüft, dass nur Rechnungen an Nutzer gestellt werden, die auch in der Anwendung registriert sind |
-| negativeInvoice@TransferServiceTest | Überprüft, dass Nutzer keine Negativen Geldbeträge in Rechnung stellen |
-| PayInvoiceHappy@TransferService | Testet das Bezahlen einer Rechnung von einem Gedeckten Account |
+| negativeInvoice@InvoiceServiceTest | Überprüft, dass Nutzer keine Negativen Geldbeträge in Rechnung stellen |
+| PayInvoiceHappy@InvoiceServiceTest | Testet das Bezahlen einer Rechnung von einem Gedeckten Account |
 | searchTransferByIdThatDoesNotExists@TransferRepositoryTest | Überprüft, dass kein Transfer zurück gefunden wird, wenn die ID der Suche nicht existiert |
 
 
@@ -195,9 +195,11 @@ Diese sollten, wie im produktivcode auch an einer gemeinsamen Stelle verwaltet w
 <u><h3>Code Coverage</u></h3>
 Die CodeCoverage ist mittels SonarCloud, GitHubActions und JUnit getestet.
 Die Testergebnisse werden von JUnit gesammelt und der Report and SonarCloud gesendet.
-https://sonarcloud.io/summary/overall?id=JanPfenning_AdvancedSoftwareEngineeringSplit
-https://sonarcloud.io/component_measures?id=JanPfenning_AdvancedSoftwareEngineeringSplit&metric=coverage&view=list
-[Code Coverage im Projekt analysieren und begründen]
+- https://sonarcloud.io/summary/overall?id=JanPfenning_AdvancedSoftwareEngineeringSplit
+- https://sonarcloud.io/component_measures?id=JanPfenning_AdvancedSoftwareEngineeringSplit&metric=coverage&view=list
+
+<img src="./images/codeCoverage.jpg">
+Die Coverage alleine ist noch nicht wirklich aussagekräftig. Wie zuvor beschrieben müssen z.B. Getter oder Teilweise Konstruktoren nicht getestet werden. Eine Codecoverage von 1/5 wäre für große und kritische Systeme jedoch ungeachtet dessen deutlich zu wenig. Einige unserer Klassen sind gar nicht vertestet, daher ist es zu erwarten dass sich die Codecoverage in Grenzen hält. 
 
 <u><h3>Fakes und Mocks</u></h3>
 [Analyse und Begründung des Einsatzes von 2 Fake/Mock-Objekten; zusätzlich jeweils UML
@@ -211,7 +213,7 @@ warum es zur Ubiquitous Language gehört]
 | Bezeichnung | Bedeutung | Begründung |
 |-|-|-|
 | Depot | Zusammenfassung aller möglichen Geldspeicher | Accounts und Moneypools sind beides Geldspeicher sind aber für unterschiedliche Dinge gedacht |
-| Transfer | Überweisung jeglicher Art | Auch Payments sind überweisungen aber diejendigen, die eine Invoice bezahlen |
+| Balance | Kontostand | Balances beschreiben Geldmengen im Bezug auf ein Depot. Da Depots aber nicht ins negative gehen dürfen wird hier zu "Amount" unterschieden |
 | Invoice | Rechnung | Nutzer können Rechnungen ausstellen, die sich andere Nutzer anscheun können und bezahlen können
 | Ledger | Gesamtmenge aller Transfers die getätigt wurden | Der nutzer kann diesen Ledger analysieren und nach empfangenem und gesendetem Geld suchen
 
@@ -219,25 +221,36 @@ warum es zur Ubiquitous Language gehört]
 Entities sind ähnlich zu Value Objects, sind jedoch anhand einer Art ID und nicht innerer Werte identifiziert.
 Modifikationen an einer Entity sollen diese nie aus einem Validen status entfernen.
 Account, User, Moneypool, Transfer, Payment, ...
-[UML, Beschreibung und Begründung des Einsatzes einer Entity; falls keine Entity vorhanden:
-ausführliche Begründung, warum es keines geben kann/hier nicht sinnvoll ist]
+
+<img src="./images/Transfer_entity.jpg">
+
+Ein Transfer wird ausschließlich andhand von seiner ID auf gleichheit überprüft. Eine exakte Kopie des Transfers mit einer anderen ID sind zwei unterschiedliche Objekte (wie bei zwei Schülern mit dem gleichen Namen). 
 
 <u><h3>Value Objects</u></h3>
 Valueobjects sind definierte Datentypen, die nach Möglichkeit primitiven Datentypen ersetzen sollen.
 Value Objects sollen im Konstruktor bereits die Regeln der Domäne validieren und so nur in einem Validen Zustand existieren.
-[UML, Beschreibung und Begründung des Einsatzes eines Value Objects; falls kein Value Object
-vorhanden: ausführliche Begründung, warum es keines geben kann/hier nicht sinnvoll ist]
+
+<img src="./images/ValueObjectUML.jpg">
+
+Das Value Object Money definiert Geld als Datentyp. Würde hier kein value object eingesetzt werden, würde Geld einfach als float dargestellt werden. floats sind aber potentiell negativ. In dieser Domäne gibt es jedoch keine negativen Geldsummen. Das Valueobject definiert Berechungsfunktionen die wiederum wieder neue Valueobjects zurückliefern. Die Klasse ist final und alle Attribute sind "blank final" können also nur ein einziges mal im Konstruktor gesetzt werden. Equals und Hashcode sind überschrieben, um sicherzustellen, dass zwei instanzen eines Value Objects bei gleichem Value auch gleich angesehen werden. Es gibt keine Settermethoden, der einzige weg ein Valueobjekt zu bekommen ist die Instanziierung. Innerhalb der Konstruktormethode wird auch jegliche Logik validiert. Ein Valueobjekt kann also nur valide existieren und diesen validen Zustand nie verlassen.
 
 <u><h3>Repositories</u></h3>
-Transfer, Invoice, User
-[UML, Beschreibung und Begründung des Einsatzes eines Repositories; falls kein Repository
-vorhanden: ausführliche Begründung, warum es keines geben kann/hier nicht sinnvoll ist]
+Repositories haben die Aufgabe, Objekte hinzuzufügen, Objekte nach Bezeichnern oder komplexen Kriterien abzurufen und Objekte zu entfernen. Es gibt auch Anwendungsfälle, die Aggregationen erfordern, wie z. B. die Anzahl der Objekte im System oder die Gesamtmenge aller Produkte im Lager. Für diese Anwendungsfälle kann das Repository direkte Aggregationsmethoden bereitstellen, so dass wir nicht ineffizient viele Objekte abrufen müssen.
+
+<img src="./images/RepositoryUML.jpg">
+
+Das Repository Invoice kann Rechnungen basierend auf der ID lesen, alle Rechungen zu einem Nutzernamen auslesen und eine Rechnung persistieren.
+Die Methoden sind im dazugehörtigen Interface deklariert.
 
 <u><h3>Aggregates</u></h3>
-Account, User, Moneypool, mit User als RootEntity
-[UML, Beschreibung und Begründung des Einsatzes eines Aggregates; falls kein Aggregate vorhanden:
-ausführliche Begründung, warum es keines geben kann/hier nicht sinnvoll ist]
+Ein Aggregat ist eine Ansammlung von Domänenobjekten, die als eine Einheit behandelt werden können. Eine Entität innerhalb des Aggregates fungiert als die Aggregate-Root bzw. der Root-Entity. Über diese wird auf das gesamte Aggregat zugegriffen.
 
+<img src="./images/aggregateUML.jpg">
+
+Die Abbildung zeigt im oberen Bereich das eigentliche Aggregat "UserAggregate" welches die Entitäten User, Account und Moneypool vereint.
+Das Aggregat "besteht aus" Account und Moneypool.
+Das UserRepositoryInterface ist die einzige schnittstelle zum Moneypool und Account Repository. Ein zugriff auf eine Sub-Entität muss also über das Aggregate Root verlaufen.
+Das UserRepository ruft dann intern die Repositories der Sub-Entitäten auf.
 
 Kapitel 7: Refactoring
 -
@@ -247,7 +260,7 @@ möglichen Lösungsweg bzw. den genommen Lösungsweg beschreiben (inkl. (Pseudo-
 
 <u><h3>2 Refactorings</u></h3>
 - Long Class extracted into subclasses
-https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/pull/32/files
+https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/pull/32/files</br>
 Im UserRepository war der Code dafür direkt Accounts und Moneypools auszulesen.
 Diese Entitäten haben nun jeweils eigene Repositories die vom User Repository aufgerufen werden. 
 
@@ -263,7 +276,7 @@ UML-Diagram des UserRepository nach dem Refactoring:
 
 
 - Extract method
-https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/commit/b49d5f087ee3ae59a97852e9bc90eafddc4b770c
+https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/commit/b49d5f087ee3ae59a97852e9bc90eafddc4b770c</br>
 Es war nicht deutlich was "rowdata[0]" bedeuten sollte. 
 Darum die benannte funktion die nun verdeutlicht, dass es sich um den Nutzernamen handelt
 

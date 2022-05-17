@@ -34,13 +34,14 @@ public class InitAction implements ActionInterface {
                 "0) Quit\n"
             );
             String stringResponse = CommandLineReader.readLine();
-            response = Integer.parseInt(stringResponse);
-            if(response==0) break;
-            actions.get(response).act();
-
-            OutputLogger.log("\nEnter to continue");
-            String awaitKey = CommandLineReader.readLine();
-            if(!awaitKey.equals("")) break;
+            try{
+                response = Integer.parseInt(stringResponse);
+                if(response==0) break;
+                actions.get(response).act();
+                OutputLogger.log("\nEnter to continue");
+                String awaitKey = CommandLineReader.readLine();
+                if(!awaitKey.equals("")) break;
+            }catch (Exception ignored){}
         }while(true);
     }
 }

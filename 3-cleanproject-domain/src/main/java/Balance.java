@@ -1,16 +1,36 @@
 import java.util.Objects;
 
-public class Balance implements Comparable{
-    private float value;
+public final class Balance implements Comparable{
 
-    Balance(float desiredBalance) throws InvalidBalanceException {
-        if(desiredBalance < 0)
-            throw new InvalidBalanceException("Balance can't be negative");
-        this.value = desiredBalance;
+    private final Money value;
+
+    Balance(Money money) throws InvalidBalanceException {
+        try{
+            if(money.compareTo(new Money(0))<0)
+                throw new InvalidBalanceException("Balance can't be negative");
+        } catch (InvalidMoneyException e){
+            System.exit(-1);
+        }
+        this.value = money;
     }
 
-    public float getValue() {
-        return value;
+    public Balance add(Amount a) throws InvalidBalanceException {
+        try {
+            return new Balance(this.value.add(a.getValue()));
+        }catch (InvalidMoneyException e){
+            throw new InvalidBalanceException("Balance can't be negative");
+        }    }
+
+    public Balance subtract(Amount a) throws InvalidBalanceException {
+        try {
+            return new Balance(this.value.subtract(a.getValue()));
+        }catch (InvalidMoneyException e){
+            throw new InvalidBalanceException("Balance can't be negative");
+        }
+    }
+
+    public Money getValue(){
+        return this.value;
     }
 
     @Override
@@ -23,7 +43,7 @@ public class Balance implements Comparable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Balance balance = (Balance) o;
-        return Float.compare(balance.value, value) == 0;
+        return balance.value.compareTo(value) == 0;
     }
 
     @Override
@@ -33,6 +53,6 @@ public class Balance implements Comparable{
 
     @Override
     public int compareTo(Object o) {
-        return Float.compare(this.value, ((Balance)o).value);
+        return this.value.compareTo(((Balance)o).value);
     }
 }

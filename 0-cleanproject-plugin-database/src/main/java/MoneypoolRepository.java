@@ -41,7 +41,7 @@ public class MoneypoolRepository {
             LinkedList<String> rows = CSVreader.read(USERS_MONEYPOOLS_FILEPATH, "\r\n");
             for(String row : rows){
                 String[] rowdata = row.split(";");
-                if(rowdata[0].equals(username.getValue())) {
+                if(rowdata[0].equals(username.toString())) {
                     Moneypool moneypool = getMoneypoolFrom(UUID.fromString(rowdata[1]));
                     if(moneypool != null)
                         moneypools.add(moneypool);
