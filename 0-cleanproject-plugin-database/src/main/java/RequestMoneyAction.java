@@ -24,7 +24,7 @@ public class RequestMoneyAction implements ActionInterface {
         String amountString = CommandLineReader.readLine();
 
         try{
-            Amount amount = new Amount(Float.parseFloat(amountString));
+            Amount amount = new Amount(new Money(Float.parseFloat(amountString)));
             Username username = new Username(recipientUserName);
             service.sendInvoice(billerDepot, username, amount);
         } catch (Exception e) {

@@ -7,7 +7,7 @@ public class Moneypool extends Depot {
     }
 
     public Moneypool(String id, float balance) throws Exception {
-        super(UUID.fromString(id), new Balance(balance));
+        super(UUID.fromString(id), new Balance(new Money(balance)));
     }
 
     @Override

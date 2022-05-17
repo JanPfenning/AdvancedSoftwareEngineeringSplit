@@ -10,7 +10,7 @@ class MoneypoolTest {
     void negativeMoneypool() throws Exception {
         Moneypool moneypool = new Moneypool(UUID.randomUUID().toString(), 10);
         assertThrows(InvalidBalanceException.class, ()->{
-            moneypool.setBalance(new Balance(-1));
+            moneypool.setBalance(new Balance(new Money(-1)));
         });
     }
 
@@ -18,7 +18,7 @@ class MoneypoolTest {
     void emptyMoneypool() throws Exception {
         Moneypool moneypool = new Moneypool(UUID.randomUUID().toString(), 10);
         assertThrows(TransferOutOfMoneypoolException.class, ()->{
-            moneypool.setBalance(new Balance(0));
+            moneypool.setBalance(new Balance(new Money(0)));
         });
     }
 
@@ -26,7 +26,7 @@ class MoneypoolTest {
     void payFromMoneypool() throws Exception {
         Moneypool moneypool = new Moneypool(UUID.randomUUID().toString(), 10);
         assertThrows(TransferOutOfMoneypoolException.class, ()->{
-            moneypool.setBalance(new Balance(2));
+            moneypool.setBalance(new Balance(new Money(2)));
         });
     }
 
@@ -34,7 +34,7 @@ class MoneypoolTest {
     void receiveMoney() throws Exception {
         Moneypool moneypool = new Moneypool(UUID.randomUUID().toString(), 10);
         assertDoesNotThrow(()->{
-            moneypool.setBalance(new Balance(12));
+            moneypool.setBalance(new Balance(new Money(12)));
         });
     }
 }

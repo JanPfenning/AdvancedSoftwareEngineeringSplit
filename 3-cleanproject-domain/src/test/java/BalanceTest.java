@@ -8,25 +8,25 @@ public class BalanceTest {
     @Test
     @DisplayName("invalid values for Balance")
     public void negativeValues() throws Exception {
-        assertThrows(Exception.class, () -> new Balance(-1));
-        assertThrows(Exception.class, () -> new Balance(-10));
-        assertThrows(Exception.class, () -> new Balance(Integer.MAX_VALUE+1));
+        assertThrows(Exception.class, () -> new Balance(new Money(-1)));
+        assertThrows(Exception.class, () -> new Balance(new Money(-10)));
+        assertThrows(Exception.class, () -> new Balance(new Money(Integer.MAX_VALUE+1)));
     }
 
     @Test
     @DisplayName("valid values for Balance")
     public void nonNegativeValues() throws Exception {
         assertDoesNotThrow(() -> {
-            new Balance(0);
+            new Balance(new Money(0));
         });
         assertDoesNotThrow(() -> {
-            new Balance(1);
+            new Balance(new Money(1));
         });
         assertDoesNotThrow(() -> {
-            new Balance(10);
+            new Balance(new Money(10));
         });
         assertDoesNotThrow(() -> {
-            new Balance(Integer.MAX_VALUE);
+            new Balance(new Money(Integer.MAX_VALUE));
         });
     }
 
@@ -34,8 +34,8 @@ public class BalanceTest {
     @DisplayName("Getter test")
     public void getter(){
         assertDoesNotThrow(() -> {
-            Balance b = new Balance(0);
-            assertEquals(0, b.getValue());
+            Balance b = new Balance(new Money(0));
+            assertEquals(new Money(0), b.getValue());
         });
     }
 }

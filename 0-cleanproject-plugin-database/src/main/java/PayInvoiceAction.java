@@ -1,4 +1,3 @@
-import IO.CSVreader;
 import IO.CommandLineReader;
 
 import java.util.UUID;
@@ -26,8 +25,10 @@ public class PayInvoiceAction implements ActionInterface {
 
         try{
             this.service.payInvoice(UUID.fromString(invoiceId), UUID.fromString(depotId));
-            System.out.println("Invoice has been paied");
-        }catch (Exception e){
+            System.out.println("Invoice payment send");
+        }catch (InvoiceIsPaidException i){
+            System.out.println("Invoice has been paied already");
+        }catch(Exception e){
             System.out.println("Error at payment");
             System.out.println(e);
             System.exit(-1);

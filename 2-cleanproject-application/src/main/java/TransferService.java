@@ -21,8 +21,8 @@ public class TransferService {
         if(senderDepot == null) throw new DepotNotFoundException("Sender Depot could not be found");
         if(receiverDepot == null) throw new DepotNotFoundException("Receiver Depot could not be found");
 
-        Balance newSenderBalance = new Balance(senderDepot.getBalance().getValue()-amount.getValue());
-        Balance newReceiverBalance = new Balance(receiverDepot.getBalance().getValue()+amount.getValue());
+        Balance newSenderBalance = senderDepot.getBalance().subtract(amount);
+        Balance newReceiverBalance = receiverDepot.getBalance().add(amount);
 
         senderDepot.setBalance(newSenderBalance);
         receiverDepot.setBalance(newReceiverBalance);
