@@ -228,14 +228,27 @@ https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/pull/32/files
 Im UserRepository war der Code dafür direkt Accounts und Moneypools auszulesen.
 Diese Entitäten haben nun jeweils eigene Repositories die vom User Repository aufgerufen werden. 
 
-TODO: UML
+UML-Diagram des UserRepository vor dem Refactoring:
+<img src="./images/PRE_Long-Class-extracted-into-subclasses_UML.png">
 
-- extract method
+Screenshot des Codes nach dem Refactoring:
+<img src="./images/POST_Long-Class-extracted-into-subclasses_Code.png">
+
+UML-Diagram des UserRepository nach dem Refactoring:
+<img src="./images/POST_Long-Class-extracted-into-subclasses_UML.png">
+
+
+
+- Extract method
 https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/commit/b49d5f087ee3ae59a97852e9bc90eafddc4b770c
 Es war nicht deutlich was "rowdata[0]" bedeuten sollte. 
 Darum die benannte funktion die nun verdeutlicht, dass es sich um den Nutzernamen handelt
 
-TODO: UML With and without the function?
+UML-Diagram des UserRepository vor dem Refactoring:
+<img src="./images/PRE_Extract-method_UML.png">
+
+UML-Diagram des UserRepository nach dem Refactoring:
+<img src="./images/POST_Extract-method_UML.png">
 
 
 Kapitel 8: Entwurfsmuster
