@@ -67,19 +67,24 @@ UML)]
 ###Positiv-Beispiel
 ###Negativ-Beispiel
 
-##Analyse Open-Closed-Principle (OCP)
+<u><h3>Analyse Open-Closed-Principle (OCP)</h3>
 [jeweils eine Klasse als positives und negatives Beispiel für OCP; jeweils UML der Klasse und
 Analyse mit Begründung, warum das OCP erfüllt/nicht erfüllt wurde – falls erfüllt: warum hier
 sinnvoll/welches Problem gab es? Falls nicht erfüllt: wie könnte man es lösen (inkl. UML)?]
-###Positiv-Beispiel
-###Negativ-Beispiel
+<h4>Positiv-Beispiel</h4>
+Ein positives Beispiel für ein Open-Close-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
+Dafür wird in InitAction eine Hashmap erstellt, welche Integer (User-Input) auf ActionInterfaces mapped.
+Wenn eine neue Action (Funktion für den Nutzer) entwickelt wird so muss nicht innerhalb der Klasse ActionInterfaces eine neue Funktion erstellt / modifiziert werden, sondern nur möglicherweise die Hashmap ergänzt und eine neue Klasse erstellt werden, welche ActionInterface implementiert. Somit sind Erweiterungen der Funktionalität sehr einfach, wobei Modifikationen bestehendes Codes vermieden werden.
+<img src="./images/ActionInterfaceOpenClosePrinciple.png">
+
+<h4>Negativ-Beispiel</h4>
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
 [jeweils eine Klasse als positives und negatives Beispiel für entweder LSP oder ISP oder DIP); jeweils
 UML der Klasse und Begründung, warum man hier das Prinzip erfüllt/nicht erfüllt wird]
 [Anm.: es darf nur ein Prinzip ausgewählt werden; es darf NICHT z.B. ein positives Beispiel für LSP
 und ein negatives Beispiel für ISP genommen werden]
-###Positiv-Beispiel
+
 ###Negativ-Beispiel
 
 
