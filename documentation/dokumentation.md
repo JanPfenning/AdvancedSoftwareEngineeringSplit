@@ -31,16 +31,20 @@ Daraus folgt auch, dass der innere Code unabhängig vom Rest der Anwendung ausge
 <u><h3>Analyse der Dependency Rule</u></h3>
 [https://moodle.dhbw.de/pluginfile.php/193721/mod_resource/content/1/clean-architecture.pdf]
 
-Da wir die Ansätze von Clean Architecure verfolgen und es durch die Maven-Dependencies in den Packages enforced ist dürften keine Negativbeispiele existieren.
-Keine Dependency geht von innen nach außen.
-
 [(1 Klasse, die die Dependency Rule einhält und eine Klasse, die die Dependency Rule verletzt);
 jeweils UML der Klasse und Analyse der Abhängigkeiten in beide Richtungen (d.h., von wem hängt die
 Klasse ab und wer hängt von der Klasse ab) in Bezug auf die Dependency Rule]
-###Positiv-Beispiel: Dependency Rule
-###Negativ-Beispiel: Dependency Rule
+<h4>Positiv-Beispiel: Dependency Rule</h4>
+Die Domain-Klasse UserRepository greift auf keine Klassen außerhalb von Layer 3 zu.
+<img src="./images/UserAggregateUML.png">
+Alle schichtübergreifenden Abhängigkeiten greifen von einer äußeren Schicht auf die innere Schicht zu bzw. von einer kleineren Schicht auf die größere Schicht zu.
+
+<h4>Negativ-Beispiel: Dependency Rule</h4>
+Da wir die Ansätze von Clean Architecure verfolgen und es durch die Maven-Dependencies in den Packages enforced ist dürften keine Negativbeispiele existieren.
+Keine Dependency geht von innen nach außen.
+
 <img src="./images/CleanarchitectureUML.png">
-<img src="./images/dependencyAnalyzer">
+<img src="./images/dependencyAnalyzer.png">
 
 
 <u><h3>Analyse der Schichten</u></h3>
