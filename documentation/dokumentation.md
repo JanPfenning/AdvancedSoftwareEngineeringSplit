@@ -39,6 +39,9 @@ jeweils UML der Klasse und Analyse der Abhängigkeiten in beide Richtungen (d.h.
 Klasse ab und wer hängt von der Klasse ab) in Bezug auf die Dependency Rule]
 ###Positiv-Beispiel: Dependency Rule
 ###Negativ-Beispiel: Dependency Rule
+<img src="./images/CleanarchitectureUML.png">
+<img src="./images/dependencyAnalyzer">
+
 
 <u><h3>Analyse der Schichten</u></h3>
 - 3-Domainkern: ValueObjects  z.B. Depot (Klasse die ein Geldspeicher darstellt)
