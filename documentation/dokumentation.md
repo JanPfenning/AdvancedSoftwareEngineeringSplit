@@ -245,10 +245,10 @@ Es war nicht deutlich was "rowdata[0]" bedeuten sollte.
 Darum die benannte funktion die nun verdeutlicht, dass es sich um den Nutzernamen handelt
 
 UML-Diagram des UserRepository vor dem Refactoring:
-<img src="./images/PRE_Extract-method_UML.png">
+<img src="./images/PRE_Extract-Method_UML.png">
 
 UML-Diagram des UserRepository nach dem Refactoring:
-<img src="./images/POST_Extract-method_UML.png">
+<img src="./images/POST_Extract-Method_UML.png">
 
 
 Kapitel 8: Entwurfsmuster
