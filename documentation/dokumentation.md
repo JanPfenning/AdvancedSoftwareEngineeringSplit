@@ -72,12 +72,23 @@ UML)]
 Analyse mit Begründung, warum das OCP erfüllt/nicht erfüllt wurde – falls erfüllt: warum hier
 sinnvoll/welches Problem gab es? Falls nicht erfüllt: wie könnte man es lösen (inkl. UML)?]
 <h4>Positiv-Beispiel</h4>
-Ein positives Beispiel für ein Open-Close-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
+Ein positives Beispiel für ein Open-Closed-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
 Dafür wird in InitAction eine Hashmap erstellt, welche Integer (User-Input) auf ActionInterfaces mapped.
 Wenn eine neue Action (Funktion für den Nutzer) entwickelt wird so muss nicht innerhalb der Klasse ActionInterfaces eine neue Funktion erstellt / modifiziert werden, sondern nur möglicherweise die Hashmap ergänzt und eine neue Klasse erstellt werden, welche ActionInterface implementiert. Somit sind Erweiterungen der Funktionalität sehr einfach, wobei Modifikationen bestehendes Codes vermieden werden.
 <img src="./images/ActionInterfaceOpenClosePrinciple.png">
 
 <h4>Negativ-Beispiel</h4>
+Ein negatives Beispiel für das Open-Closed-Principle ist die Polymorphie zwischen Moneypool un Depot. Dabei erbt Moneypool von Depot.
+Moneypool ist ein Depot mit speziellen Einschränkungen, da von einem Moneypool kein Geld versendet werden darf. 
+Deshalb wird in Moneypool die setBalance-Methode überschrieben und es wird geprüft, ob sich die Balance verkleinern würde. Wenn dies der Fall ist, wird eine Exception geworfen.
+Falls nun Depot um Funktionalität erweitern werden soll, welche aber nicht für Moneypool gelten soll, so muss in Moneypool die neue Funktionalität überschrieben werden.
+Dies sorgt dafür, dass sich durch eine Erweiterung der Funktionalität, nötig die bestehende Klasse Depot, sowie alle Spezialisierungen von Depot (Moneypool) zu verändern.
+<img src="./images/DepotMoneypoolOpenClosedPrinciple.png">
+Eine Gegenmaßnahme wäre das die Umkehrung der Vererbung:
+<img src="./images/MoneypoolDepotOpenClosedPrinciple.png">
+Somit erben alle (hier: Depot) von kleinsten gemeinsamen Teil (hier: Moneypool). Wenn Depot erweitert wird, wirkt sich dies nicht auf Moenypool aus.
+
+
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
 [jeweils eine Klasse als positives und negatives Beispiel für entweder LSP oder ISP oder DIP); jeweils
