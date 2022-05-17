@@ -1,17 +1,37 @@
 import java.util.Objects;
 
-public class Amount {
+public final class Amount implements Comparable{
 
-    private float value;
+    private final Money value;
 
-    public Amount(float value) throws InvalidAmountException {
-        if (value <= 0)
-            throw new InvalidAmountException(value+" is negative but Amounts must be positive");
-        this.value = value;
+    public Amount(Money money) throws InvalidAmountException {
+        try{
+            if(money.compareTo(new Money(0))<=0)
+                throw new InvalidAmountException("Amount must be positive");
+        } catch (InvalidMoneyException e){
+            System.exit(-1);
+        }
+        this.value = money;
     }
 
-    public float getValue() {
-        return value;
+    public Money getValue(){
+        return this.value;
+    }
+
+    public Amount add(Money m) throws InvalidAmountException {
+        try{
+            return new Amount(m.add(this.value));
+        } catch (InvalidMoneyException e){
+            throw new InvalidAmountException("Amount must be positive");
+        }
+    }
+
+    public Amount subtract(Money m) throws InvalidAmountException {
+        try{
+            return new Amount(m.subtract(this.value));
+        } catch (InvalidMoneyException e){
+            throw new InvalidAmountException("Amount must be positive");
+        }
     }
 
     @Override
@@ -24,11 +44,16 @@ public class Amount {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Amount amount = (Amount) o;
-        return Float.compare(amount.value, value) == 0;
+        return Objects.equals(value, amount.value);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.value.compareTo(o);
     }
 }

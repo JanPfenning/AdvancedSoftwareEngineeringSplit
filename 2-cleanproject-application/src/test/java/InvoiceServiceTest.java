@@ -48,13 +48,13 @@ class InvoiceServiceTest {
 
         when(mockedUserRepository.getUserFrom(accountIDofIssuer)).thenReturn(mockedIssuer);
         when(mockedPayer.getDepotBy(accountIDofIssuer)).thenReturn(mockedIssuerDepot);
-        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(0));
+        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(new Money(0)));
 
         when(mockedUserRepository.getUserFrom(usernameOfPayer)).thenReturn(mockedPayer);
 
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
         assertDoesNotThrow(()->{
-            service.sendInvoice(accountIDofIssuer.toString(), usernameOfPayer, new Amount(1));
+            service.sendInvoice(accountIDofIssuer.toString(), usernameOfPayer, new Amount(new Money(1)));
         });
     }
 
@@ -64,13 +64,13 @@ class InvoiceServiceTest {
 
         when(mockedUserRepository.getUserFrom(moneypoolIDofIssuer)).thenReturn(mockedIssuer);
         when(mockedIssuer.getDepotBy(moneypoolIDofIssuer)).thenReturn(mockedIssuerDepot);
-        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(0));
+        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(new Money(0)));
 
         when(mockedUserRepository.getUserFrom(usernameOfPayer)).thenReturn(mockedPayer);
 
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
         assertDoesNotThrow(()->{
-            service.sendInvoice(moneypoolIDofIssuer.toString(), usernameOfPayer, new Amount(1));
+            service.sendInvoice(moneypoolIDofIssuer.toString(), usernameOfPayer, new Amount(new Money(1)));
         });
     }
 
@@ -84,7 +84,7 @@ class InvoiceServiceTest {
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
         Username unknownUser = new Username("UNKNOWN_USER");
         assertThrows(UnknownUserAggregateException.class, ()->{
-            service.sendInvoice(moneypoolIDofIssuer.toString(), unknownUser, new Amount(1));
+            service.sendInvoice(moneypoolIDofIssuer.toString(), unknownUser, new Amount(new Money(1)));
         });
     }
 
@@ -101,26 +101,26 @@ class InvoiceServiceTest {
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
 
         assertThrows(InvalidAmountException.class, ()->{
-            service.sendInvoice(moneypoolIDofIssuer.toString(), usernameOfPayer, new Amount(-1));
+            service.sendInvoice(moneypoolIDofIssuer.toString(), usernameOfPayer, new Amount(new Money(-1)));
         });
     }
 
     @Test
-    public void payInvoiceHappyAccount() throws InvalidBalanceException, InvalidAmountException {
+    public void payInvoiceHappyAccount() throws InvalidBalanceException, InvalidAmountException, InvalidMoneyException {
         Depot mockedIssuerDepot = mock(Account.class);
         Depot mockedPayerDepot = mock(Account.class);
 
         when(mockedUserRepository.getUserFrom(accountIDofIssuer)).thenReturn(mockedIssuer);
         when(mockedIssuer.getDepotBy(accountIDofIssuer)).thenReturn(mockedIssuerDepot);
-        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(100));
+        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
         when(mockedIssuerDepot.getId()).thenReturn(accountIDofIssuer);
 
         when(mockedUserRepository.getUserFrom(accountIDofPayer)).thenReturn(mockedPayer);
         when(mockedPayer.getDepotBy(accountIDofPayer)).thenReturn(mockedPayerDepot);
-        when(mockedPayerDepot.getBalance()).thenReturn(new Balance(100));
+        when(mockedPayerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
         when(mockedPayerDepot.getId()).thenReturn(accountIDofPayer);
 
-        Invoice invoice = new Invoice(mockedIssuerDepot, mockedPayer, new Amount(10));
+        Invoice invoice = new Invoice(mockedIssuerDepot, mockedPayer, new Amount(new Money(10)));
         when(mockedInvoiceRepository.get(invoice.getId())).thenReturn(invoice);
 
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
@@ -130,21 +130,21 @@ class InvoiceServiceTest {
     }
 
     @Test
-    public void payInvoiceWrongPayer() throws InvalidBalanceException, InvalidAmountException {
+    public void payInvoiceWrongPayer() throws InvalidBalanceException, InvalidAmountException, InvalidMoneyException {
         Depot mockedIssuerDepot = mock(Account.class);
         Depot mockedPayerDepot = mock(Account.class);
 
         when(mockedUserRepository.getUserFrom(accountIDofIssuer)).thenReturn(mockedIssuer);
         when(mockedIssuer.getDepotBy(accountIDofIssuer)).thenReturn(mockedIssuerDepot);
-        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(100));
+        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
         when(mockedIssuerDepot.getId()).thenReturn(accountIDofIssuer);
 
         when(mockedUserRepository.getUserFrom(accountIDofPayer)).thenReturn(mockedPayer);
         when(mockedPayer.getDepotBy(accountIDofPayer)).thenReturn(null);
-        when(mockedPayerDepot.getBalance()).thenReturn(new Balance(100));
+        when(mockedPayerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
         when(mockedPayerDepot.getId()).thenReturn(accountIDofPayer);
 
-        Invoice invoice = new Invoice(mockedIssuerDepot, mockedPayer, new Amount(10));
+        Invoice invoice = new Invoice(mockedIssuerDepot, mockedPayer, new Amount(new Money(10)));
         when(mockedInvoiceRepository.get(invoice.getId())).thenReturn(invoice);
 
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
@@ -154,25 +154,49 @@ class InvoiceServiceTest {
     }
 
     @Test
-    public void payInvoiceInsufficientAmount() throws InvalidBalanceException, InvalidAmountException {
+    public void payInvoiceInsufficientAmount() throws InvalidBalanceException, InvalidAmountException, InvalidMoneyException {
         Depot mockedIssuerDepot = mock(Account.class);
         Depot mockedPayerDepot = mock(Account.class);
 
         when(mockedUserRepository.getUserFrom(accountIDofIssuer)).thenReturn(mockedIssuer);
         when(mockedIssuer.getDepotBy(accountIDofIssuer)).thenReturn(mockedIssuerDepot);
-        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(100));
+        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
         when(mockedIssuerDepot.getId()).thenReturn(accountIDofIssuer);
 
         when(mockedUserRepository.getUserFrom(accountIDofPayer)).thenReturn(mockedPayer);
         when(mockedPayer.getDepotBy(accountIDofPayer)).thenReturn(mockedPayerDepot);
-        when(mockedPayerDepot.getBalance()).thenReturn(new Balance(0));
+        when(mockedPayerDepot.getBalance()).thenReturn(new Balance(new Money(0)));
         when(mockedPayerDepot.getId()).thenReturn(accountIDofPayer);
 
-        Invoice invoice = new Invoice(mockedIssuerDepot, mockedPayer, new Amount(10));
+        Invoice invoice = new Invoice(mockedIssuerDepot, mockedPayer, new Amount(new Money(10)));
         when(mockedInvoiceRepository.get(invoice.getId())).thenReturn(invoice);
 
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
         assertThrows(InvalidBalanceException.class,()->{
+            service.payInvoice(invoice.getId(), accountIDofPayer);
+        });
+    }
+
+    @Test
+    public void invoiceAlreadyPaid() throws InvalidBalanceException {
+        Depot mockedIssuerDepot = mock(Account.class);
+        Depot mockedPayerDepot = mock(Account.class);
+
+        when(mockedUserRepository.getUserFrom(accountIDofIssuer)).thenReturn(mockedIssuer);
+        when(mockedIssuer.getDepotBy(accountIDofIssuer)).thenReturn(mockedIssuerDepot);
+        when(mockedIssuerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
+        when(mockedIssuerDepot.getId()).thenReturn(accountIDofIssuer);
+
+        when(mockedUserRepository.getUserFrom(accountIDofPayer)).thenReturn(mockedPayer);
+        when(mockedPayer.getDepotBy(accountIDofPayer)).thenReturn(mockedPayerDepot);
+        when(mockedPayerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
+        when(mockedPayerDepot.getId()).thenReturn(accountIDofPayer);
+
+        Invoice invoice = new Invoice(UUID.randomUUID(), mockedIssuerDepot, mockedPayer, new Amount(new Money(10)), true);
+        when(mockedInvoiceRepository.get(invoice.getId())).thenReturn(invoice);
+
+        InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
+        assertThrows(InvoiceIsPaidException.class,()->{
             service.payInvoice(invoice.getId(), accountIDofPayer);
         });
     }

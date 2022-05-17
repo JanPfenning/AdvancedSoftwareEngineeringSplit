@@ -47,12 +47,12 @@ class TransferServiceTest {
         when(mockedSender.getDepotBy(accountIDofSender)).thenReturn(mockedSenderDepot);
         when(mockedReceiver.getDepotBy(accountIDofReciever)).thenReturn(mockedReceiverDepot);
 
-        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(0));
-        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(0));
+        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(new Money(0)));
+        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(new Money(0)));
 
         TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
         assertThrows(InvalidBalanceException.class, ()->{
-            service.sendMoney(accountIDofSender.toString(), accountIDofReciever.toString(), new Amount(1));
+            service.sendMoney(accountIDofSender.toString(), accountIDofReciever.toString(), new Amount(new Money(1)));
         });
     }
 
@@ -67,12 +67,12 @@ class TransferServiceTest {
         when(mockedSender.getDepotBy(accountIDofSender)).thenReturn(mockedSenderDepot);
         when(mockedReceiver.getDepotBy(accountIDofReciever)).thenReturn(mockedReceiverDepot);
 
-        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(2));
-        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(0));
+        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(new Money(2)));
+        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(new Money(2)));
 
         TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
         assertDoesNotThrow(()->{
-            service.sendMoney(accountIDofSender.toString(), accountIDofReciever.toString(), new Amount(1));
+            service.sendMoney(accountIDofSender.toString(), accountIDofReciever.toString(), new Amount(new Money(1)));
         });
     }
 
@@ -87,12 +87,12 @@ class TransferServiceTest {
         when(mockedSender.getDepotBy(accountIDofSender)).thenReturn(mockedSenderDepot);
         when(mockedReceiver.getDepotBy(moneypoolIDofReciever)).thenReturn(mockedReceiverDepot);
 
-        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(2));
-        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(0));
+        when(mockedSenderDepot.getBalance()).thenReturn(new Balance(new Money(2)));
+        when(mockedReceiverDepot.getBalance()).thenReturn(new Balance(new Money(0)));
 
         TransferService service = new TransferService(mockedUserRepository, mockedTransferRepository);
         assertDoesNotThrow(()->{
-            service.sendMoney(accountIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(1));
+            service.sendMoney(accountIDofSender.toString(), moneypoolIDofReciever.toString(), new Amount(new Money(1)));
         });
     }
 
