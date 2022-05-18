@@ -22,14 +22,14 @@ public class SendMoneyAction implements ActionInterface {
         String amountString = CommandLineReader.readLine();
 
         try {
-            Amount amount = new Amount(Float.parseFloat(amountString));
+            Amount amount = new Amount(new Money(Float.parseFloat(amountString)));
             service.sendMoney(senderDepotId, receiverDepotId, amount);
             System.out.println("Money send");
         } catch (DepotNotFoundException e) {
             e.printStackTrace();
-        } catch (InvalidBalanceException e) {
-            e.printStackTrace();
         } catch (InvalidAmountException e) {
+            e.printStackTrace();
+        } catch (InvalidBalanceException e) {
             e.printStackTrace();
         } catch (TransferOutOfMoneypoolException e) {
             e.printStackTrace();

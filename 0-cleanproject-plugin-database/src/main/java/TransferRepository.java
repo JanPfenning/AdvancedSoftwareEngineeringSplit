@@ -1,6 +1,7 @@
 import IO.CSVreader;
 import IO.CSVwriter;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -34,14 +35,18 @@ public class TransferRepository implements TransferRepositoryInterface{
                 String[] rowdata = row.split(";");
                 if(id.toString().equals(rowdata[0])) {
                     UUID readUUID = UUID.fromString(rowdata[0]);
-                    Depot sender = new Depot(UUID.fromString(rowdata[1]), new Balance(0));
-                    Depot receiver = new Depot(UUID.fromString(rowdata[2]), new Balance(0));
-                    Amount amount = new Amount(Float.parseFloat(rowdata[3]));
+                    Depot sender = new Depot(UUID.fromString(rowdata[1]), new Balance(new Money(0)));
+                    Depot receiver = new Depot(UUID.fromString(rowdata[2]), new Balance(new Money(0)));
+                    Amount amount = new Amount(new Money(Float.parseFloat(rowdata[3])));
                     return new Transfer(readUUID, sender, receiver, amount);
                 }
             }
-        }catch (Exception e){
-            System.out.println(e);
+        }catch (InvalidAmountException e){
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvalidBalanceException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -65,9 +70,9 @@ public class TransferRepository implements TransferRepositoryInterface{
                 String[] rowdata = row.split(";");
                 if(rowdata[position].equals(depot.getId().toString())) {
                     UUID readUUID = UUID.fromString(rowdata[0]);
-                    Depot sender = new Depot(UUID.fromString(rowdata[1]), new Balance(0));
-                    Depot receiver = new Depot(UUID.fromString(rowdata[2]), new Balance(0));
-                    Amount amount = new Amount(Float.parseFloat(rowdata[3]));
+                    Depot sender = new Depot(UUID.fromString(rowdata[1]), new Balance(new Money(0)));
+                    Depot receiver = new Depot(UUID.fromString(rowdata[2]), new Balance(new Money(0)));
+                    Amount amount = new Amount(new Money(Float.parseFloat(rowdata[3])));
                     transfers.add(new Transfer(readUUID, sender, receiver, amount));
                 }
             }

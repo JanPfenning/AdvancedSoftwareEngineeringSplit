@@ -1,7 +1,6 @@
 import IO.CSVreader;
 import IO.CSVwriter;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -56,7 +55,7 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
             UserAggregate biller = userRepository.getUserFrom(UUID.fromString(rowdata[1]));
             Depot billerDestination = biller.getDepotBy(UUID.fromString(rowdata[1]));
             UserAggregate receiver = userRepository.getUserFrom(new Username(rowdata[2]));
-            Amount amount = new Amount(Float.parseFloat(rowdata[3]));
+            Amount amount = new Amount(new Money(Float.parseFloat(rowdata[3])));
             boolean paid = !rowdata[5].equals("0");
             return new Invoice(UUID.fromString(rowdata[0]), billerDestination, receiver, amount, paid);
         }catch (Exception e){
@@ -72,11 +71,11 @@ public class InvoiceRepository implements InvoiceRepositoryInterface{
             LinkedList<String> rows = CSVreader.read(INVOICE_FILEPATH, "\r\n");
             for(String row : rows){
                 String[] rowdata = row.split(";");
-                if(rowdata[2].equals(username.getValue())) {
+                if(rowdata[2].equals(username.toString())) {
                     UUID readUUID = UUID.fromString(rowdata[0]);
-                    Depot biller = new Depot(UUID.fromString(rowdata[1]), new Balance(1));
+                    Depot biller = new Depot(UUID.fromString(rowdata[1]), new Balance(new Money(1)));
                     UserAggregate payer = new UserAggregate(username.toString());
-                    Amount amount = new Amount(Float.parseFloat(rowdata[3]));
+                    Amount amount = new Amount(new Money(Float.parseFloat(rowdata[3])));
                     boolean paid = Integer.parseInt(rowdata[5]) == 1;
                     invoices.add(new Invoice(readUUID, biller, payer, amount, paid));
                 }

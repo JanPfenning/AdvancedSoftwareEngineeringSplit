@@ -7,9 +7,9 @@ class UserAggregateTest {
     @Test
     void updateAccount() throws Exception {
         UserAggregate user = new UserAggregate("Jan");
-        assertEquals(new Balance(0), user.getAccount().getBalance());
-        user.getAccount().setBalance(new Balance(1));
-        assertEquals(new Balance(1), user.getAccount().getBalance());
+        assertEquals(new Balance(new Money(0)), user.getAccount().getBalance());
+        user.getAccount().setBalance(new Balance(new Money(1)));
+        assertEquals(new Balance(new Money(1)), user.getAccount().getBalance());
     }
 
 }

@@ -1,7 +1,6 @@
 import IO.CSVreader;
 import IO.CSVwriter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -38,7 +37,7 @@ public class UserRepository implements UserRepositoryInterface {
 
     @Override
     public UserAggregate getUserFrom(Username name) {
-        String row = UserRepository.getFirstRowStringFromCSV(name.getValue(), 0, UserRepository.USER_FILEPATH);
+        String row = UserRepository.getFirstRowStringFromCSV(name.toString(), 0, UserRepository.USER_FILEPATH);
         if(row == null) return null;
         return getUserAggregateOfAccountRow(row);
     }
