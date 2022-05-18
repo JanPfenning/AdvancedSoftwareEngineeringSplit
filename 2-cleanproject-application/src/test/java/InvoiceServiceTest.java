@@ -120,12 +120,17 @@ class InvoiceServiceTest {
         when(mockedPayerDepot.getBalance()).thenReturn(new Balance(new Money(100)));
         when(mockedPayerDepot.getId()).thenReturn(accountIDofPayer);
 
-        Invoice invoice = new Invoice(mockedIssuerDepot, mockedPayer, new Amount(new Money(10)));
-        when(mockedInvoiceRepository.get(invoice.getId())).thenReturn(invoice);
+        Invoice mockedInvoice = mock(Invoice.class);
+        when(mockedInvoice.isPaid()).thenReturn(false);
+        when(mockedInvoice.getId()).thenReturn(UUID.fromString("71483cf4-ab1a-45c2-8706-32c7dff1094d"));
+        when(mockedInvoice.getRecipient()).thenReturn(mockedPayer);
+        when(mockedInvoice.getBiller()).thenReturn(mockedIssuerDepot);
+        when(mockedInvoice.getAmount()).thenReturn(new Amount(new Money(10)));
+        when(mockedInvoiceRepository.get(mockedInvoice.getId())).thenReturn(mockedInvoice);
 
         InvoiceService service = new InvoiceService(mockedUserRepository, mockedInvoiceRepository, mockedTransferRepository);
         assertDoesNotThrow(()->{
-            service.payInvoice(invoice.getId(), accountIDofPayer);
+            service.payInvoice(mockedInvoice.getId(), accountIDofPayer);
         });
     }
 

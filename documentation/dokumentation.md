@@ -64,8 +64,17 @@ Kapitel 3: SOLID
 [jeweils eine Klasse als positives und negatives Beispiel für SRP; jeweils UML der Klasse und
 Beschreibung der Aufgabe bzw. der Aufgaben und möglicher Lösungsweg des Negativ-Beispiels (inkl.
 UML)]
-###Positiv-Beispiel
-###Negativ-Beispiel
+Das Single-Resopnsibility-Principle (SRP) ist ein Prinzip, das besagt, dass eine Klass (kann auch feiner granuliert werden) nur eine Aufgabe erfüllen sollt.
+<h4>Positiv-Beispiel</h4>
+Ein positives Beispiel ist die Unterteilung in CSVreader und CSVwriter, dabei beide Klassen für unterschiedliche IO-Operationen zuständig sind. Zudem muss wenn das Parsening des CSVreaders angepasst wird, nicht die CSVwriter angepasst werden.
+<img src="./images/InvoiceRepositorySingleResponsibilityPrinciple.png">
+<h4>Negativ-Beispiel</h4>
+An TransferService ist ein negatives Beispiel für Single-Responsibility-Principle, da es zwei Aufgaben gibt, die von einer Klasse aus ausgeführt werden müssen.
+Einmal das senden von Geld (sendMoney()) und das analysieren von Transaktionen (analyseTransferSendings() und analyseTransferRecievings())).
+<img src="./images/TransferServiceSingleResponsibilityPrincipleBAD.png">
+Dies kann durch die Teilung des TransferService in zwei Klassen (TransferSendService und TransferAnalyseService) erreicht werden.
+<img src="./images/TransferServiceSingleResponsibilityPrincipleGOOD.png">
+Dadruch wird das SRP auch für die Klassen TransferSendService und TransferAnalyseService erfüllt.
 
 <u><h3>Analyse Open-Closed-Principle (OCP)</u></h3>
 [jeweils eine Klasse als positives und negatives Beispiel für OCP; jeweils UML der Klasse und
@@ -75,20 +84,27 @@ sinnvoll/welches Problem gab es? Falls nicht erfüllt: wie könnte man es lösen
 Ein positives Beispiel für ein Open-Closed-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
 Dafür wird in InitAction eine Hashmap erstellt, welche Integer (User-Input) auf ActionInterfaces mapped.
 Wenn eine neue Action (Funktion für den Nutzer) entwickelt wird so muss nicht innerhalb der Klasse ActionInterfaces eine neue Funktion erstellt / modifiziert werden, sondern nur möglicherweise die Hashmap ergänzt und eine neue Klasse erstellt werden, welche ActionInterface implementiert. Somit sind Erweiterungen der Funktionalität sehr einfach, wobei Modifikationen bestehendes Codes vermieden werden.
+
 <img src="./images/ActionInterfaceOpenClosePrinciple.png">
 
 <h4>Negativ-Beispiel</h4>
-Ein negatives Beispiel für das Open-Closed-Principle ist die Polymorphie zwischen Moneypool un Depot. Dabei erbt Moneypool von Depot.
-Moneypool ist ein Depot mit speziellen Einschränkungen, da von einem Moneypool kein Geld versendet werden darf. 
-Deshalb wird in Moneypool die setBalance-Methode überschrieben und es wird geprüft, ob sich die Balance verkleinern würde. Wenn dies der Fall ist, wird eine Exception geworfen.
-Falls nun Depot um Funktionalität erweitern werden soll, welche aber nicht für Moneypool gelten soll, so muss in Moneypool die neue Funktionalität überschrieben werden.
-Dies sorgt dafür, dass sich durch eine Erweiterung der Funktionalität, nötig die bestehende Klasse Depot, sowie alle Spezialisierungen von Depot (Moneypool) zu verändern.
-<img src="./images/DepotMoneypoolOpenClosedPrinciple.png">
-Eine Gegenmaßnahme wäre das die Umkehrung der Vererbung:
-<img src="./images/MoneypoolDepotOpenClosedPrinciple.png">
-Somit erben alle (hier: Depot) von kleinsten gemeinsamen Teil (hier: Moneypool). Wenn Depot erweitert wird, wirkt sich dies nicht auf Moenypool aus.
 
+Ein negativ Beispiel für das Open-Closed-Principle sind die Services. Hier wir dies am Beispiel von InvoiceService gezeigt.
 
+<img src="./images/InvoiceServiceOpenClosedPrincipleBAD.png">
+
+Man kann erkennen, dass die Actions (hier: PayInvoice und ViewInvoice) direkt den InvoiceService instanzieren.
+
+Da kein Interface benutzt wird, müssen bei Änderungen an Services, diese Änderungen an den Actions mit angepasst werden.
+Die Klassen (Actions) sind somit abhängig von der konkreten Implementierung des Services.
+
+Um dies zu lösen, wird ein ServiceInterface (hier: InvoiceServiceInterface) erstellt. 
+Dieses Interface definiert die Schnittstellen für die Actions und entkoppelt die Actions von der Implementierung des Services.
+
+<img src="./images/InvoiceServiceOpenClosedPrincipleGOOD.png">
+
+Die Schnittstellen sind für Änderungen geschlossen (da die Schnittstellendefinition eingehalten werden muss), aber können leicht erweitert werden (innerhalb der implementation sind zusätzliche Hilfsfunktionen erlaubt; Außerdem kann ein Interface vererbt werden um so auch die Erweiterungen an der Schnittstellendefinition zu ermöglichen). Der Hauptvorteil dieses Ansatzes ist, dass eine Schnittstelle eine zusätzliche Abstraktionsebene einführt, die eine lose Kopplung ermöglicht. Die potentiell verschiedenen Implementationen einer Schnittstelle sind unabhängig voneinander und müssen sich keinen Code teilen.
+Damit wird das Open-Closed-Principle erfüllt.
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
 [jeweils eine Klasse als positives und negatives Beispiel für entweder LSP oder ISP oder DIP); jeweils
@@ -219,11 +235,34 @@ Die Testergebnisse werden von JUnit gesammelt und der Report and SonarCloud gese
 - https://sonarcloud.io/component_measures?id=JanPfenning_AdvancedSoftwareEngineeringSplit&metric=coverage&view=list
 
 <img src="./images/codeCoverage.jpg">
+
 Die Coverage alleine ist noch nicht wirklich aussagekräftig. Wie zuvor beschrieben müssen z.B. Getter oder Teilweise Konstruktoren nicht getestet werden. Eine Codecoverage von 1/5 wäre für große und kritische Systeme jedoch ungeachtet dessen deutlich zu wenig. Einige unserer Klassen sind gar nicht vertestet, daher ist es zu erwarten dass sich die Codecoverage in Grenzen hält. 
 
 <u><h3>Fakes und Mocks</u></h3>
-[Analyse und Begründung des Einsatzes von 2 Fake/Mock-Objekten; zusätzlich jeweils UML
-Diagramm der Klasse]
+
+<span style="font-family:monospace">InvoiceService</span> hat u.A. Abhängigkeiten zu <span style="font-family:monospace">Depot</span>, der Implementierung von <span style="font-family:monospace">InvoiceRepositoryInterface</span> und <span style="font-family:monospace">Invoice</span>. Diese haben potentiell selbst noch weitere Abhängigkeiten, welche Transitiv gegeben sein müssten.
+
+<img src="./images/why_mock1.jpg">
+
+Da aber nur die Funktionalität dieser einen Klasse getestet werden soll, werden sog. Mock-Objekte angelegt. Diese geben für eine gewisse eingabe einfach eine gewünschte Ausgabe, die das verhalten dieses Objekts imitieren soll.
+
+<!--<img src="./images/deklaration_of_mocks.jpg">-->
+<h4>Beispiel 1 - Depot Mock als Account</h4>
+<img src="./images/mock_behaviour.jpg">
+
+Das Mock-Objekt <span style="font-family:monospace">mockedPlayerDepot</span> ist also wie eine Instanz vom Typ <span style="font-family:monospace">Account</span> zu behandeln. Egal wie die Funktionalität in der Klasse <span style="font-family:monospace">Account</span> jetzt implementiert ist, wenn auf dem Mock-Objekt <span style="font-family:monospace">getBalance()</span> aufgerufen wird, wird ein Kontostand von 100 zurückgegeben. So kann dieser Zustand forciert werden ohne lange vorbereitungen.
+Die Mock-Objekte abstrahieren also die Objekte mit denen die zu testende Klasse in der Realität zutun haben wird, indem sie die gleichen Funktionen anbietet wie das Original, aber nur so tut als würde sie die Werte echt berechnen und stattdessen einen fixen Wert zurückliefert.
+
+<img src="./images/usage_of_mocks.jpg">
+
+Die gemockten Objekte können so einfach als Platzhalter für die originalen Objekte fungieren.
+
+Die Mock-Objekte werden durch das "Inlining" von JUnit sogar noch wesentlich kompakter. Hier kann eine Funktion in einer Zeile definiert werden. Auf die deklarierung der Resultate unwichtiger Funktionen kann so verzichtet werden. Außerdem sind die zurückzugebenden Werte der Mock-Objekte für die meisten Test-Cases sehr unterschiedlich und müssen deswegen sowieso neu definiert werden. 
+
+<h4>Beispiel 2 - Invoice Mock</h4>
+<img src="./images/invoice_mock.jpg">
+
+Die UML-Diagramme der entstehenden Mock-Objekte unterscheiden sich nicht von den Diagrammen der Objekte die sie immitieren, da beide Objekte von der gleichen Klasse ausgehen. Lediglich die implementation der Methoden ändert sich (oder einige Methoden sind potentiell im Mock-Objekt nicht implementiert). Lediglich private Funktionen würden einen Unterschied im UML-Diagramm ausmachen, diese sind auf dem Mock-Objekt i.d.R. überflüssig.
 
 Kapitel 6: Domain Driven Design
 -
