@@ -75,24 +75,26 @@ sinnvoll/welches Problem gab es? Falls nicht erfüllt: wie könnte man es lösen
 Ein positives Beispiel für ein Open-Closed-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
 Dafür wird in InitAction eine Hashmap erstellt, welche Integer (User-Input) auf ActionInterfaces mapped.
 Wenn eine neue Action (Funktion für den Nutzer) entwickelt wird so muss nicht innerhalb der Klasse ActionInterfaces eine neue Funktion erstellt / modifiziert werden, sondern nur möglicherweise die Hashmap ergänzt und eine neue Klasse erstellt werden, welche ActionInterface implementiert. Somit sind Erweiterungen der Funktionalität sehr einfach, wobei Modifikationen bestehendes Codes vermieden werden.
+
 <img src="./images/ActionInterfaceOpenClosePrinciple.png">
 
 <h4>Negativ-Beispiel</h4>
+
 Ein negativ Beispiel für das Open-Closed-Principle sind die Services. Hier wir dies am Beispiel von InvoiceService gezeigt.
+
 <img src="./images/InvoiceServiceOpenClosedPrincipleBAD.png">
+
 Es kann erkannt werden, dass die Action (hier: PayInvoice und ViewInvoice) direkt den InvoiceService instanzieren.
-Die Schnittstellen sind für Änderungen geschlossen, und Sie können neue Implementierungen bereitstellen, um die Funktionalität Ihrer Software zu erweitern.
 
-Der Hauptvorteil dieses Ansatzes ist, dass eine Schnittstelle eine zusätzliche Abstraktionsebene einführt, die eine lose Kopplung ermöglicht. Die Implementationen einer Schnittstelle sind unabhängig voneinander und müssen sich keinen Code teilen. Wenn Sie es für sinnvoll halten, dass zwei Implementierungen einer Schnittstelle einen Teil des Codes gemeinsam nutzen, können Sie entweder Vererbung oder Komposition verwenden.
+Da kein Interface benutzt wird, müssen bei Änderungen an Services, diese Änderungen an den Actions mit angepasst werden.
+Die Klassen (Actions) sind somit abhängig von der konkreten Implementierung des Services.
 
-Da kein Interface benutzt wird, müssen bei Änderungen an in Services, diese Änderungen an den Actions mit angepasst werden.
-Die Klassen (Actions) sind somit abhängig von der Implementierung.
+Um dies zu lösen, wird ein ServiceInterface (hier: InvoiceServiceInterface) erstellt. Dieses Interface definiert die Schnittstellen für die Actions und entkoppelt die Actions von der Implementierung des Services.
 
-Um dies zu lösen, wird ein ServiceInterface (hier: InvoiceServiceInterface) erstellt. Dieses Interface definiert die Schnittstellen für die Actions.
 <img src="./images/InvoiceServiceOpenClosedPrincipleGOOD.png">
 
-Damit wird dsa Open-Closed-Principle erfüllt.
-
+Die Schnittstellen sind für Änderungen geschlossen (da die Schnittstellendefinition eingehalten werden muss), aber können leicht erweitert werden (innerhalb der implementation sind zusätzliche Hilfsfunktionen erlaubt; Außerdem kann ein Interface vererbt werden um so auch die Erweiterungen an der Schnittstellendefinition zu ermöglichen). Der Hauptvorteil dieses Ansatzes ist, dass eine Schnittstelle eine zusätzliche Abstraktionsebene einführt, die eine lose Kopplung ermöglicht. Die potentiell verschiedenen Implementationen einer Schnittstelle sind unabhängig voneinander und müssen sich keinen Code teilen.
+Damit wird das Open-Closed-Principle erfüllt.
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
 [jeweils eine Klasse als positives und negatives Beispiel für entweder LSP oder ISP oder DIP); jeweils
