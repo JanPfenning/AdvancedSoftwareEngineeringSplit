@@ -223,11 +223,34 @@ Die Testergebnisse werden von JUnit gesammelt und der Report and SonarCloud gese
 - https://sonarcloud.io/component_measures?id=JanPfenning_AdvancedSoftwareEngineeringSplit&metric=coverage&view=list
 
 <img src="./images/codeCoverage.jpg">
+
 Die Coverage alleine ist noch nicht wirklich aussagekräftig. Wie zuvor beschrieben müssen z.B. Getter oder Teilweise Konstruktoren nicht getestet werden. Eine Codecoverage von 1/5 wäre für große und kritische Systeme jedoch ungeachtet dessen deutlich zu wenig. Einige unserer Klassen sind gar nicht vertestet, daher ist es zu erwarten dass sich die Codecoverage in Grenzen hält. 
 
 <u><h3>Fakes und Mocks</u></h3>
-[Analyse und Begründung des Einsatzes von 2 Fake/Mock-Objekten; zusätzlich jeweils UML
-Diagramm der Klasse]
+
+<span style="font-family:monospace">InvoiceService</span> hat u.A. Abhängigkeiten zu <span style="font-family:monospace">Depot</span>, der Implementierung von <span style="font-family:monospace">InvoiceRepositoryInterface</span> und <span style="font-family:monospace">Invoice</span>. Diese haben potentiell selbst noch weitere Abhängigkeiten, welche Transitiv gegeben sein müssten.
+
+<img src="./images/why_mock1.jpg">
+
+Da aber nur die Funktionalität dieser einen Klasse getestet werden soll, werden sog. Mock-Objekte angelegt. Diese geben für eine gewisse eingabe einfach eine gewünschte Ausgabe, die das verhalten dieses Objekts imitieren soll.
+
+<!--<img src="./images/deklaration_of_mocks.jpg">-->
+<h4>Beispiel 1 - Depot Mock als Account</h4>
+<img src="./images/mock_behaviour.jpg">
+
+Das Mock-Objekt <span style="font-family:monospace">mockedPlayerDepot</span> ist also wie eine Instanz vom Typ <span style="font-family:monospace">Account</span> zu behandeln. Egal wie die Funktionalität in der Klasse <span style="font-family:monospace">Account</span> jetzt implementiert ist, wenn auf dem Mock-Objekt <span style="font-family:monospace">getBalance()</span> aufgerufen wird, wird ein Kontostand von 100 zurückgegeben. So kann dieser Zustand forciert werden ohne lange vorbereitungen.
+Die Mock-Objekte abstrahieren also die Objekte mit denen die zu testende Klasse in der Realität zutun haben wird, indem sie die gleichen Funktionen anbietet wie das Original, aber nur so tut als würde sie die Werte echt berechnen und stattdessen einen fixen Wert zurückliefert.
+
+<img src="./images/usage_of_mocks.jpg">
+
+Die gemockten Objekte können so einfach als Platzhalter für die originalen Objekte fungieren.
+
+Die Mock-Objekte werden durch das "Inlining" von JUnit sogar noch wesentlich kompakter. Hier kann eine Funktion in einer Zeile definiert werden. Auf die deklarierung der Resultate unwichtiger Funktionen kann so verzichtet werden. Außerdem sind die zurückzugebenden Werte der Mock-Objekte für die meisten Test-Cases sehr unterschiedlich und müssen deswegen sowieso neu definiert werden. 
+
+<h4>Beispiel 2 - Invoice Mock</h4>
+<img src="./images/invoice_mock.jpg">
+
+Die UML-Diagramme der entstehenden Mock-Objekte unterscheiden sich nicht von den Diagrammen der Objekte die sie immitieren, da beide Objekte von der gleichen Klasse ausgehen. Lediglich die implementation der Methoden ändert sich (oder einige Methoden sind potentiell im Mock-Objekt nicht implementiert). Lediglich private Funktionen würden einen Unterschied im UML-Diagramm ausmachen, diese sind auf dem Mock-Objekt i.d.R. überflüssig.
 
 Kapitel 6: Domain Driven Design
 -
