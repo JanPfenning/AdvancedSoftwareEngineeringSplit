@@ -45,7 +45,14 @@ public class InvoiceService {
     }
 
     public ArrayList<Invoice> getInvoicesOf(Username username) {
-        return invoiceRepository.get(username);
+        ArrayList<Invoice> invoices = invoiceRepository.get(username);
+        ArrayList<Invoice> unpaid = new ArrayList<>();
+        invoices.forEach((invoice) -> {
+            if(!invoice.isPaid()){
+                unpaid.add(invoice);
+            }
+        });
+        return unpaid;
     }
 
     public void sendInvoice(String billerString, Username recipientUsername, Amount amount) throws UnknownUserAggregateException {
