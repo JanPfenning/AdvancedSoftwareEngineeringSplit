@@ -87,12 +87,32 @@ Kapitel 4: Weitere Prinzipien
 -
 <u><h3>Analyse GRASP: Geringe Kopplung</u></h3>
 Hier sind die Action klassen zur steuerung der UI vermutlich zu nennen
-[jeweils eine bis jetzt noch nicht behandelte Klasse als positives und negatives Beispiel geringer
-Kopplung; jeweils UML Diagramm mit zusammenspielenden Klassen, Aufgabenbeschreibung und
-Begründung für die Umsetzung der geringen Kopplung bzw. Beschreibung, wie die Kopplung aufgelöst
-werden kann]
-###Positiv-Beispiel
-###Negativ-Beispiel
+
+<h4>Positiv-Beispiel</h4>
+
+Alle Verbindungen mit der Implementation des <span style="font-family:monospace;">InvoiceRepositoryInterface</span> sind reine Erstellungen. Zugriffe auf die Funktionalität laufen einzig über das Interface. Die Kopplung ist hierbei also sehr gering. Die Implementation kann sich Ändern, ohne dass man befürchten muss, dass sich das Verhalten bei der nutzung des Interfaces ändert.
+
+<img src="./images/low_coupling_positive_interface.jpg">
+
+<span style="font-family:monospace;">InvoiceRepository</span> wird erstellt und als <span style="font-family:monospace;">InvoiceRepositoryInterface</span> deklariert. Aufrufer kennen somit nur das Interface.
+
+das folgende Bild zeigt gut, wie die Komplexität der Interfaces quasi nonexistent ist.
+
+<img src="./images/low_complexity_inner_layer.jpg">
+
+Auf der anderen Seite ist die Implementation des Interfaces sehr komplex.
+
+<img src="./images/high_complexity_outer_layer.jpg">
+
+<h4>Negativ-Beispiel</h4>
+
+Im folgenden Beispiel wurde keine Schnittstelle zwischen den <span style="font-family:monospace;">Repositories</span> und der Kommunikation mit dem Dateisystem <span style="font-family:monospace;">CSVreader</span> und <span style="font-family:monospace;">CSVwriter</span> vereinbart.
+
+<img src="./images/low_coupling_negative.jpg">
+
+Die <span style="font-family:monospace;">Repositories</span> greifen direkt auf die Implementierung zu. Hier sind die Abhängigkeiten also zu Klassen mit hoher komplexität. Der CSVreader hat keinen <it>Contract</it> an den es sich halten muss. Änderungen können so unerwartete Folgen und Transitive abhängigkeiten haben.
+
+Mit einem Interface als Schnittstelle könnte die Kopplung deutlich reduziert werden.
 
 <u><h3>Analyse GRASP: Hohe Kohäsion</u></h3>
 Hier ist wohl das UserAggregate zu nennen oder nach refactoring die Superclass vom UserRepository (sollte aufgeteilt werden in kleinere Repositories)
