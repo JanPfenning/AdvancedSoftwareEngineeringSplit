@@ -78,16 +78,20 @@ Wenn eine neue Action (Funktion für den Nutzer) entwickelt wird so muss nicht i
 <img src="./images/ActionInterfaceOpenClosePrinciple.png">
 
 <h4>Negativ-Beispiel</h4>
-Ein negatives Beispiel für das Open-Closed-Principle ist die Polymorphie zwischen Moneypool un Depot. Dabei erbt Moneypool von Depot.
-Moneypool ist ein Depot mit speziellen Einschränkungen, da von einem Moneypool kein Geld versendet werden darf. 
-Deshalb wird in Moneypool die setBalance-Methode überschrieben und es wird geprüft, ob sich die Balance verkleinern würde. Wenn dies der Fall ist, wird eine Exception geworfen.
-Falls nun Depot um Funktionalität erweitern werden soll, welche aber nicht für Moneypool gelten soll, so muss in Moneypool die neue Funktionalität überschrieben werden.
-Dies sorgt dafür, dass sich durch eine Erweiterung der Funktionalität, nötig die bestehende Klasse Depot, sowie alle Spezialisierungen von Depot (Moneypool) zu verändern.
-<img src="./images/DepotMoneypoolOpenClosedPrinciple.png">
-Eine Gegenmaßnahme wäre das die Umkehrung der Vererbung:
-<img src="./images/MoneypoolDepotOpenClosedPrinciple.png">
-Somit erben alle (hier: Depot) von kleinsten gemeinsamen Teil (hier: Moneypool). Wenn Depot erweitert wird, wirkt sich dies nicht auf Moenypool aus.
+Ein negativ Beispiel für das Open-Closed-Principle sind die Services. Hier wir dies am Beispiel von InvoiceService gezeigt.
+<img src="./images/InvoiceServiceOpenClosedPrincipleBAD.png">
+Es kann erkannt werden, dass die Action (hier: PayInvoice und ViewInvoice) direkt den InvoiceService instanzieren.
+Die Schnittstellen sind für Änderungen geschlossen, und Sie können neue Implementierungen bereitstellen, um die Funktionalität Ihrer Software zu erweitern.
 
+Der Hauptvorteil dieses Ansatzes ist, dass eine Schnittstelle eine zusätzliche Abstraktionsebene einführt, die eine lose Kopplung ermöglicht. Die Implementationen einer Schnittstelle sind unabhängig voneinander und müssen sich keinen Code teilen. Wenn Sie es für sinnvoll halten, dass zwei Implementierungen einer Schnittstelle einen Teil des Codes gemeinsam nutzen, können Sie entweder Vererbung oder Komposition verwenden.
+
+Da kein Interface benutzt wird, müssen bei Änderungen an in Services, diese Änderungen an den Actions mit angepasst werden.
+Die Klassen (Actions) sind somit abhängig von der Implementierung.
+
+Um dies zu lösen, wird ein ServiceInterface (hier: InvoiceServiceInterface) erstellt. Dieses Interface definiert die Schnittstellen für die Actions.
+<img src="./images/InvoiceServiceOpenClosedPrincipleGOOD.png">
+
+Damit wird dsa Open-Closed-Principle erfüllt.
 
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
