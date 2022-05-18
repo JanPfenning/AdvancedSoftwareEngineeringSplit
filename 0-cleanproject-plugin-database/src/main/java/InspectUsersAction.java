@@ -19,25 +19,25 @@ public class InspectUsersAction implements ActionInterface {
         String desiredUser = CommandLineReader.readLine();
 
         UserAggregate u = null;
-        UUID uuid;
-        Username username;
+        UUID uuid = null;
+        Username username = null;
         try {
             uuid = UUID.fromString(desiredUser);
         } catch (IllegalArgumentException invalidUUID){
-            uuid = null;
-        }
-        try{
-            username = new Username(desiredUser);
-        } catch (InvalidUsernameException e) {
-            username = null;
+            try{
+                username = new Username(desiredUser);
+            } catch (InvalidUsernameException e) {}
         }
 
-        if(username != null){
+        u = null;
+        if(username == null){
             try{
                 u = userService.getUser(uuid);
-            } catch (UserNotFoundException e) {
-                u = null;
-            }
+            } catch (UserNotFoundException e) {}
+        }else{
+            try {
+                u = userService.getUser(username);
+            } catch (UserNotFoundException e) {}
         }
 
         if(u != null){

@@ -2,8 +2,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Username {
-    private String value;
+public final class Username {
+    private final String value;
 
     Username(String name) throws InvalidUsernameException {
         if(name.length()<2) throw new InvalidUsernameException("'"+name+"' is too short");
@@ -14,11 +14,7 @@ public class Username {
         this.value = name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    List<String> badSequences = Arrays.asList(
+    private List<String> badSequences = Arrays.asList(
             "ROOT",
             "ADMIN"
     );

@@ -12,7 +12,7 @@ public class Depot {
 
     public Depot() {
         try{
-            this.balance = new Balance(0);
+            this.balance = new Balance(new Money(0));
             this.id = UUID.randomUUID();
         }catch (Exception e){
             e.printStackTrace();

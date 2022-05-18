@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 class TransferRepositoryTest {
 
@@ -20,14 +21,14 @@ class TransferRepositoryTest {
         UUID querryId = UUID.fromString("5267debe-af38-11ec-b909-0242ac120002");
         Transfer foundTransfer = null;
         try (MockedStatic<CSVreader> mockPersistence = Mockito.mockStatic(CSVreader.class)) {
-            mockPersistence.when(() -> CSVreader.read(TransferRepository.TRANSFER_FILEPATH, "\r\n")).thenReturn(transfers);
+            mockPersistence.when(() -> CSVreader.read(any(), any())).thenReturn(transfers);
 
             TransferRepository repositoryToTest = new TransferRepository();
             foundTransfer = repositoryToTest.get(querryId);
         }
         assertNotNull(foundTransfer);
         assertEquals(foundTransfer.getId(), querryId);
-        assertEquals(foundTransfer.getAmount(), new Amount((float) 0.1));
+        assertEquals(foundTransfer.getAmount(), new Amount(new Money((float) 0.1)));
     }
 
     @Test
@@ -47,7 +48,7 @@ class TransferRepositoryTest {
         }
         assertNotNull(foundTransfer);
         assertEquals(foundTransfer.getId(), querryId);
-        assertEquals(foundTransfer.getAmount(), new Amount((float) 1.2));
+        assertEquals(foundTransfer.getAmount(), new Amount(new Money((float) 1.2)));
     }
 
     @Test

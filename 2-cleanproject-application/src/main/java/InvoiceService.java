@@ -14,8 +14,9 @@ public class InvoiceService {
         this.transferRepository = transferRepository;
     }
 
-    public void payInvoice(UUID invoiceId, UUID payerDepotId) throws Exception {
+    public void payInvoice(UUID invoiceId, UUID payerDepotId) throws InvoiceIsPaidException, DepotNotFoundException, Exception {
         Invoice invoice = invoiceRepository.get(invoiceId);
+        if(invoice.isPaid()) throw new InvoiceIsPaidException("The Invoice: "+invoice.getId()+" is paid already");
         UserAggregate payer = invoice.getRecipient();
         Depot payerDepot = payer.getDepotBy(payerDepotId);
         if(payerDepot == null) throw new DepotNotFoundException("Depot with id "+payerDepotId+" not found for recipient "+payer.getUsername());
@@ -30,8 +31,8 @@ public class InvoiceService {
         Depot receiverDepot = receiver.getDepotBy(invoice.getBiller().getId());
         if(senderDepot == null || receiverDepot == null) throw new Exception("Either of the depots could not be found");
 
-        Balance newSenderBalance = new Balance(senderDepot.getBalance().getValue()-invoice.getAmount().getValue());
-        Balance newReceiverBalance = new Balance(receiverDepot.getBalance().getValue()+invoice.getAmount().getValue());
+        Balance newSenderBalance = senderDepot.getBalance().subtract(invoice.getAmount());
+        Balance newReceiverBalance = receiverDepot.getBalance().add(invoice.getAmount());
 
         senderDepot.setBalance(newSenderBalance);
         receiverDepot.setBalance(newReceiverBalance);
