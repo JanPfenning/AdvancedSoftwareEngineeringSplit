@@ -64,8 +64,17 @@ Kapitel 3: SOLID
 [jeweils eine Klasse als positives und negatives Beispiel für SRP; jeweils UML der Klasse und
 Beschreibung der Aufgabe bzw. der Aufgaben und möglicher Lösungsweg des Negativ-Beispiels (inkl.
 UML)]
-###Positiv-Beispiel
-###Negativ-Beispiel
+Das Single-Resopnsibility-Principle (SRP) ist ein Prinzip, das besagt, dass eine Klass (kann auch feiner granuliert werden) nur eine Aufgabe erfüllen sollt.
+<h4>Positiv-Beispiel</h4>
+Ein positives Beispiel ist die Unterteilung in CSVreader und CSVwriter, dabei beide Klassen für unterschiedliche IO-Operationen zuständig sind. Zudem muss wenn das Parsening des CSVreaders angepasst wird, nicht die CSVwriter angepasst werden.
+<img src="./images/InvoiceRepositorySingleResponsibilityPrinciple.png">
+<h4>Negativ-Beispiel</h4>
+An TransferService ist ein negatives Beispiel für Single-Responsibility-Principle, da es zwei Aufgaben gibt, die von einer Klasse aus ausgeführt werden müssen.
+Einmal das senden von Geld (sendMoney()) und das analysieren von Transaktionen (analyseTransferSendings() und analyseTransferRecievings())).
+<img src="./images/TransferServiceSingleResponsibilityPrincipleBAD.png">
+Dies kann durch die Teilung des TransferService in zwei Klassen (TransferSendService und TransferAnalyseService) erreicht werden.
+<img src="./images/TransferServiceSingleResponsibilityPrincipleGOOD.png">
+Dadruch wird das SRP auch für die Klassen TransferSendService und TransferAnalyseService erfüllt.
 
 <u><h3>Analyse Open-Closed-Principle (OCP)</h3>
 [jeweils eine Klasse als positives und negatives Beispiel für OCP; jeweils UML der Klasse und
