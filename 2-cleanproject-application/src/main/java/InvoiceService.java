@@ -27,13 +27,16 @@ public class InvoiceService {
     private void sendMoney(String senderDepotId, Invoice invoice) throws Exception {
         UserAggregate sender = userRepository.getUserFrom(UUID.fromString(senderDepotId));
         Depot senderDepot = sender.getDepotBy(UUID.fromString(senderDepotId));
+
         UserAggregate receiver = userRepository.getUserFrom(invoice.getBiller().getId());
         Depot receiverDepot = receiver.getDepotBy(invoice.getBiller().getId());
+
         if(senderDepot == null || receiverDepot == null) throw new Exception("Either of the depots could not be found");
 
         Balance newSenderBalance = senderDepot.getBalance().subtract(invoice.getAmount());
         Balance newReceiverBalance = receiverDepot.getBalance().add(invoice.getAmount());
 
+        DepotMemento senderDepotMemento = senderDepot.saveToMemento();
         senderDepot.setBalance(newSenderBalance);
         receiverDepot.setBalance(newReceiverBalance);
 
@@ -41,11 +44,23 @@ public class InvoiceService {
         transferRepository.save(payment);
 
         userRepository.save(sender);
-        userRepository.save(receiver);
+        try {
+            userRepository.save(receiver);
+        }catch(PersistExecption e){
+            senderDepot.restoreFromMemento(senderDepotMemento);
+            userRepository.save(sender);
+        }
     }
 
     public ArrayList<Invoice> getInvoicesOf(Username username) {
-        return invoiceRepository.get(username);
+        ArrayList<Invoice> invoices = invoiceRepository.get(username);
+        ArrayList<Invoice> unpaid = new ArrayList<>();
+        invoices.forEach((invoice) -> {
+            if(!invoice.isPaid()){
+                unpaid.add(invoice);
+            }
+        });
+        return unpaid;
     }
 
     public void sendInvoice(String billerString, Username recipientUsername, Amount amount) throws UnknownUserAggregateException {

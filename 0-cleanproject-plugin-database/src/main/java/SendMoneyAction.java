@@ -1,4 +1,5 @@
 import IO.CommandLineReader;
+import IO.OutputLogger;
 
 public class SendMoneyAction implements ActionInterface {
 
@@ -33,6 +34,9 @@ public class SendMoneyAction implements ActionInterface {
             e.printStackTrace();
         } catch (TransferOutOfMoneypoolException e) {
             e.printStackTrace();
+        } catch (PersistExecption e) {
+            System.out.println(e);
+            OutputLogger.log("Something went wrong at transfering money, please contact your administrator");
         }
     }
 }

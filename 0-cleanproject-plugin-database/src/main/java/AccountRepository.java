@@ -8,7 +8,7 @@ public class AccountRepository {
 
     public AccountRepository() {}
 
-    public void save(Account account) {
+    public void save(Account account) throws PersistAccountExecption {
         Account oldAccount = this.getAccountFrom(account.getId());
         StringBuilder sb = new StringBuilder();
         sb.append(account.getId()).append(";").append(account.getBalance());
@@ -17,7 +17,7 @@ public class AccountRepository {
             try {
                 CSVwriter.overwriteLine(ACCOUNT_FILEPATH, row , sb.toString());
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new PersistAccountExecption("Failed to persist Account with id "+account.getId()+"\nBalance to be saved: "+account.getBalance());
             }
         }else{
             CSVwriter.writeLine(ACCOUNT_FILEPATH, sb.toString());

@@ -55,4 +55,15 @@ public class UserAggregate {
         return this.account;
     }
 
+    public UserMemento saveToMemento() {
+        System.out.println("Originator: Saving to Memento.");
+        return new UserMemento(username, account, moneypools);
+    }
+
+    public void restoreFromMemento(UserMemento memento) {
+        this.account = memento.getSavedAccount();
+        this.moneypools = memento.getSavedMoneypools();
+        this.username = memento.getSavedUsername();
+    }
+
 }
