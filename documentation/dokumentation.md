@@ -98,17 +98,23 @@ Die Schnittstellen sind für Änderungen geschlossen (da die Schnittstellendefin
 Damit wird das Open-Closed-Principle erfüllt.
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
-Das Liskov-Substitution-Principle (LSP) besagt, dass Obejkte einer Klasse, welche von einer anderen Klasse abgeleitet werden, durch Objekte dieser (Super-)Klasse ersetzt werden können.
-Dabei haben Objekte der abgeleiteten Klassen mindestens die gleichen Mehtoden wie Objekte der Superklasse. Zwei Klassen ähnlicher aber nicht identischer Funktionalität können durch ein Interface oder eine Superkalsse abstrahiert werden.
+Das Liskov-Substitution-Principle (LSP) besagt, dass Objekte einer (Super-)Klasse, von welcher anderen Klassen abgeleitet werden, durch Objekte dieser (Sub-)Klassen ersetzen kann.
+Dabei haben Objekte der abgeleiteten Klassen mindestens die gleichen Methoden, wie Objekte der Superklasse. Zwei Klassen ähnlicher aber nicht identischer Funktionalität sollen nach dem Open-Closed-Prinziple durch ein Interface oder eine Superkalsse abstrahiert werden.
 <h4>Positiv-Beispiel</h4>
-Ein positives Beispiel für ein Liskov-Substitution-Principle ist die Superklasse Depot. Von ihr Erben die Klassen Account und Moneypool.
+Ein positives Beispiel für ein Liskov-Substitution-Principle ist die Superklasse Depot. Von ihr Erben die Klasse Account und Moneypool.
 Dabei unterscheiden sich die Klassen darin, dass kein Geld aus einem Moeneypool transferiert werden kann. 
-Beide Klassen lassen sich somit generalisieren / abstahieren als Depots. Wenn die Unterscheidung im Kontext irrelevant ist kann somit ein Objekt von Depot erstellt werden.
+Beide Klassen lassen sich somit generalisieren / abstahieren als Depots. Wenn die Unterscheidung im Kontext irrelevant ist kann somit ein Objekt von Depot durch ein Objekt der Subklasse Account ersetzt werden.
+Bei Moneypool würde jedoch die Funktionalität von Depot bei einer substitution nicht übernommen werden.
 Dies kann innerhalb des TransferRepositorys gesehen werden.
 <img src="./images/LiskovSubstitutionPrincipleCODEGood.png">
 <img src="./images/LiskovSubstitutionPrincipleUMLGood.png">
 
-Es wurde kein negativ Beispiel für das Litkov-Substitution-Principle gefunden.
+<h4>Negatives-Beispiel</h4>
+Als negatives könnte Moneypool aufgeführt aus dem obrigen Beispiel aufgeführt werden.
+Als weiteres negatives Beispiel kann die Beziehung von Transfer und Payment aufgeführt werden.
+Hierbei erbt Payment von Transfer, jedoch unterscheiden sich die Konstruktoren den beiden Klassen.
+Somit kann nicht trivial ein Objekt von Transfer durch ein Objekt von Payment ersetzt werden.
+<img src="./images/LiskovSubstitutionPrincipleUMLBad.png">
 
 [//]: # ( TODO Ein negatives beispiel finden, dass das LSP nicht erfüllt ist. )
 Kapitel 4: Weitere Prinzipien
