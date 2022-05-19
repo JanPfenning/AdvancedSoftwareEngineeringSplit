@@ -111,9 +111,17 @@ Damit wird das Open-Closed-Principle erfüllt.
 UML der Klasse und Begründung, warum man hier das Prinzip erfüllt/nicht erfüllt wird]
 [Anm.: es darf nur ein Prinzip ausgewählt werden; es darf NICHT z.B. ein positives Beispiel für LSP
 und ein negatives Beispiel für ISP genommen werden]
+Das Liskov-Substitution-Principle (LSP) besagt, dass Obejkte einer Klasse, welche von einer anderen Klasse abgeleitet werden, durch Objekte dieser (Super-)Klasse ersetzt werden können.
+Dabei haben Objekte der abgeleiteten Klassen mindestens die gleichen Mehtoden wie Objekte der Superklasse. Zwei Klassen ähnlicher aber nicht identischer Funktionalität können durch ein Interface oder eine Superkalsse abstrahiert werden.
+<h4>Positiv-Beispiel</h4>
+Ein positives Beispiel für ein Liskov-Substitution-Principle ist die Superklasse Depot. Von ihr Erben die Klassen Account und Moneypool.
+Dabei unterscheiden sich die Klassen darin, dass kein Geld aus einem Moeneypool transferiert werden kann. 
+Beide Klassen lassen sich somit generalisieren / abstahieren als Depots. Wenn die Unterscheidung im Kontext irrelevant ist kann somit ein Objekt von Depot erstellt werden.
+Dies kann innerhalb des TransferRepositorys gesehen werden.
+<img src="./images/LiskovSubstitutionPrincipleCODEGood.png">
+<img src="./images/LiskovSubstitutionPrincipleUMLGood.png">
 
-###Negativ-Beispiel
-
+Es wurde kein negativ Beispiel für das Litkov-Substitution-Principle gefunden.
 
 Kapitel 4: Weitere Prinzipien
 -
