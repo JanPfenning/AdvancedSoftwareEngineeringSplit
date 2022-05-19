@@ -349,11 +349,17 @@ UML-Diagram des UserRepository nach dem Refactoring:
 Kapitel 8: Entwurfsmuster
 -
 - Memento
+
 Das Memento-Muster hat die Akteure Originator und Memento. Der Originator ist ein Objekt mit einem internen Zustand, der verändert werden kann. Im Memento kann dieser Zustand abgespeichert werden, um zu einem späteren Zeitpunkt wiederhergestellt zu werden.
 
 <img src="./images/MementoEntwursfmuster.jpg">
 
 Sollte es im InvoiceService zu problemen bei der Speicherung des zweiten Depots zu einem fehler kommen, muss die Änderung am ersten Depot zurückgerollt werden. Für dieses Zurückrollen eines alten internen Zustands wird ein DepotMemento vor der Verrechnung der Depots auf logischer Ebene angelegt.
 
-[2 unterschiedliche Entwurfsmuster aus der Vorlesung (oder nach Absprache auch andere) jeweils
-sinnvoll einsetzen, begründen und UML-Diagramm]
+- Iterator
+
+Das Iterator Entwurfsmuster stellt Möglichkeiten zur abarbeitung sequenzieller Zugriffen, auf Elemente einer Strukturbereit, ohne die implementierungsdetails der Struktur zu enthüllen.
+
+<img src="./images/iteratorEntwurfsmuster.jpg">
+
+In diesem Fall haben wir einen kleinen Iterator für Moneypools geschrieben, da ein Nutzer viele verschiedene Moneypools haben kann und diese nicht alle gleichzeitig den Nutzer auf der sowieso schon kleinen Commandozeile beläsitgen sollen. Die Iteratorklasse stellt die Funktion Print bereit welche unter verwendung von Pagination alle Moneypools eines Nutzers in kleinen häppchen ausgiebt.
