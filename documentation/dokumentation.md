@@ -31,9 +31,6 @@ Daraus folgt auch, dass der innere Code unabhängig vom Rest der Anwendung ausge
 <u><h3>Analyse der Dependency Rule</u></h3>
 [https://moodle.dhbw.de/pluginfile.php/193721/mod_resource/content/1/clean-architecture.pdf]
 
-[(1 Klasse, die die Dependency Rule einhält und eine Klasse, die die Dependency Rule verletzt);
-jeweils UML der Klasse und Analyse der Abhängigkeiten in beide Richtungen (d.h., von wem hängt die
-Klasse ab und wer hängt von der Klasse ab) in Bezug auf die Dependency Rule]
 <h4>Positiv-Beispiel: Dependency Rule</h4>
 Die Domain-Klasse UserRepository greift auf keine Klassen außerhalb von Layer 3 zu.
 <img src="./images/UserAggregateUML.png">
@@ -61,9 +58,6 @@ Kapitel 3: SOLID
 [https://moodle.dhbw.de/pluginfile.php/199989/mod_resource/content/1/solid-slides.pdf]
 
 <u><h3>Analyse Single-Responsibility-Principle (SRP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für SRP; jeweils UML der Klasse und
-Beschreibung der Aufgabe bzw. der Aufgaben und möglicher Lösungsweg des Negativ-Beispiels (inkl.
-UML)]
 Das Single-Resopnsibility-Principle (SRP) ist ein Prinzip, das besagt, dass eine Klass (kann auch feiner granuliert werden) nur eine Aufgabe erfüllen sollt.
 <h4>Positiv-Beispiel</h4>
 Ein positives Beispiel ist die Unterteilung in CSVreader und CSVwriter, dabei beide Klassen für unterschiedliche IO-Operationen zuständig sind. Zudem muss wenn das Parsening des CSVreaders angepasst wird, nicht die CSVwriter angepasst werden.
@@ -77,9 +71,6 @@ Dies kann durch die Teilung des TransferService in zwei Klassen (TransferSendSer
 Dadruch wird das SRP auch für die Klassen TransferSendService und TransferAnalyseService erfüllt.
 
 <u><h3>Analyse Open-Closed-Principle (OCP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für OCP; jeweils UML der Klasse und
-Analyse mit Begründung, warum das OCP erfüllt/nicht erfüllt wurde – falls erfüllt: warum hier
-sinnvoll/welches Problem gab es? Falls nicht erfüllt: wie könnte man es lösen (inkl. UML)?]
 <h4>Positiv-Beispiel</h4>
 Ein positives Beispiel für ein Open-Closed-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
 Dafür wird in InitAction eine Hashmap erstellt, welche Integer (User-Input) auf ActionInterfaces mapped.
@@ -107,10 +98,6 @@ Die Schnittstellen sind für Änderungen geschlossen (da die Schnittstellendefin
 Damit wird das Open-Closed-Principle erfüllt.
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für entweder LSP oder ISP oder DIP); jeweils
-UML der Klasse und Begründung, warum man hier das Prinzip erfüllt/nicht erfüllt wird]
-[Anm.: es darf nur ein Prinzip ausgewählt werden; es darf NICHT z.B. ein positives Beispiel für LSP
-und ein negatives Beispiel für ISP genommen werden]
 Das Liskov-Substitution-Principle (LSP) besagt, dass Obejkte einer Klasse, welche von einer anderen Klasse abgeleitet werden, durch Objekte dieser (Super-)Klasse ersetzt werden können.
 Dabei haben Objekte der abgeleiteten Klassen mindestens die gleichen Mehtoden wie Objekte der Superklasse. Zwei Klassen ähnlicher aber nicht identischer Funktionalität können durch ein Interface oder eine Superkalsse abstrahiert werden.
 <h4>Positiv-Beispiel</h4>
@@ -123,6 +110,7 @@ Dies kann innerhalb des TransferRepositorys gesehen werden.
 
 Es wurde kein negativ Beispiel für das Litkov-Substitution-Principle gefunden.
 
+[//]: # ( TODO Ein negatives beispiel finden, dass das LSP nicht erfüllt ist. )
 Kapitel 4: Weitere Prinzipien
 -
 <u><h3>Analyse GRASP: Geringe Kopplung</u></h3>
@@ -278,8 +266,7 @@ Die UML-Diagramme der entstehenden Mock-Objekte unterscheiden sich nicht von den
 Kapitel 6: Domain Driven Design
 -
 <u><h3>Ubiquitous Language</u></h3>
-[4 Beispiele für die Ubiquitous Language; jeweils Bezeichung, Bedeutung und kurze Begründung,
-warum es zur Ubiquitous Language gehört]
+
 | Bezeichnung | Bedeutung | Begründung |
 |-|-|-|
 | Depot | Zusammenfassung aller möglichen Geldspeicher | Accounts und Moneypools sind beides Geldspeicher sind aber für unterschiedliche Dinge gedacht |
