@@ -155,9 +155,12 @@ Die <span style="font-family:monospace;">Repositories</span> greifen direkt auf 
 Mit einem Interface als Schnittstelle könnte die Kopplung deutlich reduziert werden.
 
 <u><h3>Analyse GRASP: Hohe Kohäsion</u></h3>
-Hier ist wohl das UserAggregate zu nennen oder nach refactoring die Superclass vom UserRepository (sollte aufgeteilt werden in kleinere Repositories)
-[eine Klasse als positives Beispiel hoher Kohäsion; UML Diagramm und Begründung, warum die
-Kohäsion hoch ist]
+Durch das Single-Responsibility-Prinzip wird die Kohäsion erhöht, indem Funktionalität und Attribute auf mehrere Klassen verteilt werden.
+Dadurch wird schwache Kohäsion vermieden, welches Code-Duplikat vermeidet und das Don't Repeat Yourself-Prinzip unterstützt.
+Dies kann anhand der Klasse UserAggregate gesehen werden. Dabei könnte innerhalb des Aggregates der Account bzw. dessen Werte und Funktionen gespeichert werden. Dadurch würde aber die Kopplung steigen und somit die Kohäsion sinken.
+Um dies zu vermeiden wird die Logik von Account in eine eigene Klasse ausgelagert. Dies unterstützt auch das Single-Responsibility-Prinzip.
+<img src="./images/GRASP-HoheKohäsion.png">
+
 
 <u><h3>Don’t Repeat Yourself (DRY)</u></h3>
 - https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/pull/9/commits/ea97cdf4c3a767f3b8f4980f5d360862081da47f
