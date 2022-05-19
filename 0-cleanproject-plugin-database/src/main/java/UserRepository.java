@@ -16,19 +16,19 @@ public class UserRepository implements UserRepositoryInterface {
     public UserRepository() {}
 
     @Override
-    public void save(UserAggregate user) {
+    public void save(UserAggregate user) throws PersistExecption {
         if(this.getUserFrom(user.getUsername()) == null)
             this.saveNewUser(user);
         else
             this.updateUser(user);
     }
 
-    private void updateUser(UserAggregate user){
+    private void updateUser(UserAggregate user) throws PersistAccountExecption {
         moneypoolRepository.save(user.getMoneypools(), user);
         accountRepository.save(user.getAccount());
     }
 
-    private void saveNewUser(UserAggregate user){
+    private void saveNewUser(UserAggregate user) throws PersistAccountExecption {
         StringBuilder sb = new StringBuilder();
         sb.append(user.getUsername()).append(";").append(user.getAccount().getId());
         CSVwriter.writeLine(USER_FILEPATH, sb.toString());

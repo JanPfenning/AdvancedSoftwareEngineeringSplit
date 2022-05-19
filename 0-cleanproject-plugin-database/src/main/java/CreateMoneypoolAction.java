@@ -22,6 +22,8 @@ public class CreateMoneypoolAction implements ActionInterface {
             e.printStackTrace();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
+        } catch (PersistExecption e) {
+            e.printStackTrace();
         }
     }
 }

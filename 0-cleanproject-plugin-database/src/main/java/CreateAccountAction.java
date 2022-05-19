@@ -17,7 +17,7 @@ public class CreateAccountAction implements ActionInterface {
         try {
             u = userService.createNewUser(desiredUsername);
             System.out.println("New user has been registered. Your main account has the id: "+u.getAccount().getId());
-        } catch (InvalidUsernameException e) {
+        } catch (InvalidUsernameException | PersistExecption e) {
             System.out.println(e);
             e.printStackTrace();
         }

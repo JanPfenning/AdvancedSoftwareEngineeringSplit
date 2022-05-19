@@ -31,4 +31,13 @@ public class Depot {
     public void setBalance(Balance newBalance) throws TransferOutOfMoneypoolException{
         this.balance = newBalance;
     }
+
+    public DepotMemento saveToMemento() {
+        System.out.println("Originator: Saving to Memento.");
+        return new DepotMemento(balance);
+    }
+
+    public void restoreFromMemento(DepotMemento memento) {
+        this.balance = memento.getState();
+    }
 }

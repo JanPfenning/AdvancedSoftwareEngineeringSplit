@@ -11,7 +11,7 @@ public class TransferService {
         this.transferRepository = transferRepository;
     }
 
-    public void sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws DepotNotFoundException, InvalidBalanceException, TransferOutOfMoneypoolException {
+    public void sendMoney(String senderDepotId, String receiverDepotId, Amount amount) throws DepotNotFoundException, InvalidBalanceException, TransferOutOfMoneypoolException, PersistExecption {
         UserAggregate sender = userRepository.getUserFrom(UUID.fromString(senderDepotId));
         Depot senderDepot = sender.getDepotBy(UUID.fromString(senderDepotId));
 
@@ -24,6 +24,7 @@ public class TransferService {
         Balance newSenderBalance = senderDepot.getBalance().subtract(amount);
         Balance newReceiverBalance = receiverDepot.getBalance().add(amount);
 
+        DepotMemento senderDepotMemento = senderDepot.saveToMemento();
         senderDepot.setBalance(newSenderBalance);
         receiverDepot.setBalance(newReceiverBalance);
 
@@ -31,7 +32,12 @@ public class TransferService {
         transferRepository.save(transfer);
 
         userRepository.save(sender);
-        userRepository.save(receiver);
+        try {
+            userRepository.save(receiver);
+        }catch(PersistExecption e){
+            senderDepot.restoreFromMemento(senderDepotMemento);
+            userRepository.save(sender);
+        }
     }
 
     public ArrayList<Transfer> analyseTransferSendings(String uuidString) {

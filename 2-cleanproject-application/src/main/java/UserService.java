@@ -20,13 +20,13 @@ public class UserService {
         return u;
     }
 
-    public UserAggregate createNewUser(String userName) throws InvalidUsernameException {
+    public UserAggregate createNewUser(String userName) throws InvalidUsernameException, PersistExecption {
         UserAggregate newUserAggregate = new UserAggregate(userName);
         this.userRepository.save(newUserAggregate);
         return newUserAggregate;
     }
 
-    public Moneypool createNewMoneypoolFor(Username username) throws UserNotFoundException {
+    public Moneypool createNewMoneypoolFor(Username username) throws UserNotFoundException, PersistExecption {
         UserAggregate user = this.getUser(username);
         Moneypool moneypool = user.createMoneypool();
         this.userRepository.save(user);
