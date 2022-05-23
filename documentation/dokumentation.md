@@ -1,18 +1,27 @@
 Kapitel 1: Einführung
 -
 <u><h3>Übersicht über die Applikation</u></h3>
-Die Applikation abstrahiert den Geldfluss zwischen Nutzern.
+Die Applikation ermöglicht digitalen prepaid Geldfluss zwischen Nutzern.
+Nutzer interagieren mit der Applikation in einer Art Dialog in der Command Line. 
+Diese Art der Interaktion ist jedoch durch die verwendete Clean-Architecture einfach austauschbar. 
+Ebenso wie die Speicherung der Konten und Transaktionen im CSV Format.
 Nutzer der Software können sich mit einem Nutzernamen registrieren und bekommen ein Hauptkonto erstellt.
 Nutzer können auch Moneypools erstellen um Geld abseits ihres Hauptkontos für einen gewissen zweck zu sammeln.
 Es wird kein Neues Geld generiert.
 Wer Teilnehmen möchte müsste zu einer Zentralen Verwaltung der Software gehen und sein Echtes geld gegen Ledger-Dollar tauschen.
 Auch das Auszahlen würde hypotetisch über diesen Weg funktionieren.
 So können Geschäftsbeziehungen mit einem Prepaid Konto abgehandelt werden.
+Gesendetes Geld ist nicht einfach zurückzuziehen, so kann eine eingegangene Zahlung direkt als Kapital weiterverwendet werden.
 
 <u><h3>Wie startet man die Applikation?</u></h3>
-[Wie startet man die Applikation? Welche Voraussetzungen werden benötigt? Schritt-für-SchrittAnleitung]
+git clone https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit.git (oder download der ZIP-Datei)
+Java muss auf dem Zielsystem installiert sein.
+Mit <span style="font-family: monospace;">java -jar Split.jar</span> im Root-Directory des GitHub-Repos kann mit der Applikation interagiert werden.
+In der Commandline wird eine Willkommensnachricht angezeigt und die möglichen Aktionen aufgelistet.
 
 <u><h3>Wie testet man die Applikation?</u></h3>
+git clone https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit.git (oder download der ZIP-Datei)
+Maven und Java müssen auf der Zielmaschine vorhanden sein.
 Mit dem Command <span style="font-family: monospace;"> mvn clean test</span> können alle Tests mit einem einfachen Command ausgeführt werden.
 Die Tests werden ebenso automatisch ausgeführt, wenn eine neue Pull-Request auf GitHub auf gemacht wird. Diese Ausführung funktioniert über GitHub Actions. Die Ausführung ist in einer yml-Datei definiert (/.github/workflows/build.yml)
 
