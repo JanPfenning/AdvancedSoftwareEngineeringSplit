@@ -168,8 +168,7 @@ Mit einem Interface als Schnittstelle könnte die Kopplung deutlich reduziert we
 <u><h3>Analyse GRASP: Hohe Kohäsion</u></h3>
 Durch das Single-Responsibility-Prinzip wird die Kohäsion erhöht, indem Funktionalität und Attribute auf mehrere Klassen verteilt werden.
 Dadurch wird schwache Kohäsion vermieden, welches Code-Duplikat vermeidet und das Don't Repeat Yourself-Prinzip unterstützt.
-Dies kann anhand der Klasse UserAggregate gesehen werden. Dabei könnte innerhalb des Aggregates der Account bzw. dessen Werte und Funktionen gespeichert werden. Dadurch würde aber die Kopplung steigen und somit die Kohäsion sinken.
-Um dies zu vermeiden wird die Logik von Account in eine eigene Klasse ausgelagert. Dies unterstützt auch das Single-Responsibility-Prinzip.
+Dies kann anhand der Klasse UserAggregate gesehen werden. Dabei könnte innerhalb des Aggregates der Account bzw. dessen Werte und Funktionen gespeichert werden. Um die Kohäsion in der User-Class hoch zu halten, werden eigenheiten der Accounts und Moneypools in eigene Klassen ausgelagert. Dies unterstützt auch das Single-Responsibility-Prinzip.
 <img src="./images/GRASP-HoheKohäsion.png">
 
 
