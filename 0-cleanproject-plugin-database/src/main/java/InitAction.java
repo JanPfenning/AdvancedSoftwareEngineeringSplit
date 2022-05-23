@@ -16,6 +16,7 @@ public class InitAction implements ActionInterface {
         actions.put(6, new ViewInvoiceAction());
         actions.put(7, new PayInvoiceAction());
         actions.put(8, new InspectUsersAction());
+        actions.put(9, new InspectMoneypoolsAction());
     }
 
     @Override
@@ -31,6 +32,7 @@ public class InitAction implements ActionInterface {
                 "6) View Invoices\n" +
                 "7) Pay Invoice\n" +
                 "8) Inspect Users\n" +
+                "9) Inspect Moneypools of User\n" +
                 "0) Quit\n"
             );
             String stringResponse = CommandLineReader.readLine();

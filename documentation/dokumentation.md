@@ -1,18 +1,27 @@
 Kapitel 1: Einführung
 -
 <u><h3>Übersicht über die Applikation</u></h3>
-Die Applikation abstrahiert den Geldfluss zwischen Nutzern.
+Die Applikation ermöglicht digitalen prepaid Geldfluss zwischen Nutzern.
+Nutzer interagieren mit der Applikation in einer Art Dialog in der Command Line. 
+Diese Art der Interaktion ist jedoch durch die verwendete Clean-Architecture einfach austauschbar. 
+Ebenso wie die Speicherung der Konten und Transaktionen im CSV Format.
 Nutzer der Software können sich mit einem Nutzernamen registrieren und bekommen ein Hauptkonto erstellt.
 Nutzer können auch Moneypools erstellen um Geld abseits ihres Hauptkontos für einen gewissen zweck zu sammeln.
 Es wird kein Neues Geld generiert.
 Wer Teilnehmen möchte müsste zu einer Zentralen Verwaltung der Software gehen und sein Echtes geld gegen Ledger-Dollar tauschen.
 Auch das Auszahlen würde hypotetisch über diesen Weg funktionieren.
 So können Geschäftsbeziehungen mit einem Prepaid Konto abgehandelt werden.
+Gesendetes Geld ist nicht einfach zurückzuziehen, so kann eine eingegangene Zahlung direkt als Kapital weiterverwendet werden.
 
 <u><h3>Wie startet man die Applikation?</u></h3>
-[Wie startet man die Applikation? Welche Voraussetzungen werden benötigt? Schritt-für-SchrittAnleitung]
+git clone https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit.git (oder download der ZIP-Datei)
+Java muss auf dem Zielsystem installiert sein.
+Mit <span style="font-family: monospace;">java -jar Split.jar</span> im Root-Directory des GitHub-Repos kann mit der Applikation interagiert werden.
+In der Commandline wird eine Willkommensnachricht angezeigt und die möglichen Aktionen aufgelistet.
 
 <u><h3>Wie testet man die Applikation?</u></h3>
+git clone https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit.git (oder download der ZIP-Datei)
+Maven und Java müssen auf der Zielmaschine vorhanden sein.
 Mit dem Command <span style="font-family: monospace;"> mvn clean test</span> können alle Tests mit einem einfachen Command ausgeführt werden.
 Die Tests werden ebenso automatisch ausgeführt, wenn eine neue Pull-Request auf GitHub auf gemacht wird. Diese Ausführung funktioniert über GitHub Actions. Die Ausführung ist in einer yml-Datei definiert (/.github/workflows/build.yml)
 
@@ -31,39 +40,46 @@ Daraus folgt auch, dass der innere Code unabhängig vom Rest der Anwendung ausge
 <u><h3>Analyse der Dependency Rule</u></h3>
 [https://moodle.dhbw.de/pluginfile.php/193721/mod_resource/content/1/clean-architecture.pdf]
 
-[(1 Klasse, die die Dependency Rule einhält und eine Klasse, die die Dependency Rule verletzt);
-jeweils UML der Klasse und Analyse der Abhängigkeiten in beide Richtungen (d.h., von wem hängt die
-Klasse ab und wer hängt von der Klasse ab) in Bezug auf die Dependency Rule]
 <h4>Positiv-Beispiel: Dependency Rule</h4>
+Übersicht über die Applikation:
+<img src="./images/CleanarchitectureUML.png">
+(Höhere auflösung zu finden im Repository unter /documentation/images/CleanarchitectureUML.png)
+<img src="./images/dependencyAnalyzer.png">
+
+Die Dependencies sind eindeutig hierarschich und nicht zyklisch.
+
+Ein <u>explizites</u> Beispiel:
 Die Domain-Klasse UserRepository greift auf keine Klassen außerhalb von Layer 3 zu.
 <img src="./images/UserAggregateUML.png">
 Alle schichtübergreifenden Abhängigkeiten greifen von einer äußeren Schicht auf die innere Schicht zu bzw. von einer kleineren Schicht auf die größere Schicht zu.
 
-<h4>Negativ-Beispiel: Dependency Rule</h4>
+<h4>2. Positiv-Beispiel: Dependency Rule</h4>
 Da wir die Ansätze von Clean Architecure verfolgen und es durch die Maven-Dependencies in den Packages enforced ist dürften keine Negativbeispiele existieren.
 Keine Dependency geht von innen nach außen.
 
-<img src="./images/CleanarchitectureUML.png">
-<img src="./images/dependencyAnalyzer.png">
-
+In der Nahaufnahme sehen wir deshalb einige weite positive Beispiele:
+<img src="./images/DependencyRulePositives.jpg">
+Es existieren keine Zugriffe auf die Repositories in der äußersten Schicht, dies Zugriffe sind nämlich immer über Interfaces durchgeführt, welche im Domänenkern liegen. Die Zugriffe gehen lediglich von den Repositories nach innen.
 
 <u><h3>Analyse der Schichten</u></h3>
 - 3-Domainkern: ValueObjects  z.B. Depot (Klasse die ein Geldspeicher darstellt)
 Diese Klasse ändern sich i.d.R. nicht. Sie ist Teil des Applikationskerns und ist unabhängig von jeglichen Speichermethodiken oder Anwendungsfällen.
+<img src="./images/domänenkernbeispieluml.jpg">
+Es existieren Depots, die einen Kontostand (Balance) haben. Diese Information ist Domänenspezifisch und explizit. Dieser Umstand wird sich nicht ändern.
 
 - 0-Plugin-Database: CSVreader (Persistenzklasse, ließt die informationen von einer spezifischen Position mit CSV als spezifischen persistenzmethodik. Diese Technologien sollen ausgetauscht werden können, ohne den Domänenkern zu beeinflussen. Klassen in dieser Schicht veralten sehr schnell und oft. 
 
-//TODO UML der Klasse (ggf. auch zusammenspielenden Klassen)
+<img src="./images/databaselayeruml.jpg">
 
+Die 3 Klassen <span style="font-family:monospace">CSVreader, CSVwriter, TransferRepository</span> liegen in äußersten Schicht - der Datenbank schicht. Hier ist die konkrete Art der Speicherung ausimplementiert. Aktuell werden alle Informationen in CSV Dateien gespeichert. Diese Technologie ist aber unabhängig von der Domäne und ist durch die Schichten ganz einfach zu ersetzen. 
+
+Der <span style="font-family:monospace">Transferservice</span> nutzt zur Abfrage der Persistenz ein Interface als Schnittstelle zur konkreten Implementierung.
 
 Kapitel 3: SOLID
 -
 [https://moodle.dhbw.de/pluginfile.php/199989/mod_resource/content/1/solid-slides.pdf]
 
 <u><h3>Analyse Single-Responsibility-Principle (SRP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für SRP; jeweils UML der Klasse und
-Beschreibung der Aufgabe bzw. der Aufgaben und möglicher Lösungsweg des Negativ-Beispiels (inkl.
-UML)]
 Das Single-Resopnsibility-Principle (SRP) ist ein Prinzip, das besagt, dass eine Klass (kann auch feiner granuliert werden) nur eine Aufgabe erfüllen sollt.
 <h4>Positiv-Beispiel</h4>
 Ein positives Beispiel ist die Unterteilung in CSVreader und CSVwriter, dabei beide Klassen für unterschiedliche IO-Operationen zuständig sind. Zudem muss wenn das Parsening des CSVreaders angepasst wird, nicht die CSVwriter angepasst werden.
@@ -77,9 +93,6 @@ Dies kann durch die Teilung des TransferService in zwei Klassen (TransferSendSer
 Dadruch wird das SRP auch für die Klassen TransferSendService und TransferAnalyseService erfüllt.
 
 <u><h3>Analyse Open-Closed-Principle (OCP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für OCP; jeweils UML der Klasse und
-Analyse mit Begründung, warum das OCP erfüllt/nicht erfüllt wurde – falls erfüllt: warum hier
-sinnvoll/welches Problem gab es? Falls nicht erfüllt: wie könnte man es lösen (inkl. UML)?]
 <h4>Positiv-Beispiel</h4>
 Ein positives Beispiel für ein Open-Closed-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
 Dafür wird in InitAction eine Hashmap erstellt, welche Integer (User-Input) auf ActionInterfaces mapped.
@@ -107,13 +120,19 @@ Die Schnittstellen sind für Änderungen geschlossen (da die Schnittstellendefin
 Damit wird das Open-Closed-Principle erfüllt.
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für entweder LSP oder ISP oder DIP); jeweils
-UML der Klasse und Begründung, warum man hier das Prinzip erfüllt/nicht erfüllt wird]
-[Anm.: es darf nur ein Prinzip ausgewählt werden; es darf NICHT z.B. ein positives Beispiel für LSP
-und ein negatives Beispiel für ISP genommen werden]
+Das Liskov-Substitution-Principle (LSP) besagt, dass Objekte einer (Super-)Klasse, von welcher anderen Klassen abgeleitet werden, durch Objekte dieser (Sub-)Klassen ersetzen kann.
+Dabei haben Objekte der abgeleiteten Klassen mindestens die gleichen Methoden, wie Objekte der Superklasse. Zwei Klassen ähnlicher aber nicht identischer Funktionalität sollen nach dem Open-Closed-Prinziple durch ein Interface oder eine Superkalsse abstrahiert werden.
+<h4>Positiv-Beispiel</h4>
+Ein positives Beispiel für ein Liskov-Substitution-Principle ist die Superklasse Depot bzw. die Ableitung zu einem Account. Da ein Account die gleichen reaktionen auf eine Methode hat (da sie nicht überschrieben wurden) kann ein Depot durch Account ersetzt werden.
+Dieses verhalten würde innerhalb des TransferRepositorys anwendung finden.
+<img src="./images/LiskovSubstitutionPrincipleCODEGood.png">
+<img src="./images/LiskovSubstitutionPrincipleUMLGood.png">
 
-###Negativ-Beispiel
-
+<h4>Negatives-Beispiel</h4>
+Als negatives Beispiel kann die Beziehung von Transfer und Payment aufgeführt werden.
+Hierbei erbt Payment von Transfer, jedoch unterscheiden sich die Konstruktoren den beiden Klassen.
+Somit kann nicht trivial ein Objekt von Transfer durch ein Objekt von Payment ersetzt werden.
+<img src="./images/LiskovSubstitutionPrincipleUMLBad.png">
 
 Kapitel 4: Weitere Prinzipien
 -
@@ -147,9 +166,11 @@ Die <span style="font-family:monospace;">Repositories</span> greifen direkt auf 
 Mit einem Interface als Schnittstelle könnte die Kopplung deutlich reduziert werden.
 
 <u><h3>Analyse GRASP: Hohe Kohäsion</u></h3>
-Hier ist wohl das UserAggregate zu nennen oder nach refactoring die Superclass vom UserRepository (sollte aufgeteilt werden in kleinere Repositories)
-[eine Klasse als positives Beispiel hoher Kohäsion; UML Diagramm und Begründung, warum die
-Kohäsion hoch ist]
+Durch das Single-Responsibility-Prinzip wird die Kohäsion erhöht, indem Funktionalität und Attribute auf mehrere Klassen verteilt werden.
+Dadurch wird schwache Kohäsion vermieden, welches Code-Duplikat vermeidet und das Don't Repeat Yourself-Prinzip unterstützt.
+Dies kann anhand der Klasse UserAggregate gesehen werden. Dabei könnte innerhalb des Aggregates der Account bzw. dessen Werte und Funktionen gespeichert werden. Um die Kohäsion in der User-Class hoch zu halten, werden eigenheiten der Accounts und Moneypools in eigene Klassen ausgelagert. Dies unterstützt auch das Single-Responsibility-Prinzip.
+<img src="./images/GRASP-HoheKohäsion.png">
+
 
 <u><h3>Don’t Repeat Yourself (DRY)</u></h3>
 - https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/pull/9/commits/ea97cdf4c3a767f3b8f4980f5d360862081da47f
@@ -267,8 +288,7 @@ Die UML-Diagramme der entstehenden Mock-Objekte unterscheiden sich nicht von den
 Kapitel 6: Domain Driven Design
 -
 <u><h3>Ubiquitous Language</u></h3>
-[4 Beispiele für die Ubiquitous Language; jeweils Bezeichung, Bedeutung und kurze Begründung,
-warum es zur Ubiquitous Language gehört]
+
 | Bezeichnung | Bedeutung | Begründung |
 |-|-|-|
 | Depot | Zusammenfassung aller möglichen Geldspeicher | Accounts und Moneypools sind beides Geldspeicher sind aber für unterschiedliche Dinge gedacht |
@@ -314,8 +334,13 @@ Das UserRepository ruft dann intern die Repositories der Sub-Entitäten auf.
 Kapitel 7: Refactoring
 -
 <u><h3>Code Smells</u></h3>
-[jeweils 1 Code-Beispiel zu 2 Code Smells aus der Vorlesung; jeweils Code-Beispiel und einen
-möglichen Lösungsweg bzw. den genommen Lösungsweg beschreiben (inkl. (Pseudo-)Code)]
+ - duplicated code
+<img src="./images/dontrepeatyourself1.jpg">
+ Die Funktion <span>SendMoney</span> ist mehrmals implementiert, einmal für den Use-Case eine Rechnung zu bezahlen und einmal für eine einfache Transaktion ohne Rechnung. Dieser Code sollte in eine gemeinsame Methode ausgelagert werden.
+- tiefe verschachtelung
+<img src="./images/codesmelltiefeverschachtelung.jpg ">
+ Dieses Problem ist mit benannten Sub-Methoden zu lösen. zB eine Methode <span style="font-family:monospace">PrintInvoices</span> die den Bereich von Zeile 32 bis 36 Abdeckt. </br>Außerdem könnte man den Negativ-Fall für keinen gefundenen Usernamen zuerst abfrühstücken und im Fall eines Fehlers Return nutzen um die Methode früh zu verlassen. 
+ <span style="font-family:monospace">if(username==null){print(error); return}</span>
 
 <u><h3>2 Refactorings</u></h3>
 - Long Class extracted into subclasses
@@ -349,11 +374,17 @@ UML-Diagram des UserRepository nach dem Refactoring:
 Kapitel 8: Entwurfsmuster
 -
 - Memento
+
 Das Memento-Muster hat die Akteure Originator und Memento. Der Originator ist ein Objekt mit einem internen Zustand, der verändert werden kann. Im Memento kann dieser Zustand abgespeichert werden, um zu einem späteren Zeitpunkt wiederhergestellt zu werden.
 
 <img src="./images/MementoEntwursfmuster.jpg">
 
 Sollte es im InvoiceService zu problemen bei der Speicherung des zweiten Depots zu einem fehler kommen, muss die Änderung am ersten Depot zurückgerollt werden. Für dieses Zurückrollen eines alten internen Zustands wird ein DepotMemento vor der Verrechnung der Depots auf logischer Ebene angelegt.
 
-[2 unterschiedliche Entwurfsmuster aus der Vorlesung (oder nach Absprache auch andere) jeweils
-sinnvoll einsetzen, begründen und UML-Diagramm]
+- Iterator
+
+Das Iterator Entwurfsmuster stellt Möglichkeiten zur abarbeitung sequenzieller Zugriffen, auf Elemente einer Strukturbereit, ohne die implementierungsdetails der Struktur zu enthüllen.
+
+<img src="./images/iteratorEntwurfsmuster.jpg">
+
+In diesem Fall haben wir einen kleinen Iterator für Moneypools geschrieben, da ein Nutzer viele verschiedene Moneypools haben kann und diese nicht alle gleichzeitig den Nutzer auf der sowieso schon kleinen Commandozeile beläsitgen sollen. Die Iteratorklasse stellt die Funktion Print bereit welche unter verwendung von Pagination alle Moneypools eines Nutzers in kleinen häppchen ausgiebt.
