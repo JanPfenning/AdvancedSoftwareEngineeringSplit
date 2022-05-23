@@ -31,9 +31,6 @@ Daraus folgt auch, dass der innere Code unabhängig vom Rest der Anwendung ausge
 <u><h3>Analyse der Dependency Rule</u></h3>
 [https://moodle.dhbw.de/pluginfile.php/193721/mod_resource/content/1/clean-architecture.pdf]
 
-[(1 Klasse, die die Dependency Rule einhält und eine Klasse, die die Dependency Rule verletzt);
-jeweils UML der Klasse und Analyse der Abhängigkeiten in beide Richtungen (d.h., von wem hängt die
-Klasse ab und wer hängt von der Klasse ab) in Bezug auf die Dependency Rule]
 <h4>Positiv-Beispiel: Dependency Rule</h4>
 Die Domain-Klasse UserRepository greift auf keine Klassen außerhalb von Layer 3 zu.
 <img src="./images/UserAggregateUML.png">
@@ -61,9 +58,6 @@ Kapitel 3: SOLID
 [https://moodle.dhbw.de/pluginfile.php/199989/mod_resource/content/1/solid-slides.pdf]
 
 <u><h3>Analyse Single-Responsibility-Principle (SRP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für SRP; jeweils UML der Klasse und
-Beschreibung der Aufgabe bzw. der Aufgaben und möglicher Lösungsweg des Negativ-Beispiels (inkl.
-UML)]
 Das Single-Resopnsibility-Principle (SRP) ist ein Prinzip, das besagt, dass eine Klass (kann auch feiner granuliert werden) nur eine Aufgabe erfüllen sollt.
 <h4>Positiv-Beispiel</h4>
 Ein positives Beispiel ist die Unterteilung in CSVreader und CSVwriter, dabei beide Klassen für unterschiedliche IO-Operationen zuständig sind. Zudem muss wenn das Parsening des CSVreaders angepasst wird, nicht die CSVwriter angepasst werden.
@@ -77,9 +71,6 @@ Dies kann durch die Teilung des TransferService in zwei Klassen (TransferSendSer
 Dadruch wird das SRP auch für die Klassen TransferSendService und TransferAnalyseService erfüllt.
 
 <u><h3>Analyse Open-Closed-Principle (OCP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für OCP; jeweils UML der Klasse und
-Analyse mit Begründung, warum das OCP erfüllt/nicht erfüllt wurde – falls erfüllt: warum hier
-sinnvoll/welches Problem gab es? Falls nicht erfüllt: wie könnte man es lösen (inkl. UML)?]
 <h4>Positiv-Beispiel</h4>
 Ein positives Beispiel für ein Open-Closed-Principle ist die Actions-Verwaltung. Ihre Aufgabe ist es die verschiedenen Nutzereingaben zu unterscheiden und entsprechend zu reagieren. 
 Dafür wird in InitAction eine Hashmap erstellt, welche Integer (User-Input) auf ActionInterfaces mapped.
@@ -107,14 +98,25 @@ Die Schnittstellen sind für Änderungen geschlossen (da die Schnittstellendefin
 Damit wird das Open-Closed-Principle erfüllt.
 
 <u><h3>Analyse Liskov-Substitution- (LSP), Interface-Segreggation- (ISP), Dependency-Inversion-Principle (DIP)</u></h3>
-[jeweils eine Klasse als positives und negatives Beispiel für entweder LSP oder ISP oder DIP); jeweils
-UML der Klasse und Begründung, warum man hier das Prinzip erfüllt/nicht erfüllt wird]
-[Anm.: es darf nur ein Prinzip ausgewählt werden; es darf NICHT z.B. ein positives Beispiel für LSP
-und ein negatives Beispiel für ISP genommen werden]
+Das Liskov-Substitution-Principle (LSP) besagt, dass Objekte einer (Super-)Klasse, von welcher anderen Klassen abgeleitet werden, durch Objekte dieser (Sub-)Klassen ersetzen kann.
+Dabei haben Objekte der abgeleiteten Klassen mindestens die gleichen Methoden, wie Objekte der Superklasse. Zwei Klassen ähnlicher aber nicht identischer Funktionalität sollen nach dem Open-Closed-Prinziple durch ein Interface oder eine Superkalsse abstrahiert werden.
+<h4>Positiv-Beispiel</h4>
+Ein positives Beispiel für ein Liskov-Substitution-Principle ist die Superklasse Depot. Von ihr Erben die Klasse Account und Moneypool.
+Dabei unterscheiden sich die Klassen darin, dass kein Geld aus einem Moeneypool transferiert werden kann. 
+Beide Klassen lassen sich somit generalisieren / abstahieren als Depots. Wenn die Unterscheidung im Kontext irrelevant ist kann somit ein Objekt von Depot durch ein Objekt der Subklasse Account ersetzt werden.
+Bei Moneypool würde jedoch die Funktionalität von Depot bei einer substitution nicht übernommen werden.
+Dies kann innerhalb des TransferRepositorys gesehen werden.
+<img src="./images/LiskovSubstitutionPrincipleCODEGood.png">
+<img src="./images/LiskovSubstitutionPrincipleUMLGood.png">
 
-###Negativ-Beispiel
+<h4>Negatives-Beispiel</h4>
+Als negatives könnte Moneypool aufgeführt aus dem obrigen Beispiel aufgeführt werden.
+Als weiteres negatives Beispiel kann die Beziehung von Transfer und Payment aufgeführt werden.
+Hierbei erbt Payment von Transfer, jedoch unterscheiden sich die Konstruktoren den beiden Klassen.
+Somit kann nicht trivial ein Objekt von Transfer durch ein Objekt von Payment ersetzt werden.
+<img src="./images/LiskovSubstitutionPrincipleUMLBad.png">
 
-
+[//]: # ( TODO Ein negatives beispiel finden, dass das LSP nicht erfüllt ist. )
 Kapitel 4: Weitere Prinzipien
 -
 <u><h3>Analyse GRASP: Geringe Kopplung</u></h3>
@@ -147,9 +149,12 @@ Die <span style="font-family:monospace;">Repositories</span> greifen direkt auf 
 Mit einem Interface als Schnittstelle könnte die Kopplung deutlich reduziert werden.
 
 <u><h3>Analyse GRASP: Hohe Kohäsion</u></h3>
-Hier ist wohl das UserAggregate zu nennen oder nach refactoring die Superclass vom UserRepository (sollte aufgeteilt werden in kleinere Repositories)
-[eine Klasse als positives Beispiel hoher Kohäsion; UML Diagramm und Begründung, warum die
-Kohäsion hoch ist]
+Durch das Single-Responsibility-Prinzip wird die Kohäsion erhöht, indem Funktionalität und Attribute auf mehrere Klassen verteilt werden.
+Dadurch wird schwache Kohäsion vermieden, welches Code-Duplikat vermeidet und das Don't Repeat Yourself-Prinzip unterstützt.
+Dies kann anhand der Klasse UserAggregate gesehen werden. Dabei könnte innerhalb des Aggregates der Account bzw. dessen Werte und Funktionen gespeichert werden. Dadurch würde aber die Kopplung steigen und somit die Kohäsion sinken.
+Um dies zu vermeiden wird die Logik von Account in eine eigene Klasse ausgelagert. Dies unterstützt auch das Single-Responsibility-Prinzip.
+<img src="./images/GRASP-HoheKohäsion.png">
+
 
 <u><h3>Don’t Repeat Yourself (DRY)</u></h3>
 - https://github.com/JanPfenning/AdvancedSoftwareEngineeringSplit/pull/9/commits/ea97cdf4c3a767f3b8f4980f5d360862081da47f
@@ -267,8 +272,7 @@ Die UML-Diagramme der entstehenden Mock-Objekte unterscheiden sich nicht von den
 Kapitel 6: Domain Driven Design
 -
 <u><h3>Ubiquitous Language</u></h3>
-[4 Beispiele für die Ubiquitous Language; jeweils Bezeichung, Bedeutung und kurze Begründung,
-warum es zur Ubiquitous Language gehört]
+
 | Bezeichnung | Bedeutung | Begründung |
 |-|-|-|
 | Depot | Zusammenfassung aller möglichen Geldspeicher | Accounts und Moneypools sind beides Geldspeicher sind aber für unterschiedliche Dinge gedacht |
