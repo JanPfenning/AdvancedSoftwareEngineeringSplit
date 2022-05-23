@@ -123,22 +123,17 @@ Damit wird das Open-Closed-Principle erfüllt.
 Das Liskov-Substitution-Principle (LSP) besagt, dass Objekte einer (Super-)Klasse, von welcher anderen Klassen abgeleitet werden, durch Objekte dieser (Sub-)Klassen ersetzen kann.
 Dabei haben Objekte der abgeleiteten Klassen mindestens die gleichen Methoden, wie Objekte der Superklasse. Zwei Klassen ähnlicher aber nicht identischer Funktionalität sollen nach dem Open-Closed-Prinziple durch ein Interface oder eine Superkalsse abstrahiert werden.
 <h4>Positiv-Beispiel</h4>
-Ein positives Beispiel für ein Liskov-Substitution-Principle ist die Superklasse Depot. Von ihr Erben die Klasse Account und Moneypool.
-Dabei unterscheiden sich die Klassen darin, dass kein Geld aus einem Moeneypool transferiert werden kann. 
-Beide Klassen lassen sich somit generalisieren / abstahieren als Depots. Wenn die Unterscheidung im Kontext irrelevant ist kann somit ein Objekt von Depot durch ein Objekt der Subklasse Account ersetzt werden.
-Bei Moneypool würde jedoch die Funktionalität von Depot bei einer substitution nicht übernommen werden.
-Dies kann innerhalb des TransferRepositorys gesehen werden.
+Ein positives Beispiel für ein Liskov-Substitution-Principle ist die Superklasse Depot bzw. die Ableitung zu einem Account. Da ein Account die gleichen reaktionen auf eine Methode hat (da sie nicht überschrieben wurden) kann ein Depot durch Account ersetzt werden.
+Dieses verhalten würde innerhalb des TransferRepositorys anwendung finden.
 <img src="./images/LiskovSubstitutionPrincipleCODEGood.png">
 <img src="./images/LiskovSubstitutionPrincipleUMLGood.png">
 
 <h4>Negatives-Beispiel</h4>
-Als negatives könnte Moneypool aufgeführt aus dem obrigen Beispiel aufgeführt werden.
-Als weiteres negatives Beispiel kann die Beziehung von Transfer und Payment aufgeführt werden.
+Als negatives Beispiel kann die Beziehung von Transfer und Payment aufgeführt werden.
 Hierbei erbt Payment von Transfer, jedoch unterscheiden sich die Konstruktoren den beiden Klassen.
 Somit kann nicht trivial ein Objekt von Transfer durch ein Objekt von Payment ersetzt werden.
 <img src="./images/LiskovSubstitutionPrincipleUMLBad.png">
 
-[//]: # ( TODO Ein negatives beispiel finden, dass das LSP nicht erfüllt ist. )
 Kapitel 4: Weitere Prinzipien
 -
 <u><h3>Analyse GRASP: Geringe Kopplung</u></h3>
