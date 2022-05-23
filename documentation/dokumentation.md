@@ -335,8 +335,13 @@ Das UserRepository ruft dann intern die Repositories der Sub-Entitäten auf.
 Kapitel 7: Refactoring
 -
 <u><h3>Code Smells</u></h3>
-[jeweils 1 Code-Beispiel zu 2 Code Smells aus der Vorlesung; jeweils Code-Beispiel und einen
-möglichen Lösungsweg bzw. den genommen Lösungsweg beschreiben (inkl. (Pseudo-)Code)]
+ - duplicated code
+<img src="./images/dontrepeatyourself1.jpg">
+ Die Funktion <span>SendMoney</span> ist mehrmals implementiert, einmal für den Use-Case eine Rechnung zu bezahlen und einmal für eine einfache Transaktion ohne Rechnung. Dieser Code sollte in eine gemeinsame Methode ausgelagert werden.
+- tiefe verschachtelung
+<img src="./images/codesmelltiefeverschachtelung.jpg ">
+ Dieses Problem ist mit benannten Sub-Methoden zu lösen. zB eine Methode <span style="font-family:monospace">PrintInvoices</span> die den Bereich von Zeile 32 bis 36 Abdeckt. </br>Außerdem könnte man den Negativ-Fall für keinen gefundenen Usernamen zuerst abfrühstücken und im Fall eines Fehlers Return nutzen um die Methode früh zu verlassen. 
+ <span style="font-family:monospace">if(username==null){print(error); return}</span>
 
 <u><h3>2 Refactorings</u></h3>
 - Long Class extracted into subclasses
