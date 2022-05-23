@@ -41,26 +41,39 @@ Daraus folgt auch, dass der innere Code unabhängig vom Rest der Anwendung ausge
 [https://moodle.dhbw.de/pluginfile.php/193721/mod_resource/content/1/clean-architecture.pdf]
 
 <h4>Positiv-Beispiel: Dependency Rule</h4>
+Übersicht über die Applikation:
+<img src="./images/CleanarchitectureUML.png">
+(Höhere auflösung zu finden im Repository unter /documentation/images/CleanarchitectureUML.png)
+<img src="./images/dependencyAnalyzer.png">
+
+Die Dependencies sind eindeutig hierarschich und nicht zyklisch.
+
+Ein <u>explizites</u> Beispiel:
 Die Domain-Klasse UserRepository greift auf keine Klassen außerhalb von Layer 3 zu.
 <img src="./images/UserAggregateUML.png">
 Alle schichtübergreifenden Abhängigkeiten greifen von einer äußeren Schicht auf die innere Schicht zu bzw. von einer kleineren Schicht auf die größere Schicht zu.
 
-<h4>Negativ-Beispiel: Dependency Rule</h4>
+<h4>2. Positiv-Beispiel: Dependency Rule</h4>
 Da wir die Ansätze von Clean Architecure verfolgen und es durch die Maven-Dependencies in den Packages enforced ist dürften keine Negativbeispiele existieren.
 Keine Dependency geht von innen nach außen.
 
-<img src="./images/CleanarchitectureUML.png">
-<img src="./images/dependencyAnalyzer.png">
-
+In der Nahaufnahme sehen wir deshalb einige weite positive Beispiele:
+<img src="./images/DependencyRulePositives.jpg">
+Es existieren keine Zugriffe auf die Repositories in der äußersten Schicht, dies Zugriffe sind nämlich immer über Interfaces durchgeführt, welche im Domänenkern liegen. Die Zugriffe gehen lediglich von den Repositories nach innen.
 
 <u><h3>Analyse der Schichten</u></h3>
 - 3-Domainkern: ValueObjects  z.B. Depot (Klasse die ein Geldspeicher darstellt)
 Diese Klasse ändern sich i.d.R. nicht. Sie ist Teil des Applikationskerns und ist unabhängig von jeglichen Speichermethodiken oder Anwendungsfällen.
+<img src="./images/domänenkernbeispieluml.jpg">
+Es existieren Depots, die einen Kontostand (Balance) haben. Diese Information ist Domänenspezifisch und explizit. Dieser Umstand wird sich nicht ändern.
 
 - 0-Plugin-Database: CSVreader (Persistenzklasse, ließt die informationen von einer spezifischen Position mit CSV als spezifischen persistenzmethodik. Diese Technologien sollen ausgetauscht werden können, ohne den Domänenkern zu beeinflussen. Klassen in dieser Schicht veralten sehr schnell und oft. 
 
-//TODO UML der Klasse (ggf. auch zusammenspielenden Klassen)
+<img src="./images/databaselayeruml.jpg">
 
+Die 3 Klassen <span style="font-family:monospace">CSVreader, CSVwriter, TransferRepository</span> liegen in äußersten Schicht - der Datenbank schicht. Hier ist die konkrete Art der Speicherung ausimplementiert. Aktuell werden alle Informationen in CSV Dateien gespeichert. Diese Technologie ist aber unabhängig von der Domäne und ist durch die Schichten ganz einfach zu ersetzen. 
+
+Der <span style="font-family:monospace">Transferservice</span> nutzt zur Abfrage der Persistenz ein Interface als Schnittstelle zur konkreten Implementierung.
 
 Kapitel 3: SOLID
 -
